@@ -5,8 +5,11 @@ import com.example.booking.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 public interface HotelRepository extends JpaRepository<Hotel, Integer> {
     Hotel findByUser(User user);
-    Hotel findByHotelId(int hotelId);
+    Optional<Hotel> findByHotelId(int hotelId);
+    Hotel findHotelByUserId(Long userId);
 }
