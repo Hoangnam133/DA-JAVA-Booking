@@ -22,10 +22,12 @@ public class Hotel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int hotelId;
+
     @Column(length = 255)
     @NotBlank(message = "hotelName is required")
     @Size(min = 1, max = 255, message = "hotelName must be between 1 and 255 characters")
     private String hotelName;
+
     @Column(length = 10)
     @Length(min = 10, max = 10, message = "Phone must be 10 characters")
     @Pattern(regexp = "^[0-9]*$", message = "Phone must be number")
@@ -39,9 +41,6 @@ public class Hotel {
     private String hotelImage2;
     private String hotelImage3;
     private boolean hotelStatus;
-    @OneToOne
-    @JoinColumn(name = "userId")
-    private User user;
     @OneToMany(mappedBy = "hotel")
     private List<Room> rooms;
 }

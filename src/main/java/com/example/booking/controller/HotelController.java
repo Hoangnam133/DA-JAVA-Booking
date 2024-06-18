@@ -1,21 +1,15 @@
 package com.example.booking.controller;
 
 import com.example.booking.entity.Hotel;
-import com.example.booking.entity.Room;
-import com.example.booking.entity.User;
 import com.example.booking.service.HotelService;
-import com.example.booking.service.UserService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import java.security.Principal;
 import java.util.List;
 
 @Controller
@@ -49,26 +43,8 @@ public class HotelController {
             model.addAttribute("errors", errors);
             return "Hotels/add";
         }
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication != null && authentication.isAuthenticated()) {
-            User currentUser = (User) authentication.getPrincipal();
-            Hotel existingHotel = hotelService.findHotelByUserId(currentUser.getId());
-            if (existingHotel != null) {
-                model.addAttribute("errorMessage", "You can only create one hotel.");
-                return "Hotels/add";
-            }
-            hotel.setUser(currentUser);
-            try {
-                hotelService.hotelCreate(hotel);
-                return "redirect:/hotels";
-            } catch (Exception e) {
-                model.addAttribute("errorMessage", e.getMessage());
-                return "Hotels/add";
-            }
-        } else {
-            model.addAttribute("errorMessage", "You need to be logged in to create a hotel.");
-            return "errorPage";
-        }
+        hotelService.hotelCreate(hotel);
+        return "redirect:/hotels";
     }
     @GetMapping("/edit/{hotelId}")
     public String showEditFrom(@PathVariable int hotelId, Model model){

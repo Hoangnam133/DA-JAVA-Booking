@@ -32,6 +32,7 @@ public class User implements UserDetails {
     private String username;
     @Column(name = "password", length = 250)
     @NotBlank(message = "Password is required")
+    @Size(min = 6, max = 250, message = "Password must be between 6 and 250 characters")
     private String password;
     @Column(name = "email", length = 50, unique = true)
     @NotBlank(message = "Email is required")
@@ -43,8 +44,6 @@ public class User implements UserDetails {
     private String phone;
     @Column(name = "provider", length = 50)
     private String provider;
-    @OneToOne(mappedBy = "user")
-    private Hotel hotel;
 
     @OneToMany(mappedBy = "user")
     private List<Booking> bookings;
