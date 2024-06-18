@@ -8,13 +8,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 @Controller // Đánh dấu lớp này là một Controller trong Spring MVC.
 @RequestMapping("/")
@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class UserController {
     private final UserService userService;
 
-//    @GetMapping("/login")
+    //    @GetMapping("/login")
 //    public String login() {
 //        return "users/login";
 //    }
@@ -39,11 +39,13 @@ public class UserController {
         }
         return "users/login"; // Nếu không có thông tin xác thực, trả về trang đăng nhập
     }
+
     @GetMapping("/register")
     public String register(@NotNull Model model) {
         model.addAttribute("user", new User()); // Thêm một đối tượng User mới vào model
         return "users/register";
     }
+
     @PostMapping("/register")
     public String register(@Valid @ModelAttribute("user") User user, // Validate đối tượng User
                            @NotNull BindingResult bindingResult, // Kết quả của quá trình validate
@@ -60,5 +62,61 @@ public class UserController {
         userService.setDefaultRole(user.getUsername()); // Gán vai trò mặc định cho người dùng
         return "redirect:/login"; // Chuyển hướng người dùng tới trang "login"
     }
+
+    @GetMapping("/informationUser")
+    public String currentUser(@AuthenticationPrincipal UserDetails userDetails, Model model) {
+        if (userDetails != null) {
+            String username = userDetails.getUsername();
+            User user = userService.findByUsername(username)
+                    .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+            model.addAttribute("user", user);
+            return "Users/information";
+        }
+        return "redirect:/login";
+    }
+    @GetMapping("/changePassword")
+    public String changePassword(@AuthenticationPrincipal UserDetails userDetails, Model model) {
+        try {
+            if (userDetails != null) {
+                User existingUser = userService.findByUsername(userDetails.getUsername())
+                        .orElseThrow(() -> new RuntimeException("User not found"));
+                model.addAttribute("user", existingUser);
+                return "Users/changePassword";
+            } else {
+                return "redirect:/informationUser";
+            }
+        } catch (Exception e) {
+            model.addAttribute("errors", e.getMessage());
+            return "errorPage";
+        }
+    }
+    @PostMapping("/savePassword")
+    public String saveChangePassword(@AuthenticationPrincipal UserDetails userDetails,
+                                     @RequestParam("currentPassword") String currentPassword,
+                                     @RequestParam("newPassword") String newPassword,
+                                     @RequestParam("confirmNewPassword") String confirmNewPassword,
+                                     Model model) {
+        if (userDetails == null) {
+            return "redirect:/login";
+        }
+        User existingUser = userService.findByUsername(userDetails.getUsername())
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        if (!userService.checkPassword(existingUser, currentPassword)) {
+            model.addAttribute("error", "Current password is incorrect");
+            return "Users/changePassword";
+        }
+        if (!newPassword.equals(confirmNewPassword)) {
+            model.addAttribute("error", "New passwords do not match");
+            return "Users/changePassword";
+        }
+        if (newPassword.length() < 6 || newPassword.length() > 250) {
+            model.addAttribute("error", "Password must be between 6 and 250 characters");
+            return "Users/changePassword";
+        }
+        userService.updatePassword(existingUser, newPassword);
+        return "redirect:/informationUser";
+    }
+
 
 }

@@ -42,7 +42,4 @@ public class HotelService {
             throw  new RuntimeException(e.getMessage());
         }
     }
-    public Hotel findHotelByUserId(Long userId){
-        return hotelRepository.findHotelByUserId(userId);
-    }
 }
