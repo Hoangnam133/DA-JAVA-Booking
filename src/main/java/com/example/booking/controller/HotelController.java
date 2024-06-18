@@ -21,7 +21,7 @@ public class HotelController {
     public HotelController(HotelService hotelService){
         this.hotelService = hotelService;
     }
-    @GetMapping("/home")
+    @GetMapping("/homeAdmin")
     public String getHotel(Model model){
         List<Hotel> hotels = hotelService.getAllHotels();
         model.addAttribute("hotels",hotels);
@@ -30,7 +30,7 @@ public class HotelController {
     @GetMapping("/add")
     public String showAddFrom(Model model){
         model.addAttribute("hotel", new Hotel());
-        return "Hotels/add";
+        return "Hotels/create";
     }
     @PostMapping("/save")
     public String saveAddFrom(@Valid @ModelAttribute("hotel") Hotel hotel,
@@ -41,7 +41,7 @@ public class HotelController {
                     .map(DefaultMessageSourceResolvable::getDefaultMessage)
                     .toArray(String[]::new);
             model.addAttribute("errors", errors);
-            return "Hotels/add";
+            return "Hotels/create";
         }
         hotelService.hotelCreate(hotel);
         return "redirect:/hotels";
@@ -51,7 +51,7 @@ public class HotelController {
         try {
             Hotel existingHotel = hotelService.findHotelById(hotelId);
             model.addAttribute("hotel", existingHotel);
-            return "Hotels/edit";
+            return "Hotels/update";
         }catch (Exception e){
             model.addAttribute("errorMessage", "Hotel not found");
             return "errorPage";
@@ -62,7 +62,7 @@ public class HotelController {
                                @Valid Hotel hotel, BindingResult result, Model model){
         if (result.hasErrors()) {
             model.addAttribute("hotelId", hotelId);
-            return "Hotels/edit";
+            return "Hotels/update";
         }
         try {
             hotel.setHotelId(hotelId);

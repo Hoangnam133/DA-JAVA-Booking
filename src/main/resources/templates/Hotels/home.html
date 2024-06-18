@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" >
 <head>
     <meta charset="UTF-8">
     <title>Hotels Home Page</title>
@@ -28,7 +28,6 @@
         <th>Hotel Name</th>
         <th>Address</th>
         <th>Phone</th>
-        <th>Images</th>
         <th>Status</th>
         <th>Actions</th>
     </tr>
@@ -38,11 +37,6 @@
         <td th:text="${hotel.hotelName}"></td>
         <td th:text="${hotel.hotelAddress}"></td>
         <td th:text="${hotel.hotelPhone}"></td>
-        <td>
-            <img th:if="${hotel.hotelImage1}" th:src="${hotel.hotelImage1}" style="max-width: 100px; max-height: 100px;">
-            <img th:if="${hotel.hotelImage2}" th:src="${hotel.hotelImage2}" style="max-width: 100px; max-height: 100px;">
-            <img th:if="${hotel.hotelImage3}" th:src="${hotel.hotelImage3}" style="max-width: 100px; max-height: 100px;">
-        </td>
         <td th:text="${hotel.hotelStatus ? 'Active' : 'Inactive'}"></td>
         <td>
             <a th:href="@{/hotels/update/{hotelId}(hotelId=${hotel.hotelId})}">Edit</a>
