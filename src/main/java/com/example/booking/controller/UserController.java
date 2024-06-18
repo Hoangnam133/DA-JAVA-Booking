@@ -22,28 +22,18 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
     private final UserService userService;
 
-    //    @GetMapping("/login")
-//    public String login() {
-//        return "users/login";
-//    }
-    @GetMapping("/login")
-    public String login(Authentication authentication) {
-        if (authentication != null && authentication.isAuthenticated()) {
-            for (GrantedAuthority authority : authentication.getAuthorities()) {
-                if (authority.getAuthority().equals("ADMIN")) {
-                    return "redirect:/Hotels/home"; // Điều hướng ADMIN tới /Hotels/home
-                } else {
-                    return "redirect:/Layout"; // Điều hướng USER tới /Layout
-                }
-            }
-        }
-        return "users/login"; // Nếu không có thông tin xác thực, trả về trang đăng nhập
+        @GetMapping("/login")
+    public String login() {
+        return "Users/login";
     }
-
+    @GetMapping("/homeUser")
+    public String getLayoutUser(){
+            return "Users/home";
+    }
     @GetMapping("/register")
     public String register(@NotNull Model model) {
         model.addAttribute("user", new User()); // Thêm một đối tượng User mới vào model
-        return "users/register";
+        return "Users/register";
     }
 
     @PostMapping("/register")
@@ -56,7 +46,7 @@ public class UserController {
                     .map(DefaultMessageSourceResolvable::getDefaultMessage)
                     .toArray(String[]::new);
             model.addAttribute("errors", errors);
-            return "users/register"; // Trả về lại view "register" nếu có lỗi
+            return "Users/register"; // Trả về lại view "register" nếu có lỗi
         }
         userService.save(user); // Lưu người dùng vào cơ sở dữ liệu
         userService.setDefaultRole(user.getUsername()); // Gán vai trò mặc định cho người dùng

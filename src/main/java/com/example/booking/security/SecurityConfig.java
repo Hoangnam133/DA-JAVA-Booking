@@ -1,5 +1,6 @@
 package com.example.booking.security;
 
+import com.example.booking.handleLogin.LoginSuccess;
 import com.example.booking.service.UserService;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
@@ -61,7 +62,8 @@ public class SecurityConfig {
                 formLogin(formLogin -> formLogin
                         .loginPage("/login") // Trang đăng nhập.
                         .loginProcessingUrl("/login") // URL xử lý đăng nhập.
-                        .defaultSuccessUrl("/") // Trang sau đăng nhập thành công.
+//                        .defaultSuccessUrl("/") // Trang sau đăng nhập thành công.
+                                .successHandler(new LoginSuccess(userService))
                         .failureUrl("/login?error") // Trang đăng nhập thất bại.
                         .permitAll()
                 ).
