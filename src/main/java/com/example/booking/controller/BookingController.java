@@ -1,7 +1,124 @@
 package com.example.booking.controller;
 
+import com.example.booking.entity.Booking;
+import com.example.booking.entity.User;
+import com.example.booking.service.BookingService;
+import com.example.booking.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
+@RequestMapping("/bookings")
 public class BookingController {
+    private final BookingService bookingService;
+    private final UserService userService;
+    @Autowired
+    public BookingController(BookingService bookingService, UserService userService){
+        this.bookingService = bookingService;
+        this.userService = userService;
+    }
+    //for admin
+    @GetMapping("/searchBookingByPin")
+    public String getBooking(@RequestParam String pin, Model model) {
+        try {
+            Booking booking = bookingService.searchBookingByPin(pin);
+            model.addAttribute("booking", booking);
+            return "Bookings/bookingDetails";
+        } catch (IllegalArgumentException e) {
+            model.addAttribute("error", "Booking not found");
+            return "errors";
+        }
+    }
+    // for admin
+    @GetMapping("/listBookingOfAdmin")
+    public String getAllBookingOfAdmin(Model model){
+        try{
+            model.addAttribute("bookings",bookingService.showBookingListOfAdmin());
+            return "Bookings/listBookingAdmin";
+        }catch (Exception e){
+            model.addAttribute("Errors",e);
+            return "errors";
+        }
+    }
+    // for admin
+    @GetMapping("/listBookingCheckedOfAdmin")
+    public String getAllBookingIsChecked(Model model){
+        try {
+            model.addAttribute("bookings",bookingService.showBookingListCheckedOfAdmin());
+            return "Bookings/listBookingCheckedAdmin";
+        }catch (Exception e){
+            model.addAttribute("Errors",e);
+            return "errors";
+        }
+    }
+    // for user
+    @GetMapping("/listBookingOfUser/{userId}")
+    public String getAllBookingOfUser(@PathVariable("userId") Long userId, Model model){
+        try {
+            model.addAttribute("bookings",bookingService.ShowBookingListOfUser(userId));
+            return "Bookings/listBookingUser";
+        }catch (Exception e){
+            model.addAttribute("Errors",e);
+            return "errors";
+        }
+    }
+    // for user
+    @GetMapping("/listCancelBookingOfUser/{userId}")
+    public String getAllCancelBookingOfUser(@PathVariable("userId") Long userId, Model model){
+        try {
+            model.addAttribute("bookings",bookingService.ShowCancelBookingListOfUser(userId));
+            return "Bookings/listCancelBookingUser";
+        }catch (Exception e){
+            model.addAttribute("Errors",e);
+            return "errors";
+        }
+    }
+    // for admin
+    @GetMapping("/BookingUpdateCheckIn/{bookingId}")
+    public String userRequiresRegistration(@PathVariable("bookingId") int bookingId, Model model){
+        try {
+            Booking existingBooking = bookingService.findBookingById(bookingId);
+            model.addAttribute("booking",existingBooking);
+            return "Bookings/RequirescheckIn";
+        }catch (Exception e){
+            model.addAttribute("errors",e);
+            return "errors";
+        }
+    }
+    @PostMapping("/saveBookingUpdateCheckIn/{bookingId}")
+    public String saveUserRequiresRegistration(@PathVariable("bookingId") int bookingId, Booking booking){
+                bookingService.checkIn(booking);
+                return "redirect:/bookings/listBookingCheckedOfAdmin";
+    }
+    // for user
+    @GetMapping("/bookingUpdateIsCanceled/{bookingId}")
+    public String userRequestCancel(@PathVariable("bookingId") int bookingId, Model model){
+        try {
+            Booking existingBooking = bookingService.findBookingById(bookingId);
+            model.addAttribute("booking",existingBooking);
+            return "Bookings/RequestCancel";
+        }catch (Exception e){
+            model.addAttribute("errors",e);
+            return "errors";
+        }
+    }
+    @PostMapping("/SaveBookingUpdateIsCanceled/{bookingId}")
+    public String saveUserRequestCancel(@PathVariable("bookingId") int bookingId,
+                                        @RequestParam String reasonCancel,
+                                        Booking booking, BindingResult result,
+                                        @AuthenticationPrincipal UserDetails userDetails){
+        if (result.hasErrors()) {
+            booking.setBookingId(bookingId);
+        }
+        bookingService.cancelBooking(booking,reasonCancel);
+        String username = userDetails.getUsername();
+        User user = userService.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        return "redirect:/bookings/listCancelBookingOfUser/" + user.getId();
+    }
 }

@@ -24,7 +24,8 @@ public class Booking {
     private boolean paymentStatus;
     private boolean cancelStatus;
     private String cancellationReason;
-    private boolean bookingStatus;
+    private boolean checkInStatus;
+    private String pin;
     @OneToOne(mappedBy = "booking")
     private Payment payment;
 

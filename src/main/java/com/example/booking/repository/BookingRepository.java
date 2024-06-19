@@ -12,7 +12,8 @@ public interface BookingRepository extends JpaRepository<Booking, Integer> {
 
 
     List<Booking> findAllByUser_IdAndCancelStatus(Long userId, boolean cancelStatus);
-    List<Booking> findByUser_IdAndBookingStatus(Long userId, boolean bookingStatus);
-    // Example of corrected method
+    List<Booking> findByUser_IdAndCheckInStatus(Long userId, boolean bookingStatus);
     List<Booking> findAllByCancelStatusIsFalseAndCheckInDateLessThanEqualAndCheckOutDateGreaterThanEqual(LocalDate checkInDate, LocalDate checkOutDate);
+    List<Booking> findAllByCheckInStatus(boolean checkInStatus);
+    Booking findBookingByPin(String pin);
 }
