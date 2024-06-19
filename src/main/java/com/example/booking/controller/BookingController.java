@@ -3,8 +3,10 @@ package com.example.booking.controller;
 import com.example.booking.entity.Booking;
 import com.example.booking.entity.User;
 import com.example.booking.service.BookingService;
+import com.example.booking.service.RoomService;
 import com.example.booking.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -12,15 +14,19 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+
 @Controller
 @RequestMapping("/bookings")
 public class BookingController {
     private final BookingService bookingService;
     private final UserService userService;
+    private final RoomService roomService;
     @Autowired
-    public BookingController(BookingService bookingService, UserService userService){
+    public BookingController(BookingService bookingService, UserService userService, RoomService roomService){
         this.bookingService = bookingService;
         this.userService = userService;
+        this.roomService = roomService;
     }
     //for admin
     @GetMapping("/searchBookingByPin")
@@ -121,4 +127,41 @@ public class BookingController {
                 .orElseThrow(() -> new RuntimeException("User not found"));
         return "redirect:/bookings/listCancelBookingOfUser/" + user.getId();
     }
+    @GetMapping("/add/{roomId}")
+    public String createFromBooking(@PathVariable("roomId") int roomId,@RequestParam("checkInDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate checkInDate,
+                                    @RequestParam("checkOutDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate checkOutDate,
+                                    @AuthenticationPrincipal UserDetails userDetails,
+                                    Model model){
+        try {
+            String username = userDetails.getUsername();
+            User user = userService.findByUsername(username)
+                    .orElseThrow(() -> new RuntimeException("User not found"));
+
+            Booking booking = new Booking();
+            booking.setCheckInDate(checkInDate);
+            booking.setCheckOutDate(checkOutDate);
+            booking.setUser(user);
+            booking.setRoom(roomService.searchRoom(roomId));
+            model.addAttribute("booking", booking);
+            return "Bookings/add";
+
+
+        }catch (Exception e){
+            model.addAttribute("errors",e);
+            return "Errors";
+        }
+    }
+    @PostMapping("/save")
+    public String saveCreateFromBooking(Booking booking,BindingResult result,
+                                        @AuthenticationPrincipal UserDetails userDetails){
+        if (result.hasErrors()) {
+            return "/Bookings/add";
+        }
+        String username = userDetails.getUsername();
+        User user = userService.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        bookingService.createBooking(booking);
+        return "redirect:/bookings/listBookingOfUser/" + user.getId();
+    }
+
 }

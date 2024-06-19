@@ -8,7 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-
+import org.springframework.format.annotation.DateTimeFormat;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -22,12 +22,10 @@ public class SearchRoomController {
         this.roomService = roomService;
     }
     @GetMapping("/availableRooms")
-    public String availableRooms(@RequestParam("checkInDate") String checkInDate,
-                                 @RequestParam("checkOutDate") String checkOutDate,
+    public String availableRooms(@RequestParam("checkInDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate checkInDate,
+                                 @RequestParam("checkOutDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate checkOutDate,
                                  Model model) {
-        LocalDate startDate = LocalDate.parse(checkInDate);
-        LocalDate endDate = LocalDate.parse(checkOutDate);
-        List<Room> availableRooms = roomService.availableRooms(startDate, endDate);
+        List<Room> availableRooms = roomService.availableRooms(checkInDate, checkOutDate);
         model.addAttribute("availableRooms", availableRooms);
         return "Rooms/availableRooms";
     }
