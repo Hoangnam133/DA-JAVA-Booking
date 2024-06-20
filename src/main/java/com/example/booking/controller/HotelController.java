@@ -59,20 +59,21 @@ public class HotelController {
     }
     @PostMapping("/saveEdit/{hotelId}")
     public String saveEditForm(@PathVariable int hotelId,
-                               @Valid Hotel hotel, BindingResult result, Model model){
+                               @Valid Hotel hotel, BindingResult result, Model model) {
+
         if (result.hasErrors()) {
-            model.addAttribute("hotelId", hotelId);
+            var errors = result.getAllErrors()
+                    .stream()
+                    .map(DefaultMessageSourceResolvable::getDefaultMessage)
+                    .toArray(String[]::new);
+            model.addAttribute("errors", errors);
+            hotel.setHotelId(hotelId);
             return "Hotels/update";
         }
-        try {
-            hotel.setHotelId(hotelId);
-            hotelService.hotelUpdate(hotel);
-        } catch (RuntimeException ex) {
-            model.addAttribute("errorMessage", "Room not found");
-            return "errorPage";
-        }
-        return "redirect:/home";
+        hotelService.hotelUpdate(hotel);
+        return "redirect:/hotels/homeAdmin";
     }
+
 
 
 
