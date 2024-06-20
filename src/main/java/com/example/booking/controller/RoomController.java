@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Controller
-@RequestMapping("/Rooms")
+@RequestMapping("/rooms")
 public class RoomController {
     private final RoomService roomService;
     private final HotelService hotelService;
@@ -87,16 +87,15 @@ public class RoomController {
     @PostMapping("/saveEdit/{roomId}")
     public String saveEditForm(@PathVariable int roomId, @Valid Room room, BindingResult result, Model model) {
         if (result.hasErrors()) {
-            model.addAttribute("roomId", roomId);
-            return "Rooms/edit";
-        }
-        try {
+            var errors = result.getAllErrors()
+                    .stream()
+                    .map(DefaultMessageSourceResolvable::getDefaultMessage)
+                    .toArray(String[]::new);
+            model.addAttribute("errors", errors);
             room.setRoomId(roomId);
-            roomService.updateRoom(room);
-        } catch (RuntimeException ex) {
-            model.addAttribute("errorMessage", "Room not found");
-            return "errorPage";
+            return "Rooms/add";
         }
+        roomService.updateRoom(room);
         return "redirect:/List";
     }
 

@@ -39,7 +39,7 @@
         <td th:text="${hotel.hotelPhone}"></td>
         <td th:text="${hotel.hotelStatus ? 'Active' : 'Inactive'}"></td>
         <td>
-            <a th:href="@{/hotels/update/{hotelId}(hotelId=${hotel.hotelId})}">Edit</a>
+            <a th:href="@{/hotels/edit/{hotelId}(hotelId=${hotel.hotelId})}">Edit</a>
         </td>
     </tr>
     </tbody>

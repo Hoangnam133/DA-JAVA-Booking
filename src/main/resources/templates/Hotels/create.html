@@ -13,7 +13,7 @@
   </ul>
 </div>
 
-<form th:action="@{/hotels/save}" th:object="${hotel}" method="post">
+<form th:action="@{/hotels/saveEdit/{hotelId}(hotelId=${hotel.hotelId})}" th:object="${hotel}" method="post">
   <label for="hotelName">Hotel Name:</label><br>
   <input type="text" id="hotelName" name="hotelName" th:field="*{hotelName}" required><br>
   <div th:if="${#fields.hasErrors('hotelName')}" th:errors="*{hotelName}"></div>

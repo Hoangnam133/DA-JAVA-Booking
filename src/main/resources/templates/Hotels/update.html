@@ -1,31 +1,41 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
   <title>Update Hotel</title>
 </head>
 <body>
 <h2>Update Hotel</h2>
-<form action="/hotels/update" method="post">
-  <input type="hidden" id="hotelId" name="hotelId" value="${hotel.hotelId}">
+
+<div th:if="${errors != null}">
+  <ul>
+    <li th:each="error : ${errors}" th:text="${error}"></li>
+  </ul>
+</div>
+
+<form th:action="@{/hotels/saveEdit/{hotelId}(hotelId=${hotel.hotelId})}" th:object="${hotel}" method="post">
+  <input type="hidden" th:field="*{hotelId}">
 
   <label for="hotelName">Hotel Name:</label><br>
-  <input type="text" id="hotelName" name="hotelName" value="${hotel.hotelName}" required><br>
+  <input type="text" id="hotelName" th:field="*{hotelName}" required><br>
+  <div th:if="${#fields.hasErrors('hotelName')}" th:errors="*{hotelName}" style="color: red;"></div>
 
   <label for="hotelPhone">Hotel Phone:</label><br>
-  <input type="text" id="hotelPhone" name="hotelPhone" value="${hotel.hotelPhone}"><br>
+  <input type="text" id="hotelPhone" th:field="*{hotelPhone}"><br>
+  <div th:if="${#fields.hasErrors('hotelPhone')}" th:errors="*{hotelPhone}" style="color: red;"></div>
 
   <label for="hotelAddress">Hotel Address:</label><br>
-  <input type="text" id="hotelAddress" name="hotelAddress" value="${hotel.hotelAddress}" required><br>
+  <input type="text" id="hotelAddress" th:field="*{hotelAddress}" required><br>
+  <div th:if="${#fields.hasErrors('hotelAddress')}" th:errors="*{hotelAddress}" style="color: red;"></div>
 
   <label for="hotelImage1">Hotel Image 1:</label><br>
-  <input type="text" id="hotelImage1" name="hotelImage1" value="${hotel.hotelImage1}"><br>
+  <input type="text" id="hotelImage1" th:field="*{hotelImage1}"><br>
 
   <label for="hotelImage2">Hotel Image 2:</label><br>
-  <input type="text" id="hotelImage2" name="hotelImage2" value="${hotel.hotelImage2}"><br>
+  <input type="text" id="hotelImage2" th:field="*{hotelImage2}"><br>
 
   <label for="hotelImage3">Hotel Image 3:</label><br>
-  <input type="text" id="hotelImage3" name="hotelImage3" value="${hotel.hotelImage3}"><br>
+  <input type="text" id="hotelImage3" th:field="*{hotelImage3}"><br>
 
   <input type="submit" value="Update Hotel">
 </form>
