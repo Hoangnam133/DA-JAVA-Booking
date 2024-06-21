@@ -54,7 +54,7 @@ public class LoginSuccess extends SimpleUrlAuthenticationSuccessHandler {
         if (isAdmin) {
            return "hotels/homeAdmin";
         } else if (isUser) {
-            return "/homeUser";
+            return "homeUser";
         } else {
             throw new IllegalStateException();
         }

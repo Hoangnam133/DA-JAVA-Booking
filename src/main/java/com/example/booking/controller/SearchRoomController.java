@@ -25,8 +25,10 @@ public class SearchRoomController {
     public String availableRooms(@RequestParam("checkInDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate checkInDate,
                                  @RequestParam("checkOutDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate checkOutDate,
                                  Model model) {
-        List<Room> availableRooms = roomService.availableRooms(checkInDate, checkOutDate);
-        model.addAttribute("availableRooms", availableRooms);
-        return "Rooms/availableRooms";
+        List<Room> rooms = roomService.availableRooms(checkInDate, checkOutDate);
+        model.addAttribute("rooms", rooms);
+        model.addAttribute("checkInDate", checkInDate);
+        model.addAttribute("checkOutDate", checkOutDate);
+        return "searchRooms/availableRooms";
     }
 }
