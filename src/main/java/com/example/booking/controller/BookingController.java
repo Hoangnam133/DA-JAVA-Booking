@@ -1,6 +1,7 @@
 package com.example.booking.controller;
 
 import com.example.booking.entity.Booking;
+import com.example.booking.entity.Room;
 import com.example.booking.entity.User;
 import com.example.booking.service.BookingService;
 import com.example.booking.service.RoomService;
@@ -15,6 +16,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 
 @Controller
 @RequestMapping("/bookings")
@@ -128,29 +130,34 @@ public class BookingController {
         return "redirect:/bookings/listCancelBookingOfUser/" + user.getId();
     }
     @GetMapping("/add/{roomId}")
-    public String createFromBooking(@PathVariable("roomId") int roomId,@RequestParam("checkInDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate checkInDate,
+    public String createFromBooking(@PathVariable("roomId") int roomId,
+                                    @RequestParam("checkInDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate checkInDate,
                                     @RequestParam("checkOutDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate checkOutDate,
                                     @AuthenticationPrincipal UserDetails userDetails,
-                                    Model model){
+                                    Model model) {
         try {
             String username = userDetails.getUsername();
             User user = userService.findByUsername(username)
-                    .orElseThrow(() -> new RuntimeException("User not found"));
+                    .orElseThrow(() -> new RuntimeException("Không tìm thấy người dùng"));
 
             Booking booking = new Booking();
             booking.setCheckInDate(checkInDate);
             booking.setCheckOutDate(checkOutDate);
             booking.setUser(user);
-            booking.setRoom(roomService.searchRoom(roomId));
+            Room room = roomService.searchRoom(roomId);
+            booking.setRoom(room);
+            long numberOfDays = ChronoUnit.DAYS.between(checkInDate, checkOutDate);
+            double totalPrice = numberOfDays * room.getPrice();
+            booking.setTotalPrice(totalPrice);
+
             model.addAttribute("booking", booking);
             return "Bookings/add";
-
-
-        }catch (Exception e){
-            model.addAttribute("errors",e);
-            return "Errors";
+        } catch (Exception e) {
+            model.addAttribute("errors", e);
+            return "Errors"; // Đảm bảo bạn có view "Errors.html" hoặc tương tự
         }
     }
+
     @PostMapping("/save")
     public String saveCreateFromBooking(Booking booking,BindingResult result,
                                         @AuthenticationPrincipal UserDetails userDetails){
