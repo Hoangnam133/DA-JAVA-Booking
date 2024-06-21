@@ -13,27 +13,27 @@
   </ul>
 </div>
 
-<form th:action="@{/hotels/saveEdit/{hotelId}(hotelId=${hotel.hotelId})}" th:object="${hotel}" method="post">
+<form th:action="@{/hotels/save}" th:object="${hotel}" method="post">
   <label for="hotelName">Hotel Name:</label><br>
-  <input type="text" id="hotelName" name="hotelName" th:field="*{hotelName}" required><br>
+  <input type="text" id="hotelName" name="hotelName"  required><br>
   <div th:if="${#fields.hasErrors('hotelName')}" th:errors="*{hotelName}"></div>
 
   <label for="hotelAddress">Hotel Address:</label><br>
-  <input type="text" id="hotelAddress" name="hotelAddress" th:field="*{hotelAddress}" required><br>
+  <input type="text" id="hotelAddress" name="hotelAddress"  required><br>
   <div th:if="${#fields.hasErrors('hotelAddress')}" th:errors="*{hotelAddress}"></div>
 
   <label for="hotelPhone">Hotel Phone:</label><br>
-  <input type="text" id="hotelPhone" name="hotelPhone" th:field="*{hotelPhone}" required><br>
+  <input type="text" id="hotelPhone" name="hotelPhone"  required><br>
   <div th:if="${#fields.hasErrors('hotelPhone')}" th:errors="*{hotelPhone}"></div>
 
   <label for="hotelImage1">Hotel Image 1:</label><br>
-  <input type="text" id="hotelImage1" name="hotelImage1" th:field="*{hotelImage1}"><br>
+  <input type="text" id="hotelImage1" name="hotelImage1" ><br>
 
   <label for="hotelImage2">Hotel Image 2:</label><br>
-  <input type="text" id="hotelImage2" name="hotelImage2" th:field="*{hotelImage2}"><br>
+  <input type="text" id="hotelImage2" name="hotelImage2" ><br>
 
   <label for="hotelImage3">Hotel Image 3:</label><br>
-  <input type="text" id="hotelImage3" name="hotelImage3" th:field="*{hotelImage3}"><br>
+  <input type="text" id="hotelImage3" name="hotelImage3" ><br>
 
   <input type="submit" value="Create Hotel">
 </form>

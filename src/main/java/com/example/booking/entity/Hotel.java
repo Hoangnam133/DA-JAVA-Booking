@@ -35,7 +35,6 @@ public class Hotel {
 
     @NotBlank(message = "Hotel address is required")
     @Size(min = 20,max = 255, message = "Hotel address must be between 20 and 255 characters")
-    @Pattern(regexp = "^[a-zA-Z0-9 ]*$", message = "Hotel address must not contain special characters")
     private String hotelAddress;
     private String hotelImage1;
     private String hotelImage2;

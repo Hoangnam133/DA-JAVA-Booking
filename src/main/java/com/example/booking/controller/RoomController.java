@@ -19,39 +19,34 @@ import java.util.List;
 @RequestMapping("/rooms")
 public class RoomController {
     private final RoomService roomService;
-    private final HotelService hotelService;
     private final RoomTypeService roomTypeService;
 
     @Autowired
-    public RoomController(RoomService roomService, HotelService hotelService, RoomTypeService roomTypeService) {
+    public RoomController(RoomService roomService, RoomTypeService roomTypeService) {
         this.roomService = roomService;
-        this.hotelService = hotelService;
         this.roomTypeService = roomTypeService;
     }
-    @GetMapping("/List")
+    @GetMapping("/list")
     public String showRoomList(Model model) {
         List<Room> rooms = roomService.showRoomList();
         model.addAttribute("rooms", rooms);
-        return "Rooms/list";
+        return "Rooms/listRoom";
     }
-    @GetMapping("/searchRoom/{roomNumber}")
-    public String getRoom(String roomNumber,Model model){
+    @GetMapping("/searchRoom")
+    public String getRoom(@RequestParam String roomNumber,Model model){
         try {
-            Room findRoom = roomService.searchRoomsByRoomNumber(roomNumber);
-            List<Room> rooms = new ArrayList<>();
-            rooms.add(findRoom);
-            model.addAttribute("room",rooms);
-            return "Rooms/list";
+            List<Room> rooms = roomService.searchRoomsByRoomNumber(roomNumber);
+            model.addAttribute("rooms",rooms);
+            return "Rooms/listRoom";
         }catch (RuntimeException e){
             model.addAttribute("errorMessage", "Room not found");
             return "errorPage";
         }
     }
-    @GetMapping("/add/{hotelId}")
-    public String showAddFrom(@PathVariable int hotelId,@NotNull Model model){
+    @GetMapping("/add")
+    public String showAddFrom(@NotNull Model model){
        try {
            Room add = new Room();
-           add.setHotel(hotelService.findHotelById(hotelId));
            model.addAttribute("room",add);
            model.addAttribute("roomType", roomTypeService.getAll());
            return "Rooms/add";
@@ -67,10 +62,11 @@ public class RoomController {
                     .map(DefaultMessageSourceResolvable::getDefaultMessage)
                     .toArray(String[]::new);
             model.addAttribute("errors", errors);
+            model.addAttribute("roomType", roomTypeService.getAll());
             return "Rooms/add";
         }
         roomService.createRoom(room);
-        return "redirect:/List";
+        return "redirect:/rooms/list";
     }
     @GetMapping("/edit/{roomId}")
     public String showEditFrom(@PathVariable int roomId, Model model){
@@ -93,10 +89,11 @@ public class RoomController {
                     .toArray(String[]::new);
             model.addAttribute("errors", errors);
             room.setRoomId(roomId);
+            model.addAttribute("roomType", roomTypeService.getAll());
             return "Rooms/add";
         }
         roomService.updateRoom(room);
-        return "redirect:/List";
+        return "redirect:/rooms/list";
     }
 
 }

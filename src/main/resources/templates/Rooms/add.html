@@ -1,0 +1,58 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Room</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container">
+    <h2>Add Room</h2>
+    <form th:action="@{/rooms/save}" th:object="${room}" method="post" class="needs-validation" novalidate>
+        <input type="hidden" th:field="*{hotel.hotelId}">
+        <div class="form-group">
+            <label for="roomNumber">Room Number:</label>
+            <input type="text" class="form-control" id="roomNumber" th:field="*{roomNumber}" required>
+            <div class="invalid-feedback" th:if="${#fields.hasErrors('roomNumber')}" th:errors="*{roomNumber}"></div>
+        </div>
+        <div class="form-group">
+            <label for="description">Description:</label>
+            <textarea class="form-control" id="description" th:field="*{description}" required></textarea>
+            <div class="invalid-feedback" th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></div>
+        </div>
+        <div class="form-group">
+            <label for="price">Price:</label>
+            <input type="number" class="form-control" id="price" th:field="*{price}" required>
+            <div class="invalid-feedback" th:if="${#fields.hasErrors('price')}" th:errors="*{price}"></div>
+        </div>
+        <div class="form-group">
+            <label for="roomType">Room Type:</label>
+            <select class="form-control" id="roomType" th:field="*{roomType.roomTypeId}" required>
+                <option th:each="type : ${roomType}" th:value="${type.roomTypeId}" th:text="${type.roomTypeName} +', sức chứa :'+ ${type.capacity}" ></option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="roomImage1">Room Image 1:</label>
+            <input type="text" class="form-control" id="roomImage1" th:field="*{roomImage1}">
+        </div>
+        <div class="form-group">
+            <label for="roomImage2">Room Image 2:</label>
+            <input type="text" class="form-control" id="roomImage2" th:field="*{roomImage2}">
+        </div>
+        <div class="form-group form-check">
+            <input type="checkbox" class="form-check-input" id="roomStatus" th:field="*{roomStatus}">
+            <label class="form-check-label" for="roomStatus">Room Status</label>
+        </div>
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary">Save</button>
+        </div>
+        <div th:if="${errors}" class="alert alert-danger" role="alert">
+            <ul>
+                <li th:each="error : ${errors}" th:text="${error}"></li>
+            </ul>
+        </div>
+    </form>
+</div>
+</body>
+</html>
