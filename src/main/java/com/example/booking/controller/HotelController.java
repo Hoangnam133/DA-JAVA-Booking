@@ -44,7 +44,7 @@ public class HotelController {
             return "Hotels/create";
         }
         hotelService.hotelCreate(hotel);
-        return "redirect:/hotels";
+        return "redirect:/hotels/homeAdmin";
     }
     @GetMapping("/edit/{hotelId}")
     public String showEditFrom(@PathVariable int hotelId, Model model){

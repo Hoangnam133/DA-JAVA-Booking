@@ -1,8 +1,10 @@
 <!DOCTYPE html>
-<html lang="en" >
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Hotels Home Page</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <style>
         table {
             width: 100%;
@@ -19,30 +21,38 @@
     </style>
 </head>
 <body>
-<h2>Welcome to Hotels Management</h2>
+<div class="container">
+    <h2>Welcome to Hotels Management</h2>
 
-<h3>List of Hotels:</h3>
-<table>
-    <thead>
-    <tr>
-        <th>Hotel Name</th>
-        <th>Address</th>
-        <th>Phone</th>
-        <th>Status</th>
-        <th>Actions</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="hotel : ${hotels}">
-        <td th:text="${hotel.hotelName}"></td>
-        <td th:text="${hotel.hotelAddress}"></td>
-        <td th:text="${hotel.hotelPhone}"></td>
-        <td th:text="${hotel.hotelStatus ? 'Active' : 'Inactive'}"></td>
-        <td>
-            <a th:href="@{/hotels/edit/{hotelId}(hotelId=${hotel.hotelId})}">Edit</a>
-        </td>
-    </tr>
-    </tbody>
-</table>
+    <h3>Hotels:</h3>
+    <table class="table table-striped">
+        <thead class="thead-dark">
+        <tr>
+            <th>Hotel Name</th>
+            <th>Address</th>
+            <th>Phone</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="hotel : ${hotels}">
+            <td th:text="${hotel.hotelName}"></td>
+            <td th:text="${hotel.hotelAddress}"></td>
+            <td th:text="${hotel.hotelPhone}"></td>
+            <td th:text="${hotel.hotelStatus ? 'Active' : 'Inactive'}"></td>
+            <td>
+                <a th:href="@{/hotels/edit/{hotelId}(hotelId=${hotel.hotelId})}" class="btn btn-warning btn-sm">Edit</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <a th:href="@{/rooms/list}" class="btn btn-primary">List Rooms</a>
+</div>
+
+<!-- Bootstrap JS and dependencies -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>

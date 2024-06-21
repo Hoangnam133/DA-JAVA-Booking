@@ -5,6 +5,7 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import jakarta.websocket.OnMessage;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -26,7 +27,7 @@ public class Room {
     @NotBlank(message = "roomNumber is required")
     @Size(min = 1, max = 50, message = "roomNumber must be between 1 and 50 characters")
     private String roomNumber;
-    @NotBlank(message = "roomNumber is required")
+    @NotBlank(message = "Description is required")
     private String description;
     @NotNull(message = "Price is required")
     @Min(value = 1000, message = "Price must be greater than 1000 VND")

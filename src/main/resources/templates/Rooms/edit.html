@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Room</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container">
+    <h1>Edit Room</h1>
+    <form th:action="@{'/rooms/saveEdit/' + ${room.roomId}}" th:object="${room}" method="post" class="needs-validation" novalidate>
+        <div class="form-group">
+            <label for="roomNumber">Room Number:</label>
+            <input type="text" class="form-control" id="roomNumber" th:field="*{roomNumber}" required>
+            <div class="invalid-feedback" th:if="${#fields.hasErrors('roomNumber')}" th:errors="*{roomNumber}"></div>
+        </div>
+        <div class="form-group">
+            <label for="description">Description:</label>
+            <textarea class="form-control" id="description" th:field="*{description}" required></textarea>
+            <div class="invalid-feedback" th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></div>
+        </div>
+        <div class="form-group">
+            <label for="price">Price:</label>
+            <input type="number" class="form-control" id="price" th:field="*{price}" required>
+            <div class="invalid-feedback" th:if="${#fields.hasErrors('price')}" th:errors="*{price}"></div>
+        </div>
+        <div class="form-group">
+            <label for="roomType">Room Type:</label>
+            <select class="form-control" id="roomType" th:field="*{roomType.roomTypeId}" required>
+                <option th:each="type : ${roomType}" th:value="${type.roomTypeId}" th:text="${type.roomTypeName + ' (Capacity: ' + type.capacity + ')'}"></option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="roomImage1">Room Image 1:</label>
+            <input type="text" class="form-control" id="roomImage1" th:field="*{roomImage1}">
+        </div>
+        <div class="form-group">
+            <label for="roomImage2">Room Image 2:</label>
+            <input type="text" class="form-control" id="roomImage2" th:field="*{roomImage2}">
+        </div>
+        <div class="form-group">
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="roomStatus" th:field="*{roomStatus}">
+                <label class="form-check-label" for="roomStatus">Active</label>
+            </div>
+        </div>
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary">Save</button>
+        </div>
+        <div th:if="${errors}" class="alert alert-danger" role="alert">
+            <ul>
+                <li th:each="error : ${errors}" th:text="${error}"></li>
+            </ul>
+        </div>
+    </form>
+</div>
+<!-- Bootstrap JS and dependencies -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

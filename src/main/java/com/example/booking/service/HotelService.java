@@ -36,6 +36,7 @@ public class HotelService {
             existingHotel.setHotelImage1(hotelUpdate.getHotelImage1());
             existingHotel.setHotelImage2(hotelUpdate.getHotelImage2());
             existingHotel.setHotelImage3(hotelUpdate.getHotelImage3());
+            existingHotel.setHotelStatus(hotelUpdate.isHotelStatus());
             hotelRepository.save(existingHotel);
         }
         catch (Exception e) {

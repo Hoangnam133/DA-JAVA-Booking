@@ -1,8 +1,10 @@
 package com.example.booking.service;
 
 import com.example.booking.entity.Booking;
+import com.example.booking.entity.Hotel;
 import com.example.booking.entity.Room;
 import com.example.booking.repository.BookingRepository;
+import com.example.booking.repository.HotelRepository;
 import com.example.booking.repository.RoomRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,11 +15,13 @@ import java.util.List;
 public class RoomService {
     private final RoomRepository roomRepository;
     private final BookingRepository bookingRepository;
+    private final HotelRepository hotelRepository;
 
     @Autowired
-    public RoomService(RoomRepository roomRepository, BookingRepository bookingRepository) {
+    public RoomService(RoomRepository roomRepository, BookingRepository bookingRepository, HotelRepository hotelRepository) {
         this.roomRepository = roomRepository;
         this.bookingRepository = bookingRepository;
+        this.hotelRepository = hotelRepository;
     }
     public List<Room> availableRooms(LocalDate checkInDate, LocalDate checkOutDate) {
         List<Room> availableRooms = roomRepository.findAllByRoomStatusIsTrue();
@@ -27,6 +31,9 @@ public class RoomService {
         return availableRooms;
     }
     public void createRoom(Room room){
+        List<Hotel> hotels = hotelRepository.findAll();
+        Hotel hotel = hotels.getFirst();
+        room.setHotel(hotel);
         roomRepository.save(room);
     }
     public void updateRoom(Room room){
@@ -36,6 +43,7 @@ public class RoomService {
         existingRoom.setRoomImage2(room.getRoomImage2());
         existingRoom.setPrice(room.getPrice());
         existingRoom.setDescription(room.getDescription());
+        existingRoom.setRoomStatus(room.isRoomStatus());
         roomRepository.save(existingRoom);
 
     }
@@ -49,8 +57,8 @@ public class RoomService {
         return roomRepository.findById(roomId)
                 .orElseThrow(()-> new RuntimeException("Room not found"));
     }
-    public Room searchRoomsByRoomNumber(String roomNumber){
-        Room findRoom =  roomRepository.getRoomByRoomNumber(roomNumber);
+    public List<Room> searchRoomsByRoomNumber(String roomNumber){
+        List<Room> findRoom = roomRepository.findAllByRoomNumber(roomNumber);
         if (findRoom == null){
             throw new RuntimeException("Room not found");
         }
