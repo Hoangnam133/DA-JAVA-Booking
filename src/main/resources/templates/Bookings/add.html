@@ -11,18 +11,23 @@
     <form th:action="@{/bookings/save}" th:object="${booking}" method="post" class="mt-4">
         <div class="form-group">
             <label for="checkInDate">Check-In Date:</label>
-            <input type="date" id="checkInDate" name="checkInDate" th:field="*{checkInDate}"
-                   th:readonly="${true}" class="form-control" required>
+            <input type="text" id="checkInDate" name="checkInDate" th:field="*{checkInDate}" th:format="'dd/MM/yyyy'"
+                   readonly="readonly" class="form-control" required>
         </div>
         <div class="form-group">
             <label for="checkOutDate">Check-Out Date:</label>
-            <input type="date" id="checkOutDate" name="checkOutDate" th:field="*{checkOutDate}"
-                   th:readonly="${true}" class="form-control" required>
+            <input type="text" id="checkOutDate" name="checkOutDate" th:field="*{checkOutDate}" th:format="'dd/MM/yyyy'"
+                   readonly="readonly" class="form-control" required>
         </div>
         <div class="form-group">
             <label for="totalPrice">Total Price:</label>
             <input type="text" id="totalPrice" name="totalPrice" th:field="*{totalPrice}"
-                   class="form-control" th:readonly="${true}" disabled>
+                   class="form-control" readonly="readonly" disabled>
+        </div>
+        <div class="form-group">
+            <label for="room">Room:</label>
+            <input type="text" id="room" name="room" th:field="*{room.roomType.roomTypeName}" readonly="readonly"
+                   class="form-control">
         </div>
         <button type="submit" class="btn btn-primary">Book Now</button>
     </form>

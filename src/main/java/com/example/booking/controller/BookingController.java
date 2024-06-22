@@ -6,6 +6,7 @@ import com.example.booking.entity.User;
 import com.example.booking.service.BookingService;
 import com.example.booking.service.RoomService;
 import com.example.booking.service.UserService;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
+import java.util.List;
 
 @Controller
 @RequestMapping("/bookings")
@@ -129,6 +131,18 @@ public class BookingController {
                 .orElseThrow(() -> new RuntimeException("User not found"));
         return "redirect:/bookings/listCancelBookingOfUser/" + user.getId();
     }
+    @GetMapping("/AvailableRooms")
+    public String searchAvailableRooms(@RequestParam("checkInDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate checkInDate,
+                                       @RequestParam("checkOutDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate checkOutDate,
+                                       Model model) {
+        List<Room> rooms = roomService.availableRooms(checkInDate, checkOutDate);
+        model.addAttribute("rooms", rooms);
+        model.addAttribute("checkInDate", checkInDate);
+        model.addAttribute("checkOutDate", checkOutDate);
+        return "Bookings/availableRooms";
+    }
+
+
     @GetMapping("/add/{roomId}")
     public String createFromBooking(@PathVariable("roomId") int roomId,
                                     @RequestParam("checkInDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate checkInDate,
@@ -138,14 +152,15 @@ public class BookingController {
         try {
             String username = userDetails.getUsername();
             User user = userService.findByUsername(username)
-                    .orElseThrow(() -> new RuntimeException("Không tìm thấy người dùng"));
-
+                    .orElseThrow(() -> new RuntimeException("User not found"));
             Booking booking = new Booking();
             booking.setCheckInDate(checkInDate);
             booking.setCheckOutDate(checkOutDate);
             booking.setUser(user);
             Room room = roomService.searchRoom(roomId);
-            booking.setRoom(room);
+            if (room == null) {
+                throw new RuntimeException("Room not found roomId: " + roomId);
+            }
             long numberOfDays = ChronoUnit.DAYS.between(checkInDate, checkOutDate);
             double totalPrice = numberOfDays * room.getPrice();
             booking.setTotalPrice(totalPrice);
@@ -154,7 +169,7 @@ public class BookingController {
             return "Bookings/add";
         } catch (Exception e) {
             model.addAttribute("errors", e);
-            return "Errors"; // Đảm bảo bạn có view "Errors.html" hoặc tương tự
+            return "Errors"; // Ensure you have a view "Errors.html" or similar
         }
     }
 
@@ -167,8 +182,10 @@ public class BookingController {
         String username = userDetails.getUsername();
         User user = userService.findByUsername(username)
                 .orElseThrow(() -> new RuntimeException("User not found"));
+        booking.setUser(user);
         bookingService.createBooking(booking);
-        return "redirect:/bookings/listBookingOfUser/" + user.getId();
+        return "redirect:/homeUser" ;
+//                + user.getId();
     }
 
 }

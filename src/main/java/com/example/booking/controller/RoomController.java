@@ -1,7 +1,6 @@
 package com.example.booking.controller;
 
 import com.example.booking.entity.Room;
-import com.example.booking.service.HotelService;
 import com.example.booking.service.RoomService;
 import com.example.booking.service.RoomTypeService;
 import jakarta.validation.Valid;
@@ -12,8 +11,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import java.util.ArrayList;
 import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 @Controller
 @RequestMapping("/rooms")
@@ -26,23 +27,37 @@ public class RoomController {
         this.roomService = roomService;
         this.roomTypeService = roomTypeService;
     }
-    @GetMapping("/list")
-    public String showRoomList(Model model) {
-        List<Room> rooms = roomService.showRoomList();
-        model.addAttribute("rooms", rooms);
-        return "Rooms/listRoom";
-    }
+//    @GetMapping("/list")
+//    public String showRoomList(Model model) {
+//        List<Room> rooms = roomService.showRoomList();
+//        model.addAttribute("rooms", rooms);
+//        return "Rooms/listRoom";
+//    }
+@GetMapping("/list")
+public String showRoomList(@RequestParam(defaultValue = "0") int page, Model model) {
+    Pageable pageable = PageRequest.of(page, 6);
+    Page<Room> roomPage = roomService.showRoomList(pageable);
+    model.addAttribute("rooms", roomPage.getContent());
+    model.addAttribute("totalPages", roomPage.getTotalPages());
+    model.addAttribute("currentPage", page);
+    return "Rooms/listRoom";
+}
     @GetMapping("/searchRoom")
-    public String getRoom(@RequestParam String roomNumber,Model model){
+    public String getRoom(@RequestParam String roomNumber, Model model) {
         try {
             List<Room> rooms = roomService.searchRoomsByRoomNumber(roomNumber);
-            model.addAttribute("rooms",rooms);
+            if (rooms.isEmpty()) {
+                model.addAttribute("errorMessage", "Room not found");
+            } else {
+                model.addAttribute("rooms", rooms);
+            }
             return "Rooms/listRoom";
-        }catch (RuntimeException e){
+        } catch (RuntimeException e) {
             model.addAttribute("errorMessage", "Room not found");
             return "errorPage";
         }
     }
+
     @GetMapping("/add")
     public String showAddFrom(@NotNull Model model){
        try {
