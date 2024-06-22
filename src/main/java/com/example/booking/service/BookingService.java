@@ -31,19 +31,16 @@ public class BookingService {
 
         return sb.toString();
     }
+
     public void createBooking(Booking booking){
-        booking.setTotalPrice(totalPrice(booking));
         booking.setCheckInStatus(false);
         booking.setCancelStatus(false);
         booking.setPaymentStatus(false);
         booking.setPin(generateRandomString());
+        System.out.println(booking.getTotalPrice());
         bookingRepository.save(booking);
     }
-    private double totalPrice(Booking booking){
-        double price = booking.getRoom().getPrice();
-        long numberOfDays = ChronoUnit.DAYS.between(booking.getCheckInDate(), booking.getCheckOutDate());
-        return price * numberOfDays;
-    }
+
     public void cancelBooking (Booking booking, String reasonCancel){
         booking.setCancelStatus(true);
         booking.setCancellationReason(reasonCancel);

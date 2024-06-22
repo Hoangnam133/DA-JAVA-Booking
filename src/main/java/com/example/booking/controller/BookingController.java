@@ -26,6 +26,7 @@ public class BookingController {
     private final BookingService bookingService;
     private final UserService userService;
     private final RoomService roomService;
+    public double gb_totalPrice = 0;
     @Autowired
     public BookingController(BookingService bookingService, UserService userService, RoomService roomService){
         this.bookingService = bookingService;
@@ -163,8 +164,9 @@ public class BookingController {
             }
             long numberOfDays = ChronoUnit.DAYS.between(checkInDate, checkOutDate);
             double totalPrice = numberOfDays * room.getPrice();
+            gb_totalPrice = totalPrice;
             booking.setTotalPrice(totalPrice);
-
+            booking.setRoom(room);
             model.addAttribute("booking", booking);
             return "Bookings/add";
         } catch (Exception e) {
@@ -183,7 +185,10 @@ public class BookingController {
         User user = userService.findByUsername(username)
                 .orElseThrow(() -> new RuntimeException("User not found"));
         booking.setUser(user);
+        booking.setTotalPrice(gb_totalPrice);
         bookingService.createBooking(booking);
+
+        System.out.println(booking);
         return "redirect:/homeUser" ;
 //                + user.getId();
     }
