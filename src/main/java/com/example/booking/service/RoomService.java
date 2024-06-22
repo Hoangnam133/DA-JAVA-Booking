@@ -7,6 +7,8 @@ import com.example.booking.repository.BookingRepository;
 import com.example.booking.repository.HotelRepository;
 import com.example.booking.repository.RoomRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.List;
@@ -37,25 +39,20 @@ public class RoomService {
         roomRepository.save(room);
     }
     public void updateRoom(Room room){
-        Room existingRoom = searchRoom(room.getRoomId());
-        existingRoom.setRoomNumber(room.getRoomNumber());
-        existingRoom.setRoomImage1(room.getRoomImage1());
-        existingRoom.setRoomImage2(room.getRoomImage2());
-        existingRoom.setPrice(room.getPrice());
-        existingRoom.setDescription(room.getDescription());
-        existingRoom.setRoomStatus(room.isRoomStatus());
-        roomRepository.save(existingRoom);
+        roomRepository.save(room);
 
     }
-    public List<Room> showRoomList(){
-        return roomRepository.findAll();
+//    public List<Room> showRoomList(Pageable pageable){
+//        return roomRepository.findAll();
+//    }
+    public Page<Room> showRoomList(Pageable pageable) {
+        return roomRepository.findAll(pageable);
     }
     public List<Room> activeRoomsList(){
         return roomRepository.findAllByRoomStatusIsTrue();
     }
     public Room searchRoom(int roomId){
-        return roomRepository.findById(roomId)
-                .orElseThrow(()-> new RuntimeException("Room not found"));
+        return roomRepository.findByRoomId(roomId);
     }
     public List<Room> searchRoomsByRoomNumber(String roomNumber){
         List<Room> findRoom = roomRepository.findAllByRoomNumber(roomNumber);

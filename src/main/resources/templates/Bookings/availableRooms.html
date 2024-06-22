@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Available Rooms</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container mt-5">
+  <h1 class="text-center">Available Rooms</h1>
+  <table class="table table-striped">
+    <thead class="thead-dark">
+    <tr>
+      <th>Room Number</th>
+      <th>Type</th>
+      <th>Price</th>
+      <th>Capacity</th>
+      <th>Description</th>
+      <th>Total Price</th>
+      <th>Action</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="room : ${rooms}">
+      <td th:text="${room.roomNumber}">Room Number</td>
+      <td th:text="${room.roomType.roomTypeName}">Type</td>
+      <td th:text="${room.price}">Price</td>
+      <td th:text="${room.roomType.capacity}">Capacity</td>
+      <td th:text="${room.description}">Description</td>
+      <td th:text="${T(java.time.temporal.ChronoUnit).DAYS.between(checkInDate, checkOutDate) * room.price}">Total Price</td>
+      <td>
+        <a th:href="@{'/bookings/add/' + ${room.id} + '?checkInDate=' + ${checkInDate} + '&checkOutDate=' + ${checkOutDate}}">Book</a>
+      </td>
+
+    </tr>
+    </tbody>
+  </table>
+</div>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

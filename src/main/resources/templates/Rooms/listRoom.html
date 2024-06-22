@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -38,10 +38,16 @@
         <a th:href="@{/rooms/add}" class="btn btn-custom">Add Room</a>
     </div>
     <div class="mb-3">
-        <a th:href="@{/rooms/list}" class="btn btn-custom">All Room</a>
+        <a th:href="@{/rooms/list}" class="btn btn-custom">All Rooms</a>
     </div>
+
+    <!-- Error Message -->
+    <div th:if="${errorMessage}" class="alert alert-danger" role="alert">
+        <span th:text="${errorMessage}"></span>
+    </div>
+
     <!-- Table to display room list -->
-    <table class="table table-striped">
+    <table class="table table-striped" th:if="${rooms}">
         <thead class="thead-dark">
         <tr>
             <th>Room Number</th>
@@ -68,6 +74,25 @@
         </tr>
         </tbody>
     </table>
+
+    <!-- Pagination controls -->
+    <nav aria-label="Page navigation" th:if="${totalPages > 1}">
+        <ul class="pagination">
+            <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
+                <a class="page-link" th:href="@{'/rooms/list?page=' + ${currentPage - 1}}" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+            <li class="page-item" th:each="i : ${#numbers.sequence(0, totalPages - 1)}" th:classappend="${currentPage == i} ? 'active'">
+                <a class="page-link" th:href="@{'/rooms/list?page=' + ${i}}" th:text="${i + 1}">1</a>
+            </li>
+            <li class="page-item" th:classappend="${currentPage == totalPages - 1} ? 'disabled'">
+                <a class="page-link" th:href="@{'/rooms/list?page=' + ${currentPage + 1}}" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
 </div>
 <!-- Bootstrap JS and dependencies -->
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
