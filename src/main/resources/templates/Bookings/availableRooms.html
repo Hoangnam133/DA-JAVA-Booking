@@ -28,10 +28,14 @@
       <td th:text="${room.description}">Description</td>
       <td th:text="${T(java.time.temporal.ChronoUnit).DAYS.between(checkInDate, checkOutDate) * room.price}">Total Price</td>
       <td>
-        <a th:href="@{'/bookings/add/' + ${room.id} + '?checkInDate=' + ${checkInDate} + '&checkOutDate=' + ${checkOutDate}}">Book</a>
-      </td>
+        <a th:href="@{'/bookings/add/' + ${room.roomId} + '?checkInDate=' + ${checkInDate} + '&checkOutDate=' + ${checkOutDate}}">
+          Book this room
+        </a>
+
+      <td>
 
     </tr>
+
     </tbody>
   </table>
 </div>
