@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
 @Controller
 @RequestMapping("/")
 @RequiredArgsConstructor
-public class UserController {
+public class git merge mainUserController {
     private final UserService userService;
 
         @GetMapping("/login")
