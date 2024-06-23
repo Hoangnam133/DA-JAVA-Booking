@@ -3,6 +3,9 @@ package com.example.booking.service;
 import com.example.booking.entity.Booking;
 import com.example.booking.repository.BookingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.temporal.ChronoUnit;
@@ -70,13 +73,16 @@ public class BookingService {
         }
         return bookingsIsCanceled;
     }
-    public List<Booking> showBookingListOfAdmin(){
-        List<Booking> bookings =bookingRepository.findAllByCheckInStatus(false);
-        if (bookings == null){
-            throw new RuntimeException("No bookings found");
-        }
-        return bookings;
-    }
+//    public List<Booking> showBookingListOfAdmin(){
+//        List<Booking> bookings =bookingRepository.findAllByCheckInStatus(false);
+//        if (bookings == null){
+//            throw new RuntimeException("No bookings found");
+//        }
+//        return bookings;
+//    }
+public Page<Booking> showBookingListOfAdmin(Pageable pageable) {
+    return bookingRepository.findAllByCheckInStatusFalseOrderByCheckInDateDesc(pageable);
+}
     public List<Booking> showBookingListCheckedOfAdmin(){
         List<Booking> bookingsChecked =  bookingRepository.findAllByCheckInStatus(true);
         if (bookingsChecked == null){

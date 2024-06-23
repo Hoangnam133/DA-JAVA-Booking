@@ -8,6 +8,9 @@ import com.example.booking.service.RoomService;
 import com.example.booking.service.UserService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -46,16 +49,34 @@ public class BookingController {
         }
     }
     // for admin
+//    @GetMapping("/listBookingOfAdmin")
+//    public String getAllBookingOfAdmin(Model model){
+//        try{
+//            model.addAttribute("bookings",bookingService.showBookingListOfAdmin());
+//            return "ListOfAdmin/listBooking";
+//        }catch (Exception e){
+//            model.addAttribute("Errors",e);
+//            return "errors";
+//        }
+//    }
     @GetMapping("/listBookingOfAdmin")
-    public String getAllBookingOfAdmin(Model model){
-        try{
-            model.addAttribute("bookings",bookingService.showBookingListOfAdmin());
-            return "Bookings/listBookingAdmin";
-        }catch (Exception e){
-            model.addAttribute("Errors",e);
+    public String getAllBookingOfAdmin(@RequestParam(defaultValue = "0") int page, Model model) {
+        try {
+            Pageable pageable = PageRequest.of(page, 4);
+            Page<Booking> bookingPage = bookingService.showBookingListOfAdmin(pageable);
+            model.addAttribute("bookings", bookingPage.getContent());
+            model.addAttribute("totalPages", bookingPage.getTotalPages());
+            model.addAttribute("totalPages", bookingPage.getTotalPages());
+            model.addAttribute("currentPage", page);
+            return "ListOfAdmin/listBooking";
+        } catch (Exception e) {
+            model.addAttribute("Errors", e);
             return "errors";
         }
     }
+
+
+
     // for admin
     @GetMapping("/listBookingCheckedOfAdmin")
     public String getAllBookingIsChecked(Model model){
@@ -95,16 +116,21 @@ public class BookingController {
         try {
             Booking existingBooking = bookingService.findBookingById(bookingId);
             model.addAttribute("booking",existingBooking);
-            return "Bookings/RequirescheckIn";
+            return "Bookings/requiresCheckIn";
         }catch (Exception e){
             model.addAttribute("errors",e);
             return "errors";
         }
     }
     @PostMapping("/saveBookingUpdateCheckIn/{bookingId}")
-    public String saveUserRequiresRegistration(@PathVariable("bookingId") int bookingId, Booking booking){
-                bookingService.checkIn(booking);
-                return "redirect:/bookings/listBookingCheckedOfAdmin";
+    public String saveUserRequiresRegistration(@PathVariable("bookingId") int bookingId, Booking booking, Model model){
+               try {
+                   bookingService.checkIn(booking);
+                   return "redirect:/bookings/listBookingOfAdmin";
+               }catch (Exception e){
+                   model.addAttribute("errors",e);
+                   return "errors";
+               }
     }
     // for user
     @GetMapping("/bookingUpdateIsCanceled/{bookingId}")

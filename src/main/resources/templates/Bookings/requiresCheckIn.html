@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Check-In Confirmation</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<header class="bg-primary text-white text-center py-3">
+    <h1>Check-In Confirmation</h1>
+</header>
+<main class="container mt-4">
+    <div class="card">
+        <div class="card-header">
+            <h5 class="card-title">Booking Details</h5>
+        </div>
+        <div class="card-body">
+            <dl class="row">
+                <dt class="col-sm-4">Booking ID:</dt>
+                <dd class="col-sm-8" th:text="${booking.bookingId}"></dd>
+
+                <dt class="col-sm-4">Check-In Date:</dt>
+                <dd class="col-sm-8" th:text="${booking.checkInDate}"></dd>
+
+                <dt class="col-sm-4">Check-Out Date:</dt>
+                <dd class="col-sm-8" th:text="${booking.checkOutDate}"></dd>
+
+                <dt class="col-sm-4">Total Price:</dt>
+                <dd class="col-sm-8" th:text="${booking.totalPrice}"></dd>
+
+                <dt class="col-sm-4">Payment Status:</dt>
+                <dd class="col-sm-8" th:text="${booking.paymentStatus ? 'Paid' : 'Pending'}"></dd>
+
+                <dt class="col-sm-4">Cancel Status:</dt>
+                <dd class="col-sm-8" th:text="${booking.cancelStatus ? 'Cancelled' : 'Active'}"></dd>
+
+                <dt class="col-sm-4">Room:</dt>
+                <dd class="col-sm-8" th:text="${booking.room != null ? booking.room.roomNumber : 'No Room Assigned'}"></dd>
+
+                <dt class="col-sm-4">User:</dt>
+                <dd class="col-sm-8" th:text="${booking.user.username}"></dd>
+            </dl>
+            <form th:action="@{'/bookings/saveBookingUpdateCheckIn/' + ${booking.bookingId}}" method="post">
+                <button type="submit" class="btn btn-primary">Confirm Check-In</button>
+            </form>
+        </div>
+    </div>
+</main>
+<footer class="bg-light text-center py-3">
+    <p>&copy; 2024 Booking Management System</p>
+</footer>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
