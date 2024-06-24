@@ -7,6 +7,7 @@ import com.example.booking.service.BookingService;
 import com.example.booking.service.RoomService;
 import com.example.booking.service.UserService;
 import jakarta.servlet.http.HttpSession;
+import org.hibernate.validator.internal.constraintvalidators.bv.AssertTrueValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -37,28 +38,40 @@ public class BookingController {
         this.roomService = roomService;
     }
     //for admin
-    @GetMapping("/searchBookingByPin")
-    public String getBooking(@RequestParam String pin, Model model) {
+    @GetMapping("/searchBookingByUserPhone")
+    public String getBooking(@RequestParam String phone, Model model) {
         try {
-            Booking booking = bookingService.searchBookingByPin(pin);
-            model.addAttribute("booking", booking);
-            return "Bookings/bookingDetails";
+            List<Booking> bookings = bookingService.findBookingByPhone(phone);
+            if(bookings.isEmpty()){
+                model.addAttribute("errorMessage", "Booking not found");
+            }
+            else {
+                model.addAttribute("bookings", bookings);
+            }
+            model.addAttribute("bookings", bookings);
+            return "ListOfAdmin/listBooking";
         } catch (IllegalArgumentException e) {
-            model.addAttribute("error", "Booking not found");
-            return "errors";
+            model.addAttribute("errorMessage", "Booking not found");
+            return "errorPage";
         }
     }
-    // for admin
-//    @GetMapping("/listBookingOfAdmin")
-//    public String getAllBookingOfAdmin(Model model){
-//        try{
-//            model.addAttribute("bookings",bookingService.showBookingListOfAdmin());
-//            return "ListOfAdmin/listBooking";
-//        }catch (Exception e){
-//            model.addAttribute("Errors",e);
-//            return "errors";
-//        }
-//    }
+    @GetMapping("/searchBookingConfirmByUserPhone")
+    public String getBookingConfirm(@RequestParam String phone, Model model) {
+        try {
+            List<Booking> bookings = bookingService.findBookingConfirmByPhone(phone);
+            if(bookings.isEmpty()){
+                model.addAttribute("errorMessage", "Booking not found");
+            }
+            else {
+                model.addAttribute("bookings", bookings);
+            }
+            model.addAttribute("bookings", bookings);
+            return "ListOfAdmin/listBookingChecked";
+        } catch (IllegalArgumentException e) {
+            model.addAttribute("errorMessage", "Booking not found");
+            return "errorPage";
+        }
+    }
     @GetMapping("/listBookingOfAdmin")
     public String getAllBookingOfAdmin(@RequestParam(defaultValue = "0") int page, Model model) {
         try {
@@ -75,14 +88,17 @@ public class BookingController {
         }
     }
 
-
-
     // for admin
     @GetMapping("/listBookingCheckedOfAdmin")
-    public String getAllBookingIsChecked(Model model){
+    public String getAllBookingIsChecked(@RequestParam(defaultValue = "0") int page, Model model){
         try {
-            model.addAttribute("bookings",bookingService.showBookingListCheckedOfAdmin());
-            return "Bookings/listBookingCheckedAdmin";
+            Pageable pageable = PageRequest.of(page, 4);
+            Page<Booking> bookingPage = bookingService.showBookingListCheckedOfAdmin(pageable);
+            model.addAttribute("bookings", bookingPage.getContent());
+            model.addAttribute("totalPages", bookingPage.getTotalPages());
+            model.addAttribute("totalPages", bookingPage.getTotalPages());
+            model.addAttribute("currentPage", page);
+            return "ListOfAdmin/listBookingChecked";
         }catch (Exception e){
             model.addAttribute("Errors",e);
             return "errors";
@@ -125,8 +141,10 @@ public class BookingController {
     @PostMapping("/saveBookingUpdateCheckIn/{bookingId}")
     public String saveUserRequiresRegistration(@PathVariable("bookingId") int bookingId, Booking booking, Model model){
                try {
-                   bookingService.checkIn(booking);
-                   return "redirect:/bookings/listBookingOfAdmin";
+                   Booking existingBooking = bookingService.findBookingById(bookingId);
+                   existingBooking.setCheckInStatus(true);
+                   bookingService.checkIn(existingBooking);
+                   return "redirect:/bookings/listBookingCheckedOfAdmin";
                }catch (Exception e){
                    model.addAttribute("errors",e);
                    return "errors";
@@ -144,6 +162,7 @@ public class BookingController {
             return "errors";
         }
     }
+    // for user
     @PostMapping("/SaveBookingUpdateIsCanceled/{bookingId}")
     public String saveUserRequestCancel(@PathVariable("bookingId") int bookingId,
                                         @RequestParam String reasonCancel,
@@ -189,11 +208,20 @@ public class BookingController {
                 throw new RuntimeException("Room not found roomId: " + roomId);
             }
             long numberOfDays = ChronoUnit.DAYS.between(checkInDate, checkOutDate);
-            double totalPrice = numberOfDays * room.getPrice();
-            gb_totalPrice = totalPrice;
-            booking.setTotalPrice(totalPrice);
+            if(numberOfDays == 0){
+                booking.setTotalPrice(room.getPrice());
+                gb_totalPrice = room.getPrice();
+            }
+            else {
+                booking.setTotalPrice(room.getPrice() * numberOfDays);
+                gb_totalPrice = room.getPrice() * numberOfDays;
+            }
+
             booking.setRoom(room);
+
+
             model.addAttribute("booking", booking);
+
             return "Bookings/add";
         } catch (Exception e) {
             model.addAttribute("errors", e);

@@ -49,8 +49,8 @@ public class BookingService {
         booking.setCancellationReason(reasonCancel);
         bookingRepository.save(booking);
     }
+
     public void checkIn(Booking booking){
-        booking.setCheckInStatus(true);
         bookingRepository.save(booking);
     }
     public void updatePaymentStatus(int bookingId){
@@ -81,19 +81,29 @@ public class BookingService {
 //        return bookings;
 //    }
 public Page<Booking> showBookingListOfAdmin(Pageable pageable) {
-    return bookingRepository.findAllByCheckInStatusFalseOrderByCheckInDateDesc(pageable);
+    return bookingRepository.findAllByCheckInStatusFalseAndCancelStatusFalseAndPaymentStatusFalseOrderByCheckInDateDesc(pageable);
 }
-    public List<Booking> showBookingListCheckedOfAdmin(){
-        List<Booking> bookingsChecked =  bookingRepository.findAllByCheckInStatus(true);
-        if (bookingsChecked == null){
-            throw new RuntimeException("No bookings checked found");
-        }
-        return bookingsChecked;
-    }
+//    public List<Booking> showBookingListCheckedOfAdmin(){
+//        List<Booking> bookingsChecked =  bookingRepository.findAllByCheckInStatusTrue();
+//        if (bookingsChecked == null){
+//            throw new RuntimeException("No bookings checked found");
+//        }
+//        return bookingsChecked;
+//    }
+public Page<Booking> showBookingListCheckedOfAdmin(Pageable pageable){
+    return bookingRepository.findAllByCheckInStatusTrueOrderByCheckInDateDesc(pageable);
+}
     public Booking findBookingById(int bookingId){
         return bookingRepository.findById(bookingId)
                 .orElseThrow(() -> new IllegalArgumentException("Booking not found"));
     }
+    public List<Booking> findBookingByPhone(String phone){
+        return bookingRepository.findAllByCheckInStatusFalseAndUser_Phone(phone);
+    }
+    public List<Booking> findBookingConfirmByPhone(String phone){
+        return bookingRepository.findAllByCheckInStatusFalseAndUser_Phone(phone);
+    }
+
     public Booking searchBookingByPin(String pin){
         return bookingRepository.findBookingByPin(pin);
     }
