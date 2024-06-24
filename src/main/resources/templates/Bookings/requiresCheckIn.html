@@ -16,32 +16,62 @@
             <h5 class="card-title">Booking Details</h5>
         </div>
         <div class="card-body">
-            <dl class="row">
-                <dt class="col-sm-4">Booking ID:</dt>
-                <dd class="col-sm-8" th:text="${booking.bookingId}"></dd>
-
-                <dt class="col-sm-4">Check-In Date:</dt>
-                <dd class="col-sm-8" th:text="${booking.checkInDate}"></dd>
-
-                <dt class="col-sm-4">Check-Out Date:</dt>
-                <dd class="col-sm-8" th:text="${booking.checkOutDate}"></dd>
-
-                <dt class="col-sm-4">Total Price:</dt>
-                <dd class="col-sm-8" th:text="${booking.totalPrice}"></dd>
-
-                <dt class="col-sm-4">Payment Status:</dt>
-                <dd class="col-sm-8" th:text="${booking.paymentStatus ? 'Paid' : 'Pending'}"></dd>
-
-                <dt class="col-sm-4">Cancel Status:</dt>
-                <dd class="col-sm-8" th:text="${booking.cancelStatus ? 'Cancelled' : 'Active'}"></dd>
-
-                <dt class="col-sm-4">Room:</dt>
-                <dd class="col-sm-8" th:text="${booking.room != null ? booking.room.roomNumber : 'No Room Assigned'}"></dd>
-
-                <dt class="col-sm-4">User:</dt>
-                <dd class="col-sm-8" th:text="${booking.user.username}"></dd>
-            </dl>
             <form th:action="@{'/bookings/saveBookingUpdateCheckIn/' + ${booking.bookingId}}" method="post">
+                <dl class="row">
+                    <dt class="col-sm-4">Booking ID:</dt>
+                    <dd class="col-sm-8">
+                        <input type="hidden" name="bookingId" th:value="${booking.bookingId}"/>
+                        <span th:text="${booking.bookingId}"></span>
+                    </dd>
+
+                    <dt class="col-sm-4">Pin:</dt>
+                    <dd class="col-sm-8">
+                        <input type="hidden" name="pin" th:value="${booking.pin}"/>
+                        <span th:text="${booking.pin}"></span>
+                    </dd>
+
+                    <dt class="col-sm-4">Check-In Date:</dt>
+                    <dd class="col-sm-8">
+                        <input type="hidden" name="checkInDate" th:value="${booking.checkInDate}"/>
+                        <span th:text="${booking.checkInDate}"></span>
+                    </dd>
+
+                    <dt class="col-sm-4">Check-Out Date:</dt>
+                    <dd class="col-sm-8">
+                        <input type="hidden" name="checkOutDate" th:value="${booking.checkOutDate}"/>
+                        <span th:text="${booking.checkOutDate}"></span>
+                    </dd>
+
+                    <dt class="col-sm-4">Total Price:</dt>
+                    <dd class="col-sm-8">
+                        <input type="hidden" name="totalPrice" th:value="${booking.totalPrice}"/>
+                        <span th:text="${booking.totalPrice}"></span>
+                    </dd>
+
+                    <dt class="col-sm-4">Payment Status:</dt>
+                    <dd class="col-sm-8">
+                        <input type="hidden" name="paymentStatus" th:value="${booking.paymentStatus}"/>
+                        <span th:text="${booking.paymentStatus ? 'Paid' : 'Pending'}"></span>
+                    </dd>
+
+                    <dt class="col-sm-4">Room Number:</dt>
+                    <dd class="col-sm-8">
+                        <input type="hidden" name="roomNumber" th:value="${booking.room != null ? booking.room.roomNumber : 'No Room Assigned'}"/>
+                        <span th:text="${booking.room != null ? booking.room.roomNumber : 'No Room Assigned'}"></span>
+                    </dd>
+
+                    <dt class="col-sm-4">Room Type:</dt>
+                    <dd class="col-sm-8">
+                        <input type="hidden" name="roomType" th:value="${booking.room != null ? booking.room.roomType.roomTypeName : 'No Room Assigned'}"/>
+                        <span th:text="${booking.room != null ? booking.room.roomType.roomTypeName : 'No Room Assigned'}"></span>
+                    </dd>
+
+                    <dt class="col-sm-4">User:</dt>
+                    <dd class="col-sm-8">
+                        <input type="hidden" name="username" th:value="${booking.user}"/>
+                        <span th:text="${booking.user.username}"></span>
+                    </dd>
+                </dl>
                 <button type="submit" class="btn btn-primary">Confirm Check-In</button>
             </form>
         </div>

@@ -27,21 +27,15 @@ public class RoomController {
         this.roomService = roomService;
         this.roomTypeService = roomTypeService;
     }
-//    @GetMapping("/list")
-//    public String showRoomList(Model model) {
-//        List<Room> rooms = roomService.showRoomList();
-//        model.addAttribute("rooms", rooms);
-//        return "Rooms/listRoom";
-//    }
-@GetMapping("/list")
-public String showRoomList(@RequestParam(defaultValue = "0") int page, Model model) {
-    Pageable pageable = PageRequest.of(page, 6);
-    Page<Room> roomPage = roomService.showRoomList(pageable);
-    model.addAttribute("rooms", roomPage.getContent());
-    model.addAttribute("totalPages", roomPage.getTotalPages());
-    model.addAttribute("currentPage", page);
-    return "Rooms/listRoom";
-}
+    @GetMapping("/list")
+    public String showRoomList(@RequestParam(defaultValue = "0") int page, Model model) {
+        Pageable pageable = PageRequest.of(page, 6);
+        Page<Room> roomPage = roomService.showRoomList(pageable);
+        model.addAttribute("rooms", roomPage.getContent());
+        model.addAttribute("totalPages", roomPage.getTotalPages());
+        model.addAttribute("currentPage", page);
+        return "Rooms/listRoom";
+    }
     @GetMapping("/searchRoom")
     public String getRoom(@RequestParam String roomNumber, Model model) {
         try {

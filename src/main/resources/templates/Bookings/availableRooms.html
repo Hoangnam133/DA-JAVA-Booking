@@ -26,7 +26,7 @@
       <td th:text="${room.price}">Price</td>
       <td th:text="${room.roomType.capacity}">Capacity</td>
       <td th:text="${room.description}">Description</td>
-      <td th:text="${T(java.time.temporal.ChronoUnit).DAYS.between(checkInDate, checkOutDate) * room.price}">Total Price</td>
+      <td th:text="${T(java.time.temporal.ChronoUnit).DAYS.between(checkInDate, checkOutDate) == 0 ? room.price : T(java.time.temporal.ChronoUnit).DAYS.between(checkInDate, checkOutDate) * room.price}">Total Price</td>
       <td>
         <a th:href="@{'/bookings/add/' + ${room.roomId} + '?checkInDate=' + ${checkInDate} + '&checkOutDate=' + ${checkOutDate}}">
           Book this room

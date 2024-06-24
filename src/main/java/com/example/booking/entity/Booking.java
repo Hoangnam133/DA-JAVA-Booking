@@ -34,7 +34,7 @@ public class Booking {
     private Room room;
 
     @ManyToOne
-    @JoinColumn(name = "userId")
+    @JoinColumn(name = "id")
     private User user;
 
 
