@@ -17,14 +17,10 @@ import java.util.List;
 @Service
 public class PaymentService {
     private final PaymentRepository paymentRepository;
-    private final BookingRepository bookingRepository;
-    private final BookingService bookingService;
 
     @Autowired
-    public PaymentService(PaymentRepository paymentRepository, BookingRepository bookingRepository, BookingService bookingService) {
+    public PaymentService(PaymentRepository paymentRepository) {
         this.paymentRepository = paymentRepository;
-        this.bookingRepository = bookingRepository;
-        this.bookingService = bookingService;
     }
 
     public void createPayment(Payment payment){
