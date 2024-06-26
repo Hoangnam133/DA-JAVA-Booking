@@ -24,11 +24,10 @@ public class ExtraCharge {
     @Column(nullable = false)
     private String reason;
     @Column(nullable = false)
-    @Pattern(regexp = "^[0-9]+$", message = "Field must contain only numeric characters")
-    @NotBlank(message = "payExtra can not contain Blank")
-    @Min(value = 500)
+    @Min(value = 500, message = "Pay extra must be at least 500")
     private double payExtra;
     private String extraChargeDate;
+    private boolean isDelete;
     @ManyToOne
     @JoinColumn(name = "PaymentId")
     private Payment payment;

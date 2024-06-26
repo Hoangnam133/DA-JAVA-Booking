@@ -42,9 +42,6 @@ public class RoomService {
         roomRepository.save(room);
 
     }
-//    public List<Room> showRoomList(Pageable pageable){
-//        return roomRepository.findAll();
-//    }
     public Page<Room> showRoomList(Pageable pageable) {
         return roomRepository.findAll(pageable);
     }
