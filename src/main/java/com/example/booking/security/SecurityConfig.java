@@ -46,8 +46,33 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/css/**", "/js/**", "/", "/oauth/**", "/register", "/error","../Layout")
                         .permitAll() // Cho phép truy cập không cần xác thực.
-                        .requestMatchers("/Hotels/home")
-                        .hasAnyAuthority("ADMIN") // Chỉ cho phép ADMIN truy cập.
+                        .requestMatchers("/hotels/edit/{hotelId}","/hotels/saveEdit/{hotelId}",
+                                "/rooms/add","rooms/save","/rooms/edit/","/rooms/saveEdit/","/rooms/list",
+                                "/saveCreateEmployeeAccount","/employeeAccount","/createEmployeeAccount")
+                        .hasAnyAuthority("ADMIN")
+                        .requestMatchers(
+                                "/payments/showAdminPaymentList",
+                                "/payments/add/",
+                                "/payments/save",
+
+                                "/bookings/searchBookingByUserPhone",
+                                "/bookings/searchBookingConfirmByUserPhone",
+                                "/bookings/listBookingOfAdmin",
+                                "/bookings/listBookingCheckedOfAdmin",
+                                "/bookings/BookingUpdateCheckIn",
+                                "/bookings/saveBookingUpdateCheckIn",
+
+                                "/extraCharges/*")
+
+                        .hasAnyAuthority("ADMIN","EMPLOYEE")
+                        .requestMatchers("/bookings/listCancelBookingOfUser",
+                                "/bookings/bookingUpdateIsCanceled",
+                                "/bookings/SaveBookingUpdateIsCanceled",
+                                "/bookings/AvailableRooms",
+                                "/bookings/listBookingOfUser",
+                                "/informationUser")
+
+                        .hasAnyAuthority("USER")
                         .requestMatchers("/api/**").permitAll() // API mở cho mọi người dùng.
                         .anyRequest().authenticated() // Bất kỳ yêu cầu nào khác cần xác thực.
                 ).
@@ -62,7 +87,7 @@ public class SecurityConfig {
                 formLogin(formLogin -> formLogin
                         .loginPage("/login") // Trang đăng nhập.
                         .loginProcessingUrl("/login") // URL xử lý đăng nhập.
-//                        .defaultSuccessUrl("/") // Trang sau đăng nhập thành công.
+                       .defaultSuccessUrl("/") // Trang sau đăng nhập thành công.
                                 .successHandler(new LoginSuccess(userService))
                         .failureUrl("/login?error") // Trang đăng nhập thất bại.
                         .permitAll()

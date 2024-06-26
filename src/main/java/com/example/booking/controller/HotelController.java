@@ -19,6 +19,7 @@ public class HotelController {
 
     private final HotelService hotelService;
     public HotelController(HotelService hotelService){
+
         this.hotelService = hotelService;
     }
     @GetMapping("/homeAdmin")
@@ -73,6 +74,7 @@ public class HotelController {
         hotelService.hotelUpdate(hotel);
         return "redirect:/hotels/homeAdmin";
     }
+
 
 
 

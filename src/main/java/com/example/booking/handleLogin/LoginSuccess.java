@@ -39,6 +39,7 @@ public class LoginSuccess extends SimpleUrlAuthenticationSuccessHandler {
 
     protected String determineTargetUrl(Authentication authentication) {
         boolean isAdmin = false;
+        boolean isEmployee = false;
         boolean isUser = false;
 
         Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
@@ -46,17 +47,19 @@ public class LoginSuccess extends SimpleUrlAuthenticationSuccessHandler {
             if (grantedAuthority.getAuthority().equals("ADMIN")) {
                 isAdmin = true;
                 break;
+            } else if (grantedAuthority.getAuthority().equals("EMPLOYEE")) {
+                isEmployee = true;
             } else if (grantedAuthority.getAuthority().equals("USER")) {
                 isUser = true;
             }
         }
 
-        if (isAdmin) {
-           return "hotels/homeAdmin";
+        if (isAdmin || isEmployee) {
+            return "/hotels/homeAdmin";
         } else if (isUser) {
-            return "homeUser";
+            return "/homeUser";
         } else {
-            throw new IllegalStateException();
+            throw new IllegalStateException("Unexpected role found");
         }
     }
 }

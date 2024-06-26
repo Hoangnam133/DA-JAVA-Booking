@@ -1,27 +1,23 @@
 package com.example.booking.service;
 
 
+import com.example.booking.entity.Role;
 import com.example.booking.entity.User;
 import com.example.booking.repository.RoleRepository;
 import com.example.booking.repository.UserRepository;
-import jakarta.mail.MessagingException;
-import jakarta.mail.internet.MimeMessage;
 import jakarta.validation.constraints.NotNull;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import com.example.booking.eRole.Role;
-import org.thymeleaf.context.Context;
+import com.example.booking.eRole.RoleType;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 
@@ -43,7 +39,7 @@ public class UserService implements UserDetailsService {
     public void setDefaultRole(String username) {
         userRepository.findByUsername(username).ifPresentOrElse(
                 user -> {
-                    user.getRoles().add(roleRepository.findRoleByRoleId(Role.USER.value));
+                    user.getRoles().add(roleRepository.findRoleByRoleId(RoleType.USER.value));
                     userRepository.save(user);
                 },
                 () -> { throw new UsernameNotFoundException("User not found"); }
@@ -100,5 +96,20 @@ public class UserService implements UserDetailsService {
     public Optional<User> findByToken(String token) {
         return userRepository.findByToken(token);
     }
+    public void createEmployeeAccount(User employee) {
+        employee.setPassword(passwordEncoder.encode(employee.getPassword()));
+        Role employeeRole = roleRepository.findRoleByRoleId(RoleType.EMPLOYEE.value);
+        if (employeeRole == null) {
+            throw new RuntimeException("EMPLOYEE role not found. Make sure it's defined in the roles table.");
+        }
+        employee.getRoles().clear();
+        employee.getRoles().add(employeeRole);
+        userRepository.save(employee);
+
+    }
+    public List<User> findAllRoleId() {
+        return userRepository.findByRolesRoleId(3);
+    }
+
 
 }
