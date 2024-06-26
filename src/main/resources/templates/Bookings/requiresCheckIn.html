@@ -15,7 +15,10 @@
         <div class="card-header">
             <h5 class="card-title">Booking Details</h5>
         </div>
-        <div class="card-body">
+             <div class="card-body">
+            <div th:if="${successMessage}" class="alert alert-success" role="alert">
+                <span th:text="${successMessage}"></span>
+            </div>
             <form th:action="@{'/bookings/saveBookingUpdateCheckIn/' + ${booking.bookingId}}" method="post">
                 <dl class="row">
                     <dt class="col-sm-4">Booking ID:</dt>
@@ -74,6 +77,7 @@
                 </dl>
                 <button type="submit" class="btn btn-primary">Confirm Check-In</button>
             </form>
+
         </div>
     </div>
 </main>

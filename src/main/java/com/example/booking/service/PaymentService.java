@@ -6,6 +6,8 @@ import com.example.booking.entity.Payment;
 import com.example.booking.repository.BookingRepository;
 import com.example.booking.repository.PaymentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
@@ -24,31 +26,16 @@ public class PaymentService {
         this.bookingRepository = bookingRepository;
         this.bookingService = bookingService;
     }
-    @Async
-    public Payment createPayment(int bookingId){
-        Booking booking = bookingRepository.findById(bookingId)
-                .orElseThrow(() -> new IllegalArgumentException("Booking with ID " + bookingId + " not found."));
-        Payment newPayment = new Payment();
-        newPayment.setPaymentTime(new Date());
-        newPayment.setTotalPayment(booking.getTotalPrice());
-        bookingService.updatePaymentStatus(booking.getBookingId());
-        paymentRepository.save(newPayment);
-        return newPayment;
+
+    public void createPayment(Payment payment){
+        paymentRepository.save(payment);
 
     }
-    @Async
-    public Payment updatePayment(Payment payment){
-        Payment existingPayment = paymentRepository.findById(payment.getPaymentId())
-                .orElseThrow(() -> new IllegalArgumentException("Not found"));
-        existingPayment.setTotalPayment(payment.getTotalPayment());
-        paymentRepository.save(existingPayment);
-        return existingPayment;
-    }
     public List<Payment> showPaymentListOfGuest(Long userId){
-        return paymentRepository.findAllByBooking_User_Id(userId);
+        return paymentRepository.findAllByBooking_User_IdOrderByPaymentTimeDesc(userId);
     }
-    public List<Payment> showPaymentListOfAdmin(){
-        return paymentRepository.findAll();
+    public Page<Payment> showPaymentListOfAdmin(Pageable pageable){
+        return paymentRepository.findAllByOrderByPaymentTimeDesc(pageable);
     }
     public Payment checkPayment(int paymentId){
         return paymentRepository.findById(paymentId)
