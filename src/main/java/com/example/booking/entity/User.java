@@ -44,7 +44,7 @@ public class User implements UserDetails {
     private String phone;
     @Column(name = "provider", length = 50)
     private String provider;
-
+    private String token;
     @OneToMany(mappedBy = "user")
     private List<Booking> bookings;
 

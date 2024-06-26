@@ -40,7 +40,6 @@ public class BookingService {
         booking.setCancelStatus(false);
         booking.setPaymentStatus(false);
         booking.setPin(generateRandomString());
-        System.out.println(booking.getTotalPrice());
         bookingRepository.save(booking);
     }
 
@@ -73,26 +72,12 @@ public class BookingService {
         }
         return bookingsIsCanceled;
     }
-//    public List<Booking> showBookingListOfAdmin(){
-//        List<Booking> bookings =bookingRepository.findAllByCheckInStatus(false);
-//        if (bookings == null){
-//            throw new RuntimeException("No bookings found");
-//        }
-//        return bookings;
-//    }
-public Page<Booking> showBookingListOfAdmin(Pageable pageable) {
-    return bookingRepository.findAllByCheckInStatusFalseAndCancelStatusFalseAndPaymentStatusFalseOrderByCheckInDateDesc(pageable);
-}
-//    public List<Booking> showBookingListCheckedOfAdmin(){
-//        List<Booking> bookingsChecked =  bookingRepository.findAllByCheckInStatusTrue();
-//        if (bookingsChecked == null){
-//            throw new RuntimeException("No bookings checked found");
-//        }
-//        return bookingsChecked;
-//    }
-public Page<Booking> showBookingListCheckedOfAdmin(Pageable pageable){
-    return bookingRepository.findAllByCheckInStatusTrueOrderByCheckInDateDesc(pageable);
-}
+    public Page<Booking> showBookingListOfAdmin(Pageable pageable) {
+        return bookingRepository.findAllByCheckInStatusFalseAndCancelStatusFalseAndPaymentStatusFalseOrderByCheckInDateDesc(pageable);
+    }
+    public Page<Booking> showBookingListCheckedOfAdmin(Pageable pageable){
+        return bookingRepository.findAllByCheckInStatusTrueAndPaymentStatusFalseOrderByCheckInDateDesc(pageable);
+    }
     public Booking findBookingById(int bookingId){
         return bookingRepository.findById(bookingId)
                 .orElseThrow(() -> new IllegalArgumentException("Booking not found"));
@@ -102,9 +87,5 @@ public Page<Booking> showBookingListCheckedOfAdmin(Pageable pageable){
     }
     public List<Booking> findBookingConfirmByPhone(String phone){
         return bookingRepository.findAllByCheckInStatusFalseAndUser_Phone(phone);
-    }
-
-    public Booking searchBookingByPin(String pin){
-        return bookingRepository.findBookingByPin(pin);
     }
 }

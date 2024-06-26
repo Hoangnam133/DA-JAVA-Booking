@@ -19,6 +19,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
@@ -139,11 +140,12 @@ public class BookingController {
         }
     }
     @PostMapping("/saveBookingUpdateCheckIn/{bookingId}")
-    public String saveUserRequiresRegistration(@PathVariable("bookingId") int bookingId, Booking booking, Model model){
+    public String saveUserRequiresRegistration(@PathVariable("bookingId") int bookingId, Booking booking, Model model, RedirectAttributes redirectAttributes){
                try {
                    Booking existingBooking = bookingService.findBookingById(bookingId);
                    existingBooking.setCheckInStatus(true);
                    bookingService.checkIn(existingBooking);
+                   redirectAttributes.addFlashAttribute("successMessage", "Check-in confirmed successfully!");
                    return "redirect:/bookings/listBookingCheckedOfAdmin";
                }catch (Exception e){
                    model.addAttribute("errors",e);
