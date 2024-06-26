@@ -19,7 +19,7 @@ public class Payment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int paymentId;
-    private Date paymentTime;
+    private String paymentTime;
     private double totalPayment;
     @OneToOne
     @JoinColumn(name = "bookingId")

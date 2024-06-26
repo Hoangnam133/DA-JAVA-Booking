@@ -50,7 +50,6 @@ public class PaymentController {
             Booking booking = bookingService.findBookingById(bookingId);
             Payment payment = new Payment();
             payment.setBooking(booking);
-            payment.setPaymentTime(new Date());
             payment.setPaymentType(paymentTypeService.getPaymentTypeById(2));
             payment.setTotalPayment(booking.getTotalPrice());
             model.addAttribute("payment", payment);
