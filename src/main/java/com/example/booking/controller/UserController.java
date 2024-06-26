@@ -6,8 +6,6 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -15,6 +13,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Controller
 @RequestMapping("/")
@@ -107,6 +107,35 @@ public class  UserController {
         userService.updatePassword(existingUser, newPassword);
         return "redirect:/informationUser";
     }
+    @GetMapping("/createEmployeeAccount")
+    public String showCreateEmployeeAccountForm(Model model) {
+        model.addAttribute("employee", new User());
+        return "Users/createEmployeeAccount";
+    }
+
+    @PostMapping("/saveCreateEmployeeAccount")
+    public String createEmployeeAccount(@Valid @ModelAttribute("employee") User employee,
+                                        BindingResult bindingResult, Model model) {
+        if (bindingResult.hasErrors()) {
+            var errors = bindingResult.getAllErrors()
+                    .stream()
+                    .map(DefaultMessageSourceResolvable::getDefaultMessage)
+                    .toArray(String[]::new);
+            model.addAttribute("errors", errors);
+            return "Users/createEmployeeAccount";
+        }
+        userService.createEmployeeAccount(employee);
+        return "redirect:/employeeAccount";
+    }
+    @GetMapping("employeeAccount")
+    public String showEmployeeAccountForm(Model model) {
+        List<User> employees = userService.findAllRoleId();
+        model.addAttribute("employees", employees);
+        return "ListOfAdmin/ListEmployeeAccount";
+    }
+
+
+
 
 
 }
