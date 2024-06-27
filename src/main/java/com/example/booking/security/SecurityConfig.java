@@ -71,8 +71,7 @@ public class SecurityConfig {
                                 "/bookings/bookingUpdateIsCanceled",
                                 "/bookings/SaveBookingUpdateIsCanceled",
                                 "/bookings/AvailableRooms",
-                                "/bookings/listBookingOfUser",
-                                "/informationUser")
+                                "/bookings/listBookingOfUser")
 
                         .hasAnyAuthority("USER")
                         .requestMatchers("/api/**").permitAll() // API mở cho mọi người dùng.

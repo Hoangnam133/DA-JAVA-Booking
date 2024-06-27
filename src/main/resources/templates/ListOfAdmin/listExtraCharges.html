@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,57 +12,63 @@
 <header class="bg-primary text-white text-center py-3">
     <h1>List ExtraCharges</h1>
 </header>
-<main class="container mt-4">
-    <div class="table-responsive">
-        <table class="table table-bordered table-striped">
-            <thead class="thead-dark">
-            <tr>
-                <th>ExtraCharge ID</th>
-                <th>ExtraCharge Date</th>
-                <th>Total Price</th>
-                <th>Reason</th>
-                <th>Status</th>
-                <th>Payment ID</th>
-                <th>User name</th>
-                <th>Phone</th>
-                <th>Actions</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="extraCharge : ${extraCharges}">
-                <td th:text="${extraCharge.extraChargeId}"></td>
-                <td th:text="${extraCharge.extraChargeDate}"></td>
-                <td th:text="${extraCharge.payExtra}"></td>
-                <td th:text="${extraCharge.reason}"></td>
-                <td th:text="${extraCharge.delete ? 'Cancel' : 'not canceled'}"></td>
-                <td th:text="${extraCharge.payment.paymentId}"></td>
-                <td th:text="${extraCharge.payment.booking.user.username}"></td>
-                <td th:text="${extraCharge.payment.booking.user.phone}"></td>
-                <td>
-                    <a th:href="@{'/extraCharges/edit/' + ${extraCharge.extraChargeId}}" class="btn btn-warning btn-sm">Edit</a>
-                </td>
-            </tr>
-            </tbody>
-        </table>
-    </div>
-    <nav aria-label="Page navigation" th:if="${totalPages > 1}">
-        <ul class="pagination">
-            <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
-                <a class="page-link" th:href="@{'/extraCharges/showAdminExtraChargesList?page=' + ${currentPage - 1}}" aria-label="Previous">
-                    <span aria-hidden="true">&laquo;</span>
-                </a>
-            </li>
-            <li class="page-item" th:each="i : ${#numbers.sequence(0, totalPages - 1)}" th:classappend="${currentPage == i} ? 'active'">
-                <a class="page-link" th:href="@{'/extraCharges/showAdminExtraChargesList?page=' + ${i}}" th:text="${i + 1}">1</a>
-            </li>
-            <li class="page-item" th:classappend="${currentPage == totalPages - 1} ? 'disabled'">
-                <a class="page-link" th:href="@{'/extraCharges/showAdminExtraChargesList?page=' + ${currentPage + 1}}" aria-label="Next">
-                    <span aria-hidden="true">&raquo;</span>
-                </a>
-            </li>
-        </ul>
-    </nav>
-</main>
+
+<section layout:fragment="content">
+    <main class="container mt-4">
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped">
+                <thead class="thead-dark">
+                <tr>
+                    <th>ExtraCharge ID</th>
+                    <th>ExtraCharge Date</th>
+                    <th>Total Price</th>
+                    <th>Reason</th>
+                    <th>Status</th>
+                    <th>Payment ID</th>
+                    <th>User name</th>
+                    <th>Phone</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="extraCharge : ${extraCharges}">
+                    <td th:text="${extraCharge.extraChargeId}"></td>
+                    <td th:text="${extraCharge.extraChargeDate}"></td>
+                    <td th:text="${extraCharge.payExtra}"></td>
+                    <td th:text="${extraCharge.reason}"></td>
+                    <td th:text="${extraCharge.delete ? 'Cancel' : 'not canceled'}"></td>
+                    <td th:text="${extraCharge.payment.paymentId}"></td>
+                    <td th:text="${extraCharge.payment.booking.user.username}"></td>
+                    <td th:text="${extraCharge.payment.booking.user.phone}"></td>
+                    <td>
+                        <a th:href="@{'/extraCharges/edit/' + ${extraCharge.extraChargeId}}" class="btn btn-warning btn-sm">Edit</a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <nav aria-label="Page navigation" th:if="${totalPages > 1}">
+            <ul class="pagination">
+                <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
+                    <a class="page-link" th:href="@{'/extraCharges/showAdminExtraChargesList?page=' + ${currentPage - 1}}" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+                <li class="page-item" th:each="i : ${#numbers.sequence(0, totalPages - 1)}" th:classappend="${currentPage == i} ? 'active'">
+                    <a class="page-link" th:href="@{'/extraCharges/showAdminExtraChargesList?page=' + ${i}}" th:text="${i + 1}">1</a>
+                </li>
+                <li class="page-item" th:classappend="${currentPage == totalPages - 1} ? 'disabled'">
+                    <a class="page-link" th:href="@{'/extraCharges/showAdminExtraChargesList?page=' + ${currentPage + 1}}" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </main>
+</section>
+
+
+
 <footer class="bg-light text-center py-3">
     <p>&copy; 2024 Booking Management System</p>
 </footer>

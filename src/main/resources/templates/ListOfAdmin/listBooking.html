@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,79 +9,81 @@
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
+    <section layout:fragment="content">
+        <main class="container mt-4">
+            <div class="row mb-4">
+                <div class="col-md-8 offset-md-2">
+                    <form th:action="@{/bookings/searchBookingByUserPhone}" method="get" class="form-inline">
+                        <div class="form-group">
+                            <label for="phone">Phone Number:</label>
+                            <input type="text" id="phone" name="phone" class="form-control mr-2" placeholder="Enter phone number" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Search</button>
+                    </form>
+                </div>
+            </div>
+            <div class="mb-3">
+                <a th:href="@{/bookings/listBookingOfAdmin}" class="btn btn-primary">All booking</a>
+            </div>
+            <!-- Error message -->
+            <div th:if="${errorMessage}" class="alert alert-danger" role="alert">
+                <span th:text="${errorMessage}"></span>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-bordered table-striped">
+                    <thead class="thead-dark">
+                    <tr>
+                        <th>Booking ID</th>
+                        <th>Check-In Date</th>
+                        <th>Check-Out Date</th>
+                        <th>Total Price</th>
+                        <th>Payment Status</th>
+                        <th>Check-In Status</th>
+                        <th>Room</th>
+                        <th>User</th>
+                        <th>Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="booking : ${bookings}">
+                        <td th:text="${booking.bookingId}"></td>
+                        <td th:text="${booking.checkInDate}"></td>
+                        <td th:text="${booking.checkOutDate}"></td>
+                        <td th:text="${booking.totalPrice}"></td>
+                        <td th:text="${booking.paymentStatus ? 'Paid' : 'Pending'}"></td>
+                        <td th:text="${booking.checkInStatus ? 'Checked In' : 'Not Checked In'}"></td>
+                        <td th:text="${booking.room != null ? booking.room.roomNumber : 'No Room Assigned'}"></td>
+                        <td th:text="${booking.user.username}"></td>
+                        <td>
+                            <a th:href="@{'/bookings/BookingUpdateCheckIn/' + ${booking.bookingId}}" class="btn btn-sm btn-success mb-1">Check In</a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <nav aria-label="Page navigation" th:if="${totalPages > 1}">
+                <ul class="pagination">
+                    <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
+                        <a class="page-link" th:href="@{'/bookings/listBookingOfAdmin?page=' + ${currentPage - 1}}" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                    <li class="page-item" th:each="i : ${#numbers.sequence(0, totalPages - 1)}" th:classappend="${currentPage == i} ? 'active'">
+                        <a class="page-link" th:href="@{'/bookings/listBookingOfAdmin?page=' + ${i}}" th:text="${i + 1}">1</a>
+                    </li>
+                    <li class="page-item" th:classappend="${currentPage == totalPages - 1} ? 'disabled'">
+                        <a class="page-link" th:href="@{'/bookings/listBookingOfAdmin?page=' + ${currentPage + 1}}" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </main>
+    </section>
 <header class="bg-primary text-white text-center py-3">
     <h1>All Bookings</h1>
 </header>
-<main class="container mt-4">
-    <div class="row mb-4">
-        <div class="col-md-8 offset-md-2">
-            <form th:action="@{/bookings/searchBookingByUserPhone}" method="get" class="form-inline">
-                <div class="form-group">
-                    <label for="phone">Phone Number:</label>
-                    <input type="text" id="phone" name="phone" class="form-control mr-2" placeholder="Enter phone number" required>
-                </div>
-                <button type="submit" class="btn btn-primary">Search</button>
-            </form>
 
-        </div>
-    </div>
-    <div class="mb-3">
-        <a th:href="@{/bookings/listBookingOfAdmin}" class="btn btn-primary">All booking</a>
-    </div>
-    <!-- Error message -->
-    <div th:if="${errorMessage}" class="alert alert-danger" role="alert">
-        <span th:text="${errorMessage}"></span>
-    </div>
-    <div class="table-responsive">
-        <table class="table table-bordered table-striped">
-            <thead class="thead-dark">
-            <tr>
-                <th>Booking ID</th>
-                <th>Check-In Date</th>
-                <th>Check-Out Date</th>
-                <th>Total Price</th>
-                <th>Payment Status</th>
-                <th>Check-In Status</th>
-                <th>Room</th>
-                <th>User</th>
-                <th>Actions</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="booking : ${bookings}">
-                <td th:text="${booking.bookingId}"></td>
-                <td th:text="${booking.checkInDate}"></td>
-                <td th:text="${booking.checkOutDate}"></td>
-                <td th:text="${booking.totalPrice}"></td>
-                <td th:text="${booking.paymentStatus ? 'Paid' : 'Pending'}"></td>
-                <td th:text="${booking.checkInStatus ? 'Checked In' : 'Not Checked In'}"></td>
-                <td th:text="${booking.room != null ? booking.room.roomNumber : 'No Room Assigned'}"></td>
-                <td th:text="${booking.user.username}"></td>
-                <td>
-                    <a th:href="@{'/bookings/BookingUpdateCheckIn/' + ${booking.bookingId}}" class="btn btn-sm btn-success mb-1">Check In</a>
-                </td>
-            </tr>
-            </tbody>
-        </table>
-    </div>
-    <nav aria-label="Page navigation" th:if="${totalPages > 1}">
-        <ul class="pagination">
-            <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
-                <a class="page-link" th:href="@{'/bookings/listBookingOfAdmin?page=' + ${currentPage - 1}}" aria-label="Previous">
-                    <span aria-hidden="true">&laquo;</span>
-                </a>
-            </li>
-            <li class="page-item" th:each="i : ${#numbers.sequence(0, totalPages - 1)}" th:classappend="${currentPage == i} ? 'active'">
-                <a class="page-link" th:href="@{'/bookings/listBookingOfAdmin?page=' + ${i}}" th:text="${i + 1}">1</a>
-            </li>
-            <li class="page-item" th:classappend="${currentPage == totalPages - 1} ? 'disabled'">
-                <a class="page-link" th:href="@{'/bookings/listBookingOfAdmin?page=' + ${currentPage + 1}}" aria-label="Next">
-                    <span aria-hidden="true">&raquo;</span>
-                </a>
-            </li>
-        </ul>
-    </nav>
-</main>
 <footer class="bg-light text-center py-3">
     <p>&copy; 2024 Booking Management System</p>
 </footer>

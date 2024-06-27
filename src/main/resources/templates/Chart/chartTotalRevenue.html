@@ -1,27 +1,29 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
 <head>
   <meta charset="UTF-8">
   <title>Revenue Statistics</title>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-<h1>Revenue Statistics</h1>
+  <section layout:fragment="content">
+    <h1>Revenue Statistics</h1>
+    <div style="display: flex;">
+      <div style="width: 250px; height: 250px;">
+        <canvas id="barChart"></canvas>
+      </div>
+      <div style="width: 250px; height: 250px;">
+        <canvas id="pieChart"></canvas>
+      </div>
+    </div>
 
-<div style="display: flex;">
-  <div style="width: 250px; height: 250px;">
-    <canvas id="barChart"></canvas>
-  </div>
-  <div style="width: 250px; height: 250px;">
-    <canvas id="pieChart"></canvas>
-  </div>
-</div>
-
-<div>
-  <p>Total Payments: <span th:text="${totalPayments}"></span></p>
-  <p>Total Extra Charges: <span th:text="${totalExtraCharges}"></span></p>
-</div>
-
+    <div>
+      <p>Total Payments: <span th:text="${totalPayments}"></span></p>
+      <p>Total Extra Charges: <span th:text="${totalExtraCharges}"></span></p>
+    </div>
+  </section>
 <script th:inline="javascript">
   /*<![CDATA[*/
   var totalPayments = /*[[${totalPayments}]]*/ 0;

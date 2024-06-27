@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,37 +9,39 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>
-<div class="container mt-5">
-    <h1 class="mb-4">Create Employee Account</h1>
-    <form action="#" th:action="@{/saveCreateEmployeeAccount}" th:object="${employee}" method="post">
-        <div class="form-group">
-            <label for="username">Username:</label>
-            <input type="text" id="username" th:field="*{username}" class="form-control" required>
-        </div>
-        <div class="form-group">
-            <label for="password">Password:</label>
-            <input type="password" id="password" th:field="*{password}" class="form-control" required>
-        </div>
-        <div class="form-group">
-            <label for="email">Email:</label>
-            <input type="email" id="email" th:field="*{email}" class="form-control" required>
-        </div>
-        <div class="form-group">
-            <label for="phone">Phone:</label>
-            <input type="text" id="phone" th:field="*{phone}" class="form-control" required>
-        </div>
-        <button type="submit" class="btn btn-primary">Create Account</button>
-    </form>
 
-    <div th:if="${errors != null}" class="mt-3">
-        <div class="alert alert-danger">
-            <ul class="mb-0">
-                <li th:each="error : ${errors}" th:text="${error}"></li>
-            </ul>
+<section layout:fragment="content">
+    <div class="container mt-5">
+        <h1 class="mb-4">Create Employee Account</h1>
+        <form action="#" th:action="@{/saveCreateEmployeeAccount}" th:object="${employee}" method="post">
+            <div class="form-group">
+                <label for="username">Username:</label>
+                <input type="text" id="username" th:field="*{username}" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password:</label>
+                <input type="password" id="password" th:field="*{password}" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" th:field="*{email}" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label for="phone">Phone:</label>
+                <input type="text" id="phone" th:field="*{phone}" class="form-control" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Create Account</button>
+        </form>
+
+        <div th:if="${errors != null}" class="mt-3">
+            <div class="alert alert-danger">
+                <ul class="mb-0">
+                    <li th:each="error : ${errors}" th:text="${error}"></li>
+                </ul>
+            </div>
         </div>
     </div>
-</div>
-
+</section>
 <!-- Thêm Bootstrap JS và các phụ thuộc -->
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
