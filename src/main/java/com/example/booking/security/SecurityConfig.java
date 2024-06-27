@@ -47,7 +47,7 @@ public class SecurityConfig {
                         .requestMatchers("/css/**", "/js/**", "/", "/oauth/**", "/register", "/error","../Layout")
                         .permitAll() // Cho phép truy cập không cần xác thực.
                         .requestMatchers("/hotels/edit/{hotelId}","/hotels/saveEdit/{hotelId}",
-                                "/rooms/add","rooms/save","/rooms/edit/","/rooms/saveEdit/","/rooms/list",
+                                "/rooms/add","rooms/save","/rooms/edit/","/rooms/saveEdit/",
                                 "/saveCreateEmployeeAccount","/employeeAccount","/createEmployeeAccount")
                         .hasAnyAuthority("ADMIN")
                         .requestMatchers(
@@ -62,7 +62,9 @@ public class SecurityConfig {
                                 "/bookings/BookingUpdateCheckIn",
                                 "/bookings/saveBookingUpdateCheckIn",
 
-                                "/extraCharges/*")
+                                "/extraCharges/*",
+                                "/rooms/list")
+
 
                         .hasAnyAuthority("ADMIN","EMPLOYEE")
                         .requestMatchers("/bookings/listCancelBookingOfUser",
