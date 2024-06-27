@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -34,11 +34,14 @@
     </form>
 
     <!-- Add Room button -->
+
     <div class="mb-3">
-        <a th:href="@{/rooms/add}" class="btn btn-custom">Add Room</a>
+        <div sec:authorize="hasAuthority('ADMIN')">
+            <a th:href="@{/rooms/add}" class="btn btn-custom">Add Room</a>
+        </div>
     </div>
     <div class="mb-3">
-        <a th:href="@{/rooms/list}" class="btn btn-custom">All Rooms</a>
+            <a th:href="@{/rooms/list}" class="btn btn-custom">All Rooms</a>
     </div>
 
     <!-- Error Message -->
@@ -69,7 +72,11 @@
             <td th:text="${room.roomType.capacity}"></td>
             <td th:text="${room.roomStatus ? 'Active' : 'Inactive'}"></td>
             <td>
-                <a th:href="@{'/rooms/edit/' + ${room.roomId}}" class="btn btn-warning btn-sm">Edit</a>
+
+                    <div sec:authorize="hasAuthority('ADMIN')">
+                        <a th:href="@{'/rooms/edit/' + ${room.roomId}}" class="btn btn-warning btn-sm">Edit</a>
+                    </div>
+
             </td>
         </tr>
         </tbody>
