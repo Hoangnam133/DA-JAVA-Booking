@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
@@ -16,7 +18,9 @@ public class PaymentType {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int paymentTypeId;
+
     private String paymentTypeName;
-    @OneToOne(mappedBy = "paymentType")
-    private Payment payment;
+
+    @OneToMany(mappedBy = "paymentType")
+    private List<Payment> payments; // Quan hệ một nhiều (one-to-many) với Payment
 }

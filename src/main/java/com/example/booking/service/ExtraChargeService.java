@@ -35,5 +35,8 @@ public class ExtraChargeService {
     public void updateExtraCharge(ExtraCharge extraCharge){
        extraChargeRepository.save(extraCharge);
     }
+    public double getTotalExtraCharges() {
+        return extraChargeRepository.findAll().stream().mapToDouble(ExtraCharge::getPayExtra).sum();
+    }
 
 }

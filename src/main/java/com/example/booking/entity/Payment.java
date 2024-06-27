@@ -6,7 +6,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -19,20 +18,21 @@ public class Payment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int paymentId;
+
     private String paymentTime;
     private double totalPayment;
+
+    @ManyToOne // Quan hệ nhiều một (many-to-one) với PaymentType
+    @JoinColumn(name = "paymentTypeId")
+    private PaymentType paymentType;
+
     @OneToOne
     @JoinColumn(name = "bookingId")
     private Booking booking;
-
-    @OneToOne
-    @JoinColumn(name = "paymentTypeId")
-    private PaymentType paymentType;
 
     @OneToOne(mappedBy = "payment")
     private Review review;
 
     @OneToMany(mappedBy = "payment")
     private List<ExtraCharge> extraCharges;
-
 }
