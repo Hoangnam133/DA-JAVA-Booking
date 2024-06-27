@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:sec="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns:sec="http://www.w3.org/1999/xhtml"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
 <head>
     <meta charset="UTF-8">
     <title>Hotels Home Page</title>
@@ -21,44 +23,48 @@
     </style>
 </head>
 <body>
-<div class="container">
-    <h2>Welcome to Hotels Management</h2>
+<section layout:fragment="content">
+    <main>
+        <div class="container">
+            <h2>Welcome to Hotels Management</h2>
 
-    <h3>Hotels:</h3>
-    <table class="table table-striped">
-        <thead class="thead-dark">
-        <tr>
-            <th>Hotel Name</th>
-            <th>Address</th>
-            <th>Phone</th>
-            <th>Status</th>
-            <th>Actions</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="hotel : ${hotels}">
-            <td th:text="${hotel.hotelName}"></td>
-            <td th:text="${hotel.hotelAddress}"></td>
-            <td th:text="${hotel.hotelPhone}"></td>
-            <td th:text="${hotel.hotelStatus ? 'Active' : 'Inactive'}"></td>
-            <td>
-                <div sec:authorize="hasAuthority('ADMIN')">
-                    <a th:href="@{/hotels/edit/{hotelId}(hotelId=${hotel.hotelId})}" class="btn btn-warning btn-sm">Edit</a>
-                </div>
-            </td>
-        </tr>
-        </tbody>
-    </table>
-    <a th:href="@{/rooms/list}" class="btn btn-primary">List Rooms</a>
-    <a th:href="@{/bookings/listBookingOfAdmin}" class="btn btn-primary">List booking</a>
-    <a th:href="@{/bookings/listBookingCheckedOfAdmin}" class="btn btn-primary">List Checked</a>
-    <a th:href="@{/payments/showAdminPaymentList}" class="btn btn-primary">List payment</a>
-    <a th:href="@{/extraCharges/showAdminExtraChargesList}" class="btn btn-primary">List extraCharge</a>
-    <div sec:authorize="hasAuthority('ADMIN')">
-        <a th:href="@{/employeeAccount}" class="btn btn-primary">List account</a>
-    </div>
+            <h3>Hotels:</h3>
+            <table class="table table-striped">
+                <thead class="thead-dark">
+                <tr>
+                    <th>Hotel Name</th>
+                    <th>Address</th>
+                    <th>Phone</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="hotel : ${hotels}">
+                    <td th:text="${hotel.hotelName}"></td>
+                    <td th:text="${hotel.hotelAddress}"></td>
+                    <td th:text="${hotel.hotelPhone}"></td>
+                    <td th:text="${hotel.hotelStatus ? 'Active' : 'Inactive'}"></td>
+                    <td>
+                        <div sec:authorize="hasAuthority('ADMIN')">
+                            <a th:href="@{/hotels/edit/{hotelId}(hotelId=${hotel.hotelId})}" class="btn btn-warning btn-sm">Edit</a>
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <a th:href="@{/rooms/list}" class="btn btn-primary">List Rooms</a>
+            <a th:href="@{/bookings/listBookingOfAdmin}" class="btn btn-primary">List booking</a>
+            <a th:href="@{/bookings/listBookingCheckedOfAdmin}" class="btn btn-primary">List Checked</a>
+            <a th:href="@{/payments/showAdminPaymentList}" class="btn btn-primary">List payment</a>
+            <a th:href="@{/extraCharges/showAdminExtraChargesList}" class="btn btn-primary">List extraCharge</a>
+            <div sec:authorize="hasAuthority('ADMIN')">
+                <a th:href="@{/employeeAccount}" class="btn btn-primary">List account</a>
+            </div>
 
-</div>
+        </div>
+    </main>
+</section>
 
 <!-- Bootstrap JS and dependencies -->
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>

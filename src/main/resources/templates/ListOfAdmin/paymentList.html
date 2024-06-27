@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,58 +12,62 @@
 <header class="bg-primary text-white text-center py-3">
     <h1>All Bookings</h1>
 </header>
-<main class="container mt-4">
-    <h3>Payment list of admin</h3>
-    <div class="table-responsive">
-        <table class="table table-bordered table-striped">
-            <thead class="thead-dark">
-            <tr>
-                <th>Payment ID</th>
-                <th>UserName</th>
-                <th>Phone</th>
-                <th>Payment type</th>
-                <th>Total price</th>
-                <th>Payment time</th>
-                <th>Booking Id</th>
-                <th>Room number</th>
-                <th>Action</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="payment : ${payments}">
-                <td th:text="${payment.paymentId}"></td>
-                <td th:text="${payment.booking.user.username}"></td>
-                <td th:text="${payment.booking.user.phone}"></td>
-                <td th:text="${payment.paymentType.paymentTypeName}"></td>
-                <td th:text="${payment.totalPayment}"></td>
-                <td th:text="${payment.paymentTime}"></td>
-                <td th:text="${payment.booking.bookingId}"></td>
-                <td th:text="${payment.booking.room.roomNumber}"></td>
-                <td>
-                    <a th:href="@{'/extraCharges/add/' + ${payment.paymentId}}" class="btn btn-warning btn-sm">Extra</a>
-                </td>
-            </tr>
-            </tbody>
-        </table>
-    </div>
-    <nav aria-label="Page navigation" th:if="${totalPages > 1}">
-        <ul class="pagination">
-            <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
-                <a class="page-link" th:href="@{'/payments/showAdminPaymentList?page=' + ${currentPage - 1}}" aria-label="Previous">
-                    <span aria-hidden="true">&laquo;</span>
-                </a>
-            </li>
-            <li class="page-item" th:each="i : ${#numbers.sequence(0, totalPages - 1)}" th:classappend="${currentPage == i} ? 'active'">
-                <a class="page-link" th:href="@{'/payments/showAdminPaymentList?page=' + ${i}}" th:text="${i + 1}">1</a>
-            </li>
-            <li class="page-item" th:classappend="${currentPage == totalPages - 1} ? 'disabled'">
-                <a class="page-link" th:href="@{'/payments/showAdminPaymentList?page=' + ${currentPage + 1}}" aria-label="Next">
-                    <span aria-hidden="true">&raquo;</span>
-                </a>
-            </li>
-        </ul>
-    </nav>
-</main>
+
+<section layout:fragment="content">
+    <main class="container mt-4">
+        <h3>Payment list of admin</h3>
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped">
+                <thead class="thead-dark">
+                <tr>
+                    <th>Payment ID</th>
+                    <th>UserName</th>
+                    <th>Phone</th>
+                    <th>Payment type</th>
+                    <th>Total price</th>
+                    <th>Payment time</th>
+                    <th>Booking Id</th>
+                    <th>Room number</th>
+                    <th>Action</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="payment : ${payments}">
+                    <td th:text="${payment.paymentId}"></td>
+                    <td th:text="${payment.booking.user.username}"></td>
+                    <td th:text="${payment.booking.user.phone}"></td>
+                    <td th:text="${payment.paymentType.paymentTypeName}"></td>
+                    <td th:text="${payment.totalPayment}"></td>
+                    <td th:text="${payment.paymentTime}"></td>
+                    <td th:text="${payment.booking.bookingId}"></td>
+                    <td th:text="${payment.booking.room.roomNumber}"></td>
+                    <td>
+                        <a th:href="@{'/extraCharges/add/' + ${payment.paymentId}}" class="btn btn-warning btn-sm">Extra</a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <nav aria-label="Page navigation" th:if="${totalPages > 1}">
+            <ul class="pagination">
+                <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
+                    <a class="page-link" th:href="@{'/payments/showAdminPaymentList?page=' + ${currentPage - 1}}" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+                <li class="page-item" th:each="i : ${#numbers.sequence(0, totalPages - 1)}" th:classappend="${currentPage == i} ? 'active'">
+                    <a class="page-link" th:href="@{'/payments/showAdminPaymentList?page=' + ${i}}" th:text="${i + 1}">1</a>
+                </li>
+                <li class="page-item" th:classappend="${currentPage == totalPages - 1} ? 'disabled'">
+                    <a class="page-link" th:href="@{'/payments/showAdminPaymentList?page=' + ${currentPage + 1}}" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </main>
+</section>
+
 <footer class="bg-light text-center py-3">
     <p>&copy; 2024 Booking Management System</p>
 </footer>

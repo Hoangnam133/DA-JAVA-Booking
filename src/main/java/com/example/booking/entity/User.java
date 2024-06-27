@@ -45,6 +45,7 @@ public class User implements UserDetails {
     @Column(name = "provider", length = 50)
     private String provider;
     private String token;
+    private int countLogin;
     private boolean accountStatus;
     @OneToMany(mappedBy = "user")
     private List<Booking> bookings;

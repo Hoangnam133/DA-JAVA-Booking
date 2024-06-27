@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -22,85 +24,88 @@
     </style>
 </head>
 <body>
-<div class="container">
-    <h1 class="my-4">Room List</h1>
-    <!-- Form for searching rooms -->
-    <form class="form-inline mb-3" th:action="@{/rooms/searchRoom}" method="get">
-        <div class="form-group mr-2">
-            <label for="roomNumberSearch">Room Number:</label>
-            <input type="text" class="form-control ml-2" id="roomNumberSearch" name="roomNumber">
-        </div>
-        <button type="submit" class="btn btn-primary">Search</button>
-    </form>
+<section layout:fragment="content">
+    <div class="container">
+        <h1 class="my-4">Room List</h1>
+        <!-- Form for searching rooms -->
+        <form class="form-inline mb-3" th:action="@{/rooms/searchRoom}" method="get">
+            <div class="form-group mr-2">
+                <label for="roomNumberSearch">Room Number:</label>
+                <input type="text" class="form-control ml-2" id="roomNumberSearch" name="roomNumber">
+            </div>
+            <button type="submit" class="btn btn-primary">Search</button>
+        </form>
 
-    <!-- Add Room button -->
+        <!-- Add Room button -->
 
-    <div class="mb-3">
-        <div sec:authorize="hasAuthority('ADMIN')">
-            <a th:href="@{/rooms/add}" class="btn btn-custom">Add Room</a>
+        <div class="mb-3">
+            <div sec:authorize="hasAuthority('ADMIN')">
+                <a th:href="@{/rooms/add}" class="btn btn-custom">Add Room</a>
+            </div>
         </div>
-    </div>
-    <div class="mb-3">
+        <div class="mb-3">
             <a th:href="@{/rooms/list}" class="btn btn-custom">All Rooms</a>
-    </div>
+        </div>
 
-    <!-- Error Message -->
-    <div th:if="${errorMessage}" class="alert alert-danger" role="alert">
-        <span th:text="${errorMessage}"></span>
-    </div>
+        <!-- Error Message -->
+        <div th:if="${errorMessage}" class="alert alert-danger" role="alert">
+            <span th:text="${errorMessage}"></span>
+        </div>
 
-    <!-- Table to display room list -->
-    <table class="table table-striped" th:if="${rooms}">
-        <thead class="thead-dark">
-        <tr>
-            <th>Room Number</th>
-            <th>Description</th>
-            <th>Price</th>
-            <th>Room Type</th>
-            <th>Capacity</th>
-            <th>Active</th>
-            <th>Edit</th>
-        </tr>
-        </thead>
-        <tbody>
-        <!-- Iterate over the list of rooms -->
-        <tr th:each="room : ${rooms}">
-            <td th:text="${room.roomNumber}"></td>
-            <td th:text="${room.description}"></td>
-            <td th:text="${room.price}"></td>
-            <td th:text="${room.roomType.roomTypeName}"></td>
-            <td th:text="${room.roomType.capacity}"></td>
-            <td th:text="${room.roomStatus ? 'Active' : 'Inactive'}"></td>
-            <td>
+        <!-- Table to display room list -->
+        <table class="table table-striped" th:if="${rooms}">
+            <thead class="thead-dark">
+            <tr>
+                <th>Room Number</th>
+                <th>Description</th>
+                <th>Price</th>
+                <th>Room Type</th>
+                <th>Capacity</th>
+                <th>Active</th>
+                <th>Edit</th>
+            </tr>
+            </thead>
+            <tbody>
+            <!-- Iterate over the list of rooms -->
+            <tr th:each="room : ${rooms}">
+                <td th:text="${room.roomNumber}"></td>
+                <td th:text="${room.description}"></td>
+                <td th:text="${room.price}"></td>
+                <td th:text="${room.roomType.roomTypeName}"></td>
+                <td th:text="${room.roomType.capacity}"></td>
+                <td th:text="${room.roomStatus ? 'Active' : 'Inactive'}"></td>
+                <td>
 
                     <div sec:authorize="hasAuthority('ADMIN')">
                         <a th:href="@{'/rooms/edit/' + ${room.roomId}}" class="btn btn-warning btn-sm">Edit</a>
                     </div>
 
-            </td>
-        </tr>
-        </tbody>
-    </table>
+                </td>
+            </tr>
+            </tbody>
+        </table>
 
-    <!-- Pagination controls -->
-    <nav aria-label="Page navigation" th:if="${totalPages > 1}">
-        <ul class="pagination">
-            <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
-                <a class="page-link" th:href="@{'/rooms/list?page=' + ${currentPage - 1}}" aria-label="Previous">
-                    <span aria-hidden="true">&laquo;</span>
-                </a>
-            </li>
-            <li class="page-item" th:each="i : ${#numbers.sequence(0, totalPages - 1)}" th:classappend="${currentPage == i} ? 'active'">
-                <a class="page-link" th:href="@{'/rooms/list?page=' + ${i}}" th:text="${i + 1}">1</a>
-            </li>
-            <li class="page-item" th:classappend="${currentPage == totalPages - 1} ? 'disabled'">
-                <a class="page-link" th:href="@{'/rooms/list?page=' + ${currentPage + 1}}" aria-label="Next">
-                    <span aria-hidden="true">&raquo;</span>
-                </a>
-            </li>
-        </ul>
-    </nav>
-</div>
+        <!-- Pagination controls -->
+        <nav aria-label="Page navigation" th:if="${totalPages > 1}">
+            <ul class="pagination">
+                <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
+                    <a class="page-link" th:href="@{'/rooms/list?page=' + ${currentPage - 1}}" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+                <li class="page-item" th:each="i : ${#numbers.sequence(0, totalPages - 1)}" th:classappend="${currentPage == i} ? 'active'">
+                    <a class="page-link" th:href="@{'/rooms/list?page=' + ${i}}" th:text="${i + 1}">1</a>
+                </li>
+                <li class="page-item" th:classappend="${currentPage == totalPages - 1} ? 'disabled'">
+                    <a class="page-link" th:href="@{'/rooms/list?page=' + ${currentPage + 1}}" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</section>
+
 <!-- Bootstrap JS and dependencies -->
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
