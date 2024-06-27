@@ -63,7 +63,6 @@ public class PaymentController {
     public String savePayment(@PathVariable("bookingId") int bookingId, Payment payment, Model model){
         try {
 
-
             Booking booking = bookingService.findBookingById(bookingId);
             payment.setBooking(booking);
             paymentService.createPayment(payment);

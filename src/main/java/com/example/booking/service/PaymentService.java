@@ -1,14 +1,11 @@
 package com.example.booking.service;
 
 
-import com.example.booking.entity.Booking;
 import com.example.booking.entity.Payment;
-import com.example.booking.repository.BookingRepository;
 import com.example.booking.repository.PaymentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -36,6 +33,9 @@ public class PaymentService {
     public Payment checkPayment(int paymentId){
         return paymentRepository.findById(paymentId)
                 .orElseThrow(() -> new RuntimeException("payment not found"));
+    }
+    public double getTotalPayments() {
+        return paymentRepository.findAll().stream().mapToDouble(Payment::getTotalPayment).sum();
     }
 
 }
