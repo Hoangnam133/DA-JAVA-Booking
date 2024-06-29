@@ -20,6 +20,7 @@ public class RoomType {
     private int roomTypeId;
     private String roomTypeName;
     private int capacity;
+    private String roomTypeImage;
     @OneToMany(mappedBy = "roomType")
     private List<Room> rooms;
 

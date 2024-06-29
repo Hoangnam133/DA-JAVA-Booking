@@ -36,6 +36,9 @@
                     <th>Address</th>
                     <th>Phone</th>
                     <th>Status</th>
+                    <th>image1</th>
+                    <th>image2</th>
+                    <th>image3</th>
                     <th>Actions</th>
                 </tr>
                 </thead>
@@ -45,6 +48,16 @@
                     <td th:text="${hotel.hotelAddress}"></td>
                     <td th:text="${hotel.hotelPhone}"></td>
                     <td th:text="${hotel.hotelStatus ? 'Active' : 'Inactive'}"></td>
+                    <td>
+
+                        <img th:src="@{'/hinhanh/' + ${hotel.hotelImage1}}" alt="Hình ảnh sản phẩm" width="100" />
+                    </td>
+                    <td>
+                        <img th:src="@{'/hinhanh/' + ${hotel.hotelImage2}}" alt="Hình ảnh sản phẩm" width="100" />
+                    </td>
+                    <td>
+                        <img th:src="@{'/hinhanh/' + ${hotel.hotelImage3}}" alt="Hình ảnh sản phẩm" width="100" />
+                    </td>
                     <td>
                         <div sec:authorize="hasAuthority('ADMIN')">
                             <a th:href="@{/hotels/edit/{hotelId}(hotelId=${hotel.hotelId})}" class="btn btn-warning btn-sm">Edit</a>

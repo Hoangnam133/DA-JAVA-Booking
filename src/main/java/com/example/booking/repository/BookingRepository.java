@@ -18,4 +18,5 @@ public interface BookingRepository extends JpaRepository<Booking, Integer> {
     Page<Booking> findAllByCheckInStatusTrueAndPaymentStatusFalseOrderByCheckInDateDesc(Pageable pageable);
     Page<Booking> findAllByCheckInStatusFalseAndCancelStatusFalseAndPaymentStatusFalseOrderByCheckInDateDesc(Pageable pageable);
     List<Booking> findAllByCheckInStatusFalseAndUser_Phone(String phone);
+    List<Booking> findAllByCheckInStatusTrueAndPaymentStatusFalseAndUser_Phone(String phone);
 }

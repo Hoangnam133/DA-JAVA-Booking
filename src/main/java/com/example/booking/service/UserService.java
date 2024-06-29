@@ -110,6 +110,17 @@ public class UserService implements UserDetailsService {
     public List<User> findAllRoleId() {
         return userRepository.findByRolesRoleId(3);
     }
-
+    @Transactional
+    public void incrementLoginCount(String username) {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        if (user != null) {
+            user.setCountLogin(user.getCountLogin() + 1);
+            userRepository.save(user);
+        }
+    }
+    public int getTotalCountLogin(){
+        return userRepository.findAll().stream().mapToInt(User::getCountLogin).sum();
+    }
 
 }
