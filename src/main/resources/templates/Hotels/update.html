@@ -20,7 +20,8 @@
         </ul>
       </div>
 
-      <form th:action="@{/hotels/saveEdit/{hotelId}(hotelId=${hotel.hotelId})}" th:object="${hotel}" method="post" class="needs-validation" novalidate>
+      <form th:action="@{/hotels/saveEdit/{hotelId}(hotelId=${hotel.hotelId})}"
+            th:object="${hotel}" method="post" enctype="multipart/form-data">
         <input type="hidden" th:field="*{hotelId}">
 
         <div class="form-group">
@@ -40,24 +41,60 @@
           <input type="text" class="form-control" id="hotelAddress" th:field="*{hotelAddress}" required>
           <div th:if="${#fields.hasErrors('hotelAddress')}" th:errors="*{hotelAddress}" class="text-danger"></div>
         </div>
-
-        <div class="form-group">
-          <label for="hotelImage1">Hotel Image 1:</label>
-          <input type="text" class="form-control" id="hotelImage1" th:field="*{hotelImage1}">
-        </div>
-
-        <div class="form-group">
-          <label for="hotelImage2">Hotel Image 2:</label>
-          <input type="text" class="form-control" id="hotelImage2" th:field="*{hotelImage2}">
-        </div>
-
-        <div class="form-group">
-          <label for="hotelImage3">Hotel Image 3:</label>
-          <input type="text" class="form-control" id="hotelImage3" th:field="*{hotelImage3}">
-        </div>
         <div class="form-check mb-3">
           <input type="checkbox" class="form-check-input" id="hotelStatus" th:field="*{hotelStatus}">
           <label class="form-check-label" for="hotelStatus">Active</label>
+        </div>
+
+        <!-- Current Image -->
+        <div class="form-group">
+          <label for="imageFile">Current Image:</label>
+          <div>
+            <img th:src="@{'/hinhanh/' + ${hotel.hotelImage1}}" alt="Hình ảnh sản phẩm" width="100" />
+          </div>
+        </div>
+
+        <!-- Choose New Image -->
+        <div class="form-group">
+          <label for="imageFile">Choose New Image:</label>
+          <input type="file" class="form-control-file" id="imageFile" name="imageFile" onchange="previewImage(event, 'newImagePreview')" />
+          <div>
+            <img id="newImagePreview" alt="New Image Preview" width="100" style="margin-top: 10px;" />
+          </div>
+        </div>
+
+        <!-- Current Image1 -->
+        <div class="form-group">
+          <label for="imageFile1">Current Image1:</label>
+          <div>
+            <img th:src="@{'/hinhanh/' + ${hotel.hotelImage2}}" alt="Hình ảnh sản phẩm" width="100" />
+          </div>
+        </div>
+
+        <!-- Choose New Image1 -->
+        <div class="form-group">
+          <label for="imageFile1">Choose New Image1:</label>
+          <input type="file" class="form-control-file" id="imageFile1" name="imageFile1" onchange="previewImage(event, 'newImagePreview1')" />
+          <div>
+            <img id="newImagePreview1" alt="New Image Preview" width="100" style="margin-top: 10px;" />
+          </div>
+        </div>
+
+        <!-- Current Image2 -->
+        <div class="form-group">
+          <label for="imageFile2">Current Image2:</label>
+          <div>
+            <img th:src="@{'/hinhanh/' + ${hotel.hotelImage3}}" alt="Hình ảnh sản phẩm" width="100" />
+          </div>
+        </div>
+
+        <!-- Choose New Image2 -->
+        <div class="form-group">
+          <label for="imageFile2">Choose New Image2:</label>
+          <input type="file" class="form-control-file" id="imageFile2" name="imageFile2" onchange="previewImage(event, 'newImagePreview2')" />
+          <div>
+            <img id="newImagePreview2" alt="New Image Preview" width="100" style="margin-top: 10px;" />
+          </div>
         </div>
         <button type="submit" class="btn btn-primary">Update Hotel</button>
       </form>
@@ -68,5 +105,15 @@
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script>
+  function previewImage(event, previewId) {
+    const reader = new FileReader();
+    reader.onload = function() {
+      const output = document.getElementById(previewId);
+      output.src = reader.result;
+    };
+    reader.readAsDataURL(event.target.files[0]);
+  }
+</script>
 </body>
 </html>

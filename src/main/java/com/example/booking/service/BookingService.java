@@ -86,6 +86,6 @@ public class BookingService {
         return bookingRepository.findAllByCheckInStatusFalseAndUser_Phone(phone);
     }
     public List<Booking> findBookingConfirmByPhone(String phone){
-        return bookingRepository.findAllByCheckInStatusFalseAndUser_Phone(phone);
+        return bookingRepository.findAllByCheckInStatusTrueAndPaymentStatusFalseAndUser_Phone(phone);
     }
 }

@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import jakarta.persistence.*;
 import org.hibernate.validator.constraints.Length;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -36,6 +37,15 @@ public class Hotel {
     @NotBlank(message = "Hotel address is required")
     @Size(min = 20,max = 255, message = "Hotel address must be between 20 and 255 characters")
     private String hotelAddress;
+    @Transient
+    private MultipartFile hotelImage1File;
+
+    @Transient
+    private MultipartFile hotelImage2File;
+
+    @Transient
+    private MultipartFile hotelImage3File;
+
     private String hotelImage1;
     private String hotelImage2;
     private String hotelImage3;

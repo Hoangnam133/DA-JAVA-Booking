@@ -48,9 +48,12 @@ public class SecurityConfig {
                         .permitAll() // Cho phép truy cập không cần xác thực.
                         .requestMatchers("/hotels/edit/{hotelId}","/hotels/saveEdit/{hotelId}",
                                 "/rooms/add","rooms/save","/rooms/edit/","/rooms/saveEdit/",
-                                "/saveCreateEmployeeAccount","/employeeAccount","/createEmployeeAccount")
+                                "/saveCreateEmployeeAccount","/employeeAccount","/createEmployeeAccount",
+                                "hotels/homeAdmin")
                         .hasAnyAuthority("ADMIN")
                         .requestMatchers(
+                                "hotels/homeAdmin",
+
                                 "/payments/showAdminPaymentList",
                                 "/payments/add/",
                                 "/payments/save",
@@ -71,7 +74,8 @@ public class SecurityConfig {
                                 "/bookings/bookingUpdateIsCanceled",
                                 "/bookings/SaveBookingUpdateIsCanceled",
                                 "/bookings/AvailableRooms",
-                                "/bookings/listBookingOfUser")
+                                "/bookings/listBookingOfUser",
+                                "homeUser")
 
                         .hasAnyAuthority("USER")
                         .requestMatchers("/api/**").permitAll() // API mở cho mọi người dùng.
