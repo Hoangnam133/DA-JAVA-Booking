@@ -16,9 +16,6 @@ import java.util.Collection;
 @Component
 public class LoginSuccess extends SimpleUrlAuthenticationSuccessHandler {
     private final UserService userService;
-    public static final String LAYOUT_ADMIN_URL = "/Hotels/home";
-    public static final String LAYOUT_URL = "/Layout";
-
     public LoginSuccess(UserService userService) {
         this.userService = userService;
     }

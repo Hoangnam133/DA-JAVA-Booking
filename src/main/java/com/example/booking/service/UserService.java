@@ -9,6 +9,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -45,11 +46,30 @@ public class UserService implements UserDetailsService {
                 () -> { throw new UsernameNotFoundException("User not found"); }
         );}
     // Tải thông tin chi tiết người dùng để xác thực.
+//    @Override
+//    public UserDetails loadUserByUsername(String username) throws
+//            UsernameNotFoundException {
+//        User user = userRepository.findByUsername(username)
+//                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+//        return org.springframework.security.core.userdetails.User
+//                .withUsername(user.getUsername())
+//                .password(user.getPassword())
+//                .authorities(user.getAuthorities())
+//                .accountExpired(!user.isAccountNonExpired())
+//                .accountLocked(!user.isAccountNonLocked())
+//                .credentialsExpired(!user.isCredentialsNonExpired())
+//                .disabled(!user.isEnabled())
+//                .build();
+//    }
     @Override
-    public UserDetails loadUserByUsername(String username) throws
-            UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
+        if (!user.isAccountStatus()) {
+            throw new DisabledException("User account is disabled");
+        }
+
         return org.springframework.security.core.userdetails.User
                 .withUsername(user.getUsername())
                 .password(user.getPassword())
@@ -121,6 +141,12 @@ public class UserService implements UserDetailsService {
     }
     public int getTotalCountLogin(){
         return userRepository.findAll().stream().mapToInt(User::getCountLogin).sum();
+    }
+    public void saveUser(User user) {
+        userRepository.save(user);
+    }
+    public Optional<User> findUserById(Long id) {
+        return userRepository.findById(id);
     }
 
 }

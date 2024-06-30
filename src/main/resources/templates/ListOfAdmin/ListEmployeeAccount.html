@@ -22,6 +22,8 @@
                     <th>Username</th>
                     <th>Email</th>
                     <th>Phone</th>
+                    <th>Status</th>
+                    <th>Action</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -29,6 +31,9 @@
                     <td th:text="${employee.username}"></td>
                     <td th:text="${employee.email}"></td>
                     <td th:text="${employee.phone}"></td>
+                    <td th:text="${employee.accountStatus} ? 'Active' : 'Inactive'"></td>
+                    <td> <a th:href="@{/getDetailEmployee/{userId}(userId=${employee.id})}" class="btn btn-primary">Edit</a></td>
+
                 </tr>
                 </tbody>
             </table>

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:sec="http://www.w3.org/1999/xhtml"
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layout}">
+      layout:decorate="~{layout}" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <title>Hotels Home Page</title>
@@ -66,11 +66,11 @@
                 </tr>
                 </tbody>
             </table>
-            <a th:href="@{/rooms/list}" class="btn btn-primary">List Rooms</a>
-            <a th:href="@{/bookings/listBookingOfAdmin}" class="btn btn-primary">List booking</a>
-            <a th:href="@{/bookings/listBookingCheckedOfAdmin}" class="btn btn-primary">List Checked</a>
-            <a th:href="@{/payments/showAdminPaymentList}" class="btn btn-primary">List payment</a>
-            <a th:href="@{/extraCharges/showAdminExtraChargesList}" class="btn btn-primary">List extraCharge</a>
+<!--            <a th:href="@{/rooms/list}" class="btn btn-primary">List Rooms</a>-->
+<!--            <a th:href="@{/bookings/listBookingOfAdmin}" class="btn btn-primary">List booking</a>-->
+<!--            <a th:href="@{/bookings/listBookingCheckedOfAdmin}" class="btn btn-primary">List Checked</a>-->
+<!--            <a th:href="@{/payments/showAdminPaymentList}" class="btn btn-primary">List payment</a>-->
+<!--            <a th:href="@{/extraCharges/showAdminExtraChargesList}" class="btn btn-primary">List extraCharge</a>-->
             <div sec:authorize="hasAuthority('ADMIN')">
                 <a th:href="@{/employeeAccount}" class="btn btn-primary">List account</a>
             </div>

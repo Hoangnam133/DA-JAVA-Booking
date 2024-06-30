@@ -6,6 +6,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -15,6 +16,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/")
@@ -132,6 +134,35 @@ public class  UserController {
         List<User> employees = userService.findAllRoleId();
         model.addAttribute("employees", employees);
         return "ListOfAdmin/ListEmployeeAccount";
+    }
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @GetMapping("/getDetailEmployee/{userId}")
+    public String getUser(@PathVariable Long userId, Model model) {
+        Optional<User> userOptional = userService.findUserById(userId);
+        if (userOptional.isPresent()) {
+            User user = userOptional.get();
+            model.addAttribute("user", user);
+            return "ListOfAdmin/employeeDetails"; // Thay đổi view name nếu cần thiết
+        } else {
+            model.addAttribute("message", "Không tìm thấy người dùng.");
+            return "admin/error";
+        }
+    }
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @PostMapping("/updateUserStatus/{userId}")
+    public String updateUserStatus(@PathVariable Long userId, User user, Model model) {
+        Optional<User> userOptional = userService.findUserById(userId);
+        if (userOptional.isPresent()) {
+            User existingUser = userOptional.get();
+            existingUser.setAccountStatus(user.isAccountStatus());
+            userService.saveUser(existingUser);
+            model.addAttribute("message", "Cập nhật trạng thái tài khoản thành công.");
+            model.addAttribute("user", user);
+            return "redirect:/employeeAccount";
+        } else {
+            model.addAttribute("message", "Không tìm thấy người dùng.");
+            return "admin/error";
+        }
     }
 
 
