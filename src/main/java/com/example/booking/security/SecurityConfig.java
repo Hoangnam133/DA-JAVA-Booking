@@ -1,5 +1,6 @@
 package com.example.booking.security;
 
+import com.example.booking.entity.User;
 import com.example.booking.handleLogin.LoginSuccess;
 import com.example.booking.service.UserService;
 import jakarta.validation.constraints.NotNull;
@@ -7,10 +8,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -36,7 +39,7 @@ public class SecurityConfig {
     public DaoAuthenticationProvider authenticationProvider() {
         var auth = new DaoAuthenticationProvider(); // Tạo nhà cung cấp xác thực.
         auth.setUserDetailsService(userDetailsService()); // Thiết lập dịch vụ chi tiết người dùng.
-        auth.setPasswordEncoder(passwordEncoder()); // Thiết lập cơ chế mã hóa mật khẩu.
+        auth.setPasswordEncoder(passwordEncoder());
         return auth; // Trả về nhà cung cấp xác thực.
     }
 
@@ -46,14 +49,12 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/css/**", "/js/**", "/", "/oauth/**", "/register", "/error","../Layout")
                         .permitAll() // Cho phép truy cập không cần xác thực.
-                        .requestMatchers("/hotels/edit/{hotelId}","/hotels/saveEdit/{hotelId}",
+                        .requestMatchers("/hotels/add","/hotels/save","/hotels/edit/{hotelId}","/hotels/saveEdit/{hotelId}",
                                 "/rooms/add","rooms/save","/rooms/edit/","/rooms/saveEdit/",
-                                "/saveCreateEmployeeAccount","/employeeAccount","/createEmployeeAccount",
-                                "hotels/homeAdmin")
+                                "/saveCreateEmployeeAccount","/employeeAccount","/createEmployeeAccount")
                         .hasAnyAuthority("ADMIN")
                         .requestMatchers(
-                                "hotels/homeAdmin",
-
+                                "/hotels/homeAdmin",
                                 "/payments/showAdminPaymentList",
                                 "/payments/add/",
                                 "/payments/save",
@@ -67,17 +68,16 @@ public class SecurityConfig {
 
                                 "/extraCharges/*",
                                 "/rooms/list")
-
-
                         .hasAnyAuthority("ADMIN","EMPLOYEE")
+
                         .requestMatchers("/bookings/listCancelBookingOfUser",
                                 "/bookings/bookingUpdateIsCanceled",
                                 "/bookings/SaveBookingUpdateIsCanceled",
                                 "/bookings/AvailableRooms",
                                 "/bookings/listBookingOfUser",
                                 "homeUser")
-
                         .hasAnyAuthority("USER")
+
                         .requestMatchers("/api/**").permitAll() // API mở cho mọi người dùng.
                         .anyRequest().authenticated() // Bất kỳ yêu cầu nào khác cần xác thực.
                 ).
