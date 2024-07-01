@@ -26,7 +26,7 @@ import java.util.List;
 @Controller
 @RequestMapping("/hotels")
 public class HotelController {
-
+    ///Hello
     private final HotelService hotelService;
     private final HandleImageService handleImageService;
 
