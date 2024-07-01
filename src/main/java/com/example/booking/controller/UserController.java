@@ -82,6 +82,7 @@ public class  UserController {
             return "errorPage";
         }
     }
+
     @PostMapping("/savePassword")
     public String saveChangePassword(@AuthenticationPrincipal UserDetails userDetails,
                                      @RequestParam("currentPassword") String currentPassword,
@@ -162,6 +163,53 @@ public class  UserController {
         } else {
             model.addAttribute("message", "Không tìm thấy người dùng.");
             return "admin/error";
+        }
+    }
+    @GetMapping("/forgotPassword")
+    public String showForgotPasswordForm() {
+        return "Users/forgotPassword";
+    }
+
+    @PostMapping("/forgotPassword")
+    public String processForgotPassword(@RequestParam String email, Model model) {
+        String response = userService.regeneratePasswordResetToken(email);
+        model.addAttribute("message", response);
+        return "Users/forgotPassword";
+    }
+
+    @GetMapping("/reset-password")
+    public String showResetPasswordForm(@RequestParam String email, @RequestParam String token, Model model) {
+        boolean isValidToken = userService.verifyPasswordResetToken(email, token);
+        if (isValidToken) {
+            model.addAttribute("email", email);
+            model.addAttribute("token", token);
+            return "Users/resetPassword";
+        } else {
+            model.addAttribute("message", "Invalid token.");
+            return "error";
+        }
+    }
+
+    @PostMapping("/reset-password")
+    public String processResetPassword(@RequestParam String email,
+                                       @RequestParam String token,
+                                       @RequestParam String newPassword,
+                                       @RequestParam String confirmNewPassword,
+                                       Model model) {
+        if (!newPassword.equals(confirmNewPassword)) {
+            model.addAttribute("error", "Passwords do not match.");
+            model.addAttribute("email", email);
+            model.addAttribute("token", token);
+            return "Users/resetPassword";
+        }
+
+        boolean isValidToken = userService.verifyPasswordResetToken(email, token);
+        if (isValidToken) {
+            userService.updatePasswordByEmail(email, newPassword);
+            return "redirect:/login";
+        } else {
+            model.addAttribute("message", "Invalid token.");
+            return "error";
         }
     }
 
