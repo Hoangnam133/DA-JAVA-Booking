@@ -1,14 +1,18 @@
 package com.example.booking.controller;
 
 import com.example.booking.entity.Hotel;
+import com.example.booking.service.HandleImageService;
 import com.example.booking.service.HotelService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 
 import java.io.IOException;
@@ -24,10 +28,14 @@ import java.util.List;
 public class HotelController {
 
     private final HotelService hotelService;
+    private final HandleImageService handleImageService;
 
-    public HotelController(HotelService hotelService) {
+    @Autowired
+    public HotelController(HotelService hotelService, HandleImageService handleImageService) {
         this.hotelService = hotelService;
+        this.handleImageService = handleImageService;
     }
+
 
     @GetMapping("/homeAdmin")
     public String getHotel(Model model) {
@@ -73,44 +81,67 @@ public class HotelController {
 
     @PostMapping("/saveEdit/{hotelId}")
     public String saveEditForm(@PathVariable int hotelId,
-                               @RequestParam("imageFile") MultipartFile imageFile,
-                               @RequestParam("imageFile1") MultipartFile imageFile1,
-                               @RequestParam("imageFile2") MultipartFile imageFile2,
-                               @Valid Hotel hotel,
-                               BindingResult result,
-                               Model model) throws IOException {
-        if (result.hasErrors()) {
-            var errors = result.getAllErrors()
-                    .stream()
-                    .map(DefaultMessageSourceResolvable::getDefaultMessage)
-                    .toArray(String[]::new);
-            model.addAttribute("errors", errors);
-            hotel.setHotelId(hotelId);
-            return "Hotels/update";
-        }
-        try{
-            hotel = hotelService.findHotelById(hotelId);
-            if (!imageFile.isEmpty()) {
-                String storedFileName = handleImage.saveImage(imageFile);
-                hotel.setHotelImage1(storedFileName);
+                               @RequestParam(value = "imageFile") MultipartFile imageFile,
+                               @RequestParam(value = "imageFile1") MultipartFile imageFile1,
+                               @RequestParam(value = "imageFile2") MultipartFile imageFile2,
+                               @ModelAttribute("hotel") Hotel hotel,
+                               Model model) {
+        try {
+            // Retrieve existing hotel data
+            Hotel existingHotel = hotelService.findHotelById(hotelId);
+            if (existingHotel == null) {
+                model.addAttribute("errorMessage", "Hotel not found");
+                return "errorPage";  // Handle case where hotel is not found
             }
 
-            if (!imageFile1.isEmpty()) {
-                String storedFileName1 = handleImage.saveImage(imageFile1);
-                hotel.setHotelImage2(storedFileName1);
-            }
+            // Update hotel images if provided
+            updateHotelImages(imageFile, imageFile1, imageFile2, existingHotel);
 
-            if (!imageFile2.isEmpty()) {
-                String storedFileName2 = handleImage.saveImage(imageFile2);
-                hotel.setHotelImage3(storedFileName2);
-            }
-            hotelService.hotelUpdate(hotel);
+            // Update other hotel details if needed
+            updateHotelDetails(hotel, existingHotel);
+
+            // Save updated hotel details
+            hotelService.hotelUpdate(existingHotel);
+
+            // Redirect to admin home after successful update
             return "redirect:/hotels/homeAdmin";
-        }catch (Exception e){
-            model.addAttribute("errorMessage", "Hotel not found");
-            return "errorPage";
+        } catch (IOException e) {
+            model.addAttribute("errorMessage", "Error saving images: " + e.getMessage());
+            return "errorPage";  // Handle image saving error
+        } catch (Exception e) {
+            // Log the exception for debugging purposes
+            e.printStackTrace();
+            model.addAttribute("errorMessage", "Internal Server Error");
+            return "errorPage";  // Generic error handling for unexpected exceptions
         }
     }
+
+    private void updateHotelImages(MultipartFile imageFile, MultipartFile imageFile1, MultipartFile imageFile2, Hotel existingHotel) throws IOException {
+        if (imageFile != null && !imageFile.isEmpty()) {
+            String storedFilePath = handleImageService.saveImage(imageFile);
+            existingHotel.setHotelImage1(storedFilePath);
+        }
+
+        if (imageFile1 != null && !imageFile1.isEmpty()) {
+            String storedFilePath1 = handleImageService.saveImage(imageFile1);
+            existingHotel.setHotelImage2(storedFilePath1);
+        }
+
+        if (imageFile2 != null && !imageFile2.isEmpty()) {
+            String storedFilePath2 = handleImageService.saveImage(imageFile2);
+            existingHotel.setHotelImage3(storedFilePath2);
+        }
+    }
+
+    private void updateHotelDetails(Hotel hotel, Hotel existingHotel) {
+        existingHotel.setHotelName(hotel.getHotelName());
+        existingHotel.setHotelPhone(hotel.getHotelPhone());
+        existingHotel.setHotelAddress(hotel.getHotelAddress());
+        existingHotel.setHotelStatus(hotel.isHotelStatus());
+    }
+
+
+
 
 
 }

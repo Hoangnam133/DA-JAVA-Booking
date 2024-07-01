@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:sec="http://www.w3.org/1999/xhtml"
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout}">
 <head>
@@ -20,6 +20,10 @@
         th {
             background-color: #f2f2f2;
         }
+        .hotel-image {
+            max-width: 100px; /* Limit maximum width */
+            height: auto; /* Maintain aspect ratio */
+        }
     </style>
 </head>
 <body>
@@ -36,9 +40,9 @@
                     <th>Address</th>
                     <th>Phone</th>
                     <th>Status</th>
-                    <th>image1</th>
-                    <th>image2</th>
-                    <th>image3</th>
+                    <th>Image 1</th>
+                    <th>Image 2</th>
+                    <th>Image 3</th>
                     <th>Actions</th>
                 </tr>
                 </thead>
@@ -49,32 +53,37 @@
                     <td th:text="${hotel.hotelPhone}"></td>
                     <td th:text="${hotel.hotelStatus ? 'Active' : 'Inactive'}"></td>
                     <td>
-
-                        <img th:src="@{'/hinhanh/' + ${hotel.hotelImage1}}" alt="Hình ảnh sản phẩm" width="100" />
+                        <img th:src="@{${hotel.hotelImage1}}" alt="Hotel Image" class="hotel-image" id="hotelImage1-${hotel.hotelId}" />
                     </td>
                     <td>
-                        <img th:src="@{'/hinhanh/' + ${hotel.hotelImage2}}" alt="Hình ảnh sản phẩm" width="100" />
+                        <img th:src="@{${hotel.hotelImage2}}" alt="Hotel Image" class="hotel-image" id="hotelImage2-${hotel.hotelId}"/>
                     </td>
                     <td>
-                        <img th:src="@{'/hinhanh/' + ${hotel.hotelImage3}}" alt="Hình ảnh sản phẩm" width="100" />
+                        <img th:src="@{${hotel.hotelImage3}}" alt="Hotel Image" class="hotel-image" id="hotelImage3-${hotel.hotelId}"/>
                     </td>
+                    <script th:inline="javascript">
+                        $(document).ready(function() {
+                            // Cache-busting for images
+                            $('img.hotel-image').each(function() {
+                                var src = $(this).attr('src');
+                                $(this).attr('src', src + '?timestamp=' + new Date().getTime());
+                            });
+                        });
+                    </script>
                     <td>
                         <div sec:authorize="hasAuthority('ADMIN')">
-                            <a th:href="@{/hotels/edit/{hotelId}(hotelId=${hotel.hotelId})}" class="btn btn-warning btn-sm">Edit</a>
+                            <a th:href="@{/hotels/edit/{hotelId}(hotelId=${hotel.hotelId})}" class="btn btn-primary">Edit</a>
+                        </div>
+                        <div sec:authorize="hasAuthority('USER')">
+                            <a th:href="@{/hotels/detail/{hotelId}(hotelId=${hotel.hotelId})}" class="btn btn-info">Detail</a>
                         </div>
                     </td>
                 </tr>
                 </tbody>
             </table>
-            <a th:href="@{/rooms/list}" class="btn btn-primary">List Rooms</a>
-            <a th:href="@{/bookings/listBookingOfAdmin}" class="btn btn-primary">List booking</a>
-            <a th:href="@{/bookings/listBookingCheckedOfAdmin}" class="btn btn-primary">List Checked</a>
-            <a th:href="@{/payments/showAdminPaymentList}" class="btn btn-primary">List payment</a>
-            <a th:href="@{/extraCharges/showAdminExtraChargesList}" class="btn btn-primary">List extraCharge</a>
             <div sec:authorize="hasAuthority('ADMIN')">
-                <a th:href="@{/employeeAccount}" class="btn btn-primary">List account</a>
+                <a th:href="@{/hotels/new}" class="btn btn-success">Add New Hotel</a>
             </div>
-
         </div>
     </main>
 </section>
@@ -83,5 +92,6 @@
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
 </body>
 </html>

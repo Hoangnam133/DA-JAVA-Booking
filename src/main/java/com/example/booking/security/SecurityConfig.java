@@ -96,6 +96,7 @@ public class SecurityConfig {
                                 .successHandler(new LoginSuccess(userService))
                         .failureUrl("/login?error") // Trang đăng nhập thất bại.
                         .permitAll()
+
                 ).
                 rememberMe(rememberMe -> rememberMe
                         .key("hutech")
