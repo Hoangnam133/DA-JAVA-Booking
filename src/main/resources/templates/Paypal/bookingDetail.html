@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Booking Details</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- jQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <!-- Popper.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <!-- Bootstrap JS -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</head>
+<body>
+<div class="container">
+    <h1 class="mt-4">Booking Details</h1>
+
+    <div class="card mt-4">
+        <div class="card-body">
+            <h5 class="card-title">Booking Information</h5>
+            <p class="card-text"><strong>Booking ID:</strong> <span th:text="${booking.bookingId}"></span></p>
+            <p class="card-text"><strong>Check-in Date:</strong> <span th:text="${booking.checkInDate}"></span></p>
+            <p class="card-text"><strong>Check-out Date:</strong> <span th:text="${booking.checkOutDate}"></span></p>
+            <p class="card-text"><strong>Total Price:</strong> <span th:text="${booking.totalPrice}"></span></p>
+            <p class="card-text"><strong>Payment Status:</strong> <span th:text="${booking.paymentStatus}"></span></p>
+            <p class="card-text"><strong>Check-in Status:</strong> <span th:text="${booking.checkInStatus}"></span></p>
+            <p class="card-text"><strong>Pin:</strong> <span th:text="${booking.pin}"></span></p>
+
+            <form th:action="@{/payments/pay}" method="post">
+                <button type="submit" class="btn btn-primary">Pay with PayPal</button>
+            </form>
+        </div>
+    </div>
+    <a th:href="@{/hotels/homeAdmin}" class="btn btn-secondary mt-4">Back to Home</a>
+</div>
+</body>
+</html>

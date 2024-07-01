@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Payment Successful</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- jQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <!-- Popper.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <!-- Bootstrap JS -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</head>
+<body>
+<div class="container">
+    <div class="alert alert-success mt-4" role="alert">
+        <h4 class="alert-heading">Payment Successful!</h4>
+        <p>Your payment has been successfully processed.</p>
+        <hr>
+        <p class="mb-0">Thank you for your booking.</p>
+    </div>
+
+    <a th:href="@{/hotels/homeAdmin}" class="btn btn-primary mt-4">Back to Home</a>
+</div>
+</body>
+</html>

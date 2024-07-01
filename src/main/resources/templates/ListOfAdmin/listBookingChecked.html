@@ -61,6 +61,9 @@
                     <td>
                         <a th:href="@{'/payments/add/' + ${booking.bookingId}}" class="btn btn-sm btn-success mb-1">Pay</a>
                     </td>
+                    <td>
+                        <a th:href="@{'/payments/bookingDetail/' + ${booking.bookingId}}" class="btn btn-sm btn-success mb-1">Paypal</a>
+                    </td>
                 </tr>
                 </tbody>
             </table>
