@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layout}">
+      layout:decorate="~{layout}" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <title>Hotels Home Page</title>
@@ -82,11 +82,7 @@
                 </tbody>
 
             </table>
-            <!--            <a th:href="@{/rooms/list}" class="btn btn-primary">List Rooms</a>-->
-            <!--            <a th:href="@{/bookings/listBookingOfAdmin}" class="btn btn-primary">List booking</a>-->
-            <!--            <a th:href="@{/bookings/listBookingCheckedOfAdmin}" class="btn btn-primary">List Checked</a>-->
-            <!--            <a th:href="@{/payments/showAdminPaymentList}" class="btn btn-primary">List payment</a>-->
-            <!--            <a th:href="@{/extraCharges/showAdminExtraChargesList}" class="btn btn-primary">List extraCharge</a>-->
+
             <div sec:authorize="hasAuthority('ADMIN')">
                 <a th:href="@{/hotels/new}" class="btn btn-success">Add New Hotel</a>
             </div>
