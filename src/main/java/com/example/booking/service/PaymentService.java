@@ -1,6 +1,7 @@
 package com.example.booking.service;
 
 
+import com.example.booking.entity.Booking;
 import com.example.booking.entity.Payment;
 import com.example.booking.repository.PaymentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,8 +9,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
+import java.io.IOException;
 import java.util.List;
+
 
 @Service
 public class PaymentService {
@@ -37,5 +39,6 @@ public class PaymentService {
     public double getTotalPayments() {
         return paymentRepository.findAll().stream().mapToDouble(Payment::getTotalPayment).sum();
     }
+
 
 }
