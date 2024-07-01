@@ -47,7 +47,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(@NotNull HttpSecurity http) throws Exception {
         return http
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/css/**", "/js/**", "/", "/oauth/**", "/register", "/error","../Layout")
+                        .requestMatchers("/css/**", "/js/**", "/", "/oauth/**", "/register", "/error","../Layout","/forgotPassword","/reset-password")
                         .permitAll() // Cho phép truy cập không cần xác thực.
                         .requestMatchers("/hotels/add","/hotels/save","/hotels/edit/{hotelId}","/hotels/saveEdit/{hotelId}",
                                 "/rooms/add","rooms/save","/rooms/edit/","/rooms/saveEdit/",
@@ -111,6 +111,7 @@ public class SecurityConfig {
                         .maximumSessions(1) // Giới hạn số phiên đăng nhập.
                         .expiredUrl("/login") // Trang khi phiên hết hạn.
                 ).
+
                 httpBasic(httpBasic -> httpBasic
                         .realmName("hutech") // Tên miền cho xác thực cơ bản.
                 ).
