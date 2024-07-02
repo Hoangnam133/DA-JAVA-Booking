@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en"  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Room</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<section layout:fragment="content">
+    <div class="container">
+        <h1>Edit Room</h1>
+        <form th:action="@{'/blogs/saveEdit/' + ${blog.blogId}}" th:object="${blog}" method="post" class="needs-validation" novalidate>
+            <div class="form-group">
+                <label for="title">Room Number:</label>
+                <input type="text" class="form-control" id="title" th:field="*{title}" required>
+                <div class="invalid-feedback" th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="content">content:</label>
+                <textarea class="form-control" id="content" th:field="*{content}" required></textarea>
+                <div class="invalid-feedback" th:if="${#fields.hasErrors('content')}" th:errors="*{content}"></div>
+            </div>
+            <div class="form-group">
+                <label for="mainImage">mainImage:</label>
+                <input type="text" class="form-control" id="mainImage" th:field="*{mainImage}">
+            </div>
+            <div class="form-group">
+                <label for="secondaryImage">secondaryImage:</label>
+                <input type="text" class="form-control" id="secondaryImage" th:field="*{secondaryImage}">
+            </div>
+            <div class="form-group">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="blogStatus" th:field="*{blogStatus}">
+                    <label class="form-check-label" for="blogStatus">Active</label>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="postDate">Date:</label>
+                <input type="text" id="postDate" name="postDate" th:value="${blog.postDate}" class="form-control" readonly>
+            </div>
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary">Save</button>
+            </div>
+            <div th:if="${errors}" class="alert alert-danger" role="alert">
+                <ul>
+                    <li th:each="error : ${errors}" th:text="${error}"></li>
+                </ul>
+            </div>
+        </form>
+    </div>
+</section>
+<!-- Bootstrap JS and dependencies -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.w3.org/1999/xhtml"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <meta charset="UTF-8">
+    <title>List of Blogs</title>
+</head>
+<body>
+<section layout:fragment="content">
+    <h2>List of Blogs</h2>
+    <table>
+        <thead>
+        <tr>
+            <th>Title</th>
+            <th>Content</th>
+            <th>Main Image</th>
+            <th>Post Date</th>
+            <th>Status</th>
+            <th>Action</th>
+            <!-- Add more columns as needed -->
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="blog : ${blogs}">
+            <td th:text="${blog.title}"></td>
+            <td th:text="${blog.content}"></td>
+            <td th:text="${blog.mainImage}"></td>
+            <td th:text="${blog.postDate}"></td>
+            <td th:text="${blog.blogStatus ? 'Active' : 'Inactive'}"></td>
+            <td>
+                <div sec:authorize="hasAuthority('ADMIN')">
+                    <a th:href="@{'/blogs/edit/' + ${blog.blogId}}" class="btn btn-warning btn-sm">Edit</a>
+                </div>
+
+            </td>
+            <!-- Add more columns as needed -->
+        </tr>
+        </tbody>
+    </table>
+    <!-- Pagination -->
+    <div>
+        <nav aria-label="Page navigation" th:if="${totalPages > 1}">
+            <ul class="pagination">
+                <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
+                    <a class="page-link" th:href="@{'/blogs/listBlogOfAdmin?page=' + ${currentPage - 1}}" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+                <li class="page-item" th:each="i : ${#numbers.sequence(0, totalPages - 1)}" th:classappend="${currentPage == i} ? 'active'">
+                    <a class="page-link" th:href="@{'/blogs/listBlogOfAdmin?page=' + ${i}}" th:text="${i + 1}">1</a>
+                </li>
+                <li class="page-item" th:classappend="${currentPage == totalPages - 1} ? 'disabled'">
+                    <a class="page-link" th:href="@{'/blogs/listBlogOfAdmin?page=' + ${currentPage + 1}}" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</section>
+</body>
+</html>

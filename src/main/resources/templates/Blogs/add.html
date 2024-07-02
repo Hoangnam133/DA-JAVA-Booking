@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Add New Blog</title>
+</head>
+<body>
+<h2>Add New Blog</h2>
+<form th:action="@{/blogs/save}" method="post" th:object="${blog}">
+  <div>
+    <label for="title">Title:</label>
+    <input type="text" id="title" name="title" th:field="*{title}">
+    <span th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></span>
+  </div>
+  <div>
+    <label for="content">Content:</label>
+    <textarea id="content" name="content" th:field="*{content}"></textarea>
+    <span th:if="${#fields.hasErrors('content')}" th:errors="*{content}"></span>
+  </div>
+  <div>
+    <label for="mainImage">Main Image:</label>
+    <input type="text" id="mainImage" name="mainImage" th:field="*{mainImage}">
+  </div>
+  <div>
+    <label for="secondaryImage">Secondary Image:</label>
+    <input type="text" id="secondaryImage" name="secondaryImage" th:field="*{secondaryImage}">
+  </div>
+  <div>
+    <label for="formattedPostDate">Post Date:</label>
+    <input type="text" id="formattedPostDate" class="form-control" readonly>
+    <input type="hidden" id="postDate" name="postDate" th:field="*{postDate}">
+  </div>
+  <div>
+    <button type="submit">Save</button>
+  </div>
+  <div th:if="${#fields.hasErrors()}">
+    <p th:each="error : ${errors}" th:text="${error}"></p>
+  </div>
+</form>
+<script>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    const now = new Date();
+    const day = String(now.getDate()).padStart(2, '0');
+    const month = String(now.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+    const year = now.getFullYear();
+    const formattedPostDate = `${day}-${month}-${year}`; // dd-MM-yyyy
+    document.getElementById('formattedPostDate').value = formattedPostDate;
+    const hiddenFormattedDate = `${year}-${month}-${day}`; // yyyy-MM-dd
+    document.getElementById('postDate').value = hiddenFormattedDate;
+  });
+</script>
+</body>
+</html>

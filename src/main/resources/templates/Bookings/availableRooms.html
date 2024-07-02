@@ -5,6 +5,13 @@
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>
+<div class="form-group">
+  <label>Room Types:</label>
+  <div th:each="roomType, iter : ${roomTypes}">
+    <label for="roomTypeCheckbox[[${iter.index}]]"></label><input type="checkbox" id="roomTypeCheckbox[[${iter.index}]]" class="room-type-checkbox" th:value="${roomType.roomTypeId}">
+    <label th:for="'roomTypeCheckbox' + ${iter.index}" th:text="${roomType.roomTypeName}"></label>
+  </div>
+</div>
 <div class="container mt-5">
   <h1 class="text-center">Available Rooms</h1>
   <table class="table table-striped">
@@ -20,7 +27,7 @@
     </tr>
     </thead>
     <tbody>
-    <tr th:each="room : ${rooms}">
+    <tr th:each="room : ${rooms}" th:data-room-type-id="${room.roomType.roomTypeId}" class="room-row">
       <td th:text="${room.roomNumber}">Room Number</td>
       <td th:text="${room.roomType.roomTypeName}">Type</td>
       <td th:text="${room.price}">Price</td>
@@ -31,16 +38,38 @@
         <a th:href="@{'/bookings/add/' + ${room.roomId} + '?checkInDate=' + ${checkInDate} + '&checkOutDate=' + ${checkOutDate}}">
           Book this room
         </a>
-
-      <td>
-
+      </td>
     </tr>
-
     </tbody>
+
   </table>
 </div>
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script>
+  $(document).ready(function() {
+    $('.room-type-checkbox').change(function() {
+      filterRooms();
+    });
+
+    function filterRooms() {
+      var selectedRoomTypes = [];
+      $('.room-type-checkbox:checked').each(function() {
+        selectedRoomTypes.push($(this).val());
+      });
+
+      $('.room-row').each(function() {
+        var roomTypeId = $(this).data('room-type-id');
+        if (selectedRoomTypes.length === 0 || selectedRoomTypes.includes(roomTypeId.toString())) {
+          $(this).show();
+        } else {
+          $(this).hide();
+        }
+      });
+    }
+  });
+</script>
+
 </body>
 </html>
