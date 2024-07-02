@@ -88,7 +88,7 @@ public class BookingController {
             return "ListOfAdmin/listBooking";
         } catch (Exception e) {
             model.addAttribute("Errors", e);
-            return "errors";
+            return "errorPage";
         }
     }
     // for admin
@@ -104,7 +104,7 @@ public class BookingController {
             return "ListOfAdmin/listBookingChecked";
         }catch (Exception e){
             model.addAttribute("Errors",e);
-            return "errors";
+            return "errorPage";
         }
     }
     // for admin
@@ -116,7 +116,7 @@ public class BookingController {
             return "Bookings/requiresCheckIn";
         }catch (Exception e){
             model.addAttribute("errors",e);
-            return "errors";
+            return "errorPage";
         }
     }
     @PostMapping("/saveBookingUpdateCheckIn/{bookingId}")
@@ -129,7 +129,7 @@ public class BookingController {
                    return "redirect:/bookings/listBookingCheckedOfAdmin";
                }catch (Exception e){
                    model.addAttribute("errors",e);
-                   return "errors";
+                   return "errorPage";
                }
     }
     // for user
@@ -141,7 +141,7 @@ public class BookingController {
             return "Bookings/RequestCancel";
         }catch (Exception e){
             model.addAttribute("errors",e);
-            return "errors";
+            return "errorPage";
         }
     }
     // for user
@@ -205,7 +205,7 @@ public class BookingController {
             return "Bookings/add";
         } catch (Exception e) {
             model.addAttribute("errors", e);
-            return "Errors"; // Ensure you have a view "Errors.html" or similar
+            return "errorPage"; // Ensure you have a view "Errors.html" or similar
         }
     }
 
@@ -237,7 +237,7 @@ public class BookingController {
             return "Bookings/listBookingUser";
         }catch (Exception e){
             model.addAttribute("Errors",e);
-            return "errors";
+            return "errorPage";
         }
     }
     public void sendBookingToEmail(Booking booking, User user) throws MessagingException {
