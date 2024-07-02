@@ -4,8 +4,10 @@ import com.example.booking.entity.Booking;
 import com.example.booking.entity.Room;
 import com.example.booking.entity.User;
 import com.example.booking.service.BookingService;
+import com.example.booking.service.MailService;
 import com.example.booking.service.RoomService;
 import com.example.booking.service.UserService;
+import jakarta.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -29,12 +31,15 @@ public class BookingController {
     private final BookingService bookingService;
     private final UserService userService;
     private final RoomService roomService;
+    private final MailService mailService;
+
     public double gb_totalPrice = 0;
     @Autowired
-    public BookingController(BookingService bookingService, UserService userService, RoomService roomService){
+    public BookingController(BookingService bookingService, UserService userService, RoomService roomService, MailService mailService){
         this.bookingService = bookingService;
         this.userService = userService;
         this.roomService = roomService;
+        this.mailService = mailService;
     }
     //for admin
     @GetMapping("/searchBookingByUserPhone")
@@ -86,7 +91,6 @@ public class BookingController {
             return "errors";
         }
     }
-
     // for admin
     @GetMapping("/listBookingCheckedOfAdmin")
     public String getAllBookingIsChecked(@RequestParam(defaultValue = "0") int page, Model model){
@@ -98,28 +102,6 @@ public class BookingController {
             model.addAttribute("totalPages", bookingPage.getTotalPages());
             model.addAttribute("currentPage", page);
             return "ListOfAdmin/listBookingChecked";
-        }catch (Exception e){
-            model.addAttribute("Errors",e);
-            return "errors";
-        }
-    }
-    // for user
-    @GetMapping("/listBookingOfUser/{userId}")
-    public String getAllBookingOfUser(@PathVariable("userId") Long userId, Model model){
-        try {
-            model.addAttribute("bookings",bookingService.ShowBookingListOfUser(userId));
-            return "Bookings/listBookingUser";
-        }catch (Exception e){
-            model.addAttribute("Errors",e);
-            return "errors";
-        }
-    }
-    // for user
-    @GetMapping("/listCancelBookingOfUser/{userId}")
-    public String getAllCancelBookingOfUser(@PathVariable("userId") Long userId, Model model){
-        try {
-            model.addAttribute("bookings",bookingService.ShowCancelBookingListOfUser(userId));
-            return "Bookings/listCancelBookingUser";
         }catch (Exception e){
             model.addAttribute("Errors",e);
             return "errors";
@@ -175,7 +157,7 @@ public class BookingController {
         String username = userDetails.getUsername();
         User user = userService.findByUsername(username)
                 .orElseThrow(() -> new RuntimeException("User not found"));
-        return "redirect:/bookings/listCancelBookingOfUser/" + user.getId();
+        return "redirect:/bookings/listCancelBookingOfUser";
     }
     @GetMapping("/AvailableRooms")
     public String searchAvailableRooms(@RequestParam("checkInDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate checkInDate,
@@ -187,8 +169,6 @@ public class BookingController {
         model.addAttribute("checkOutDate", checkOutDate);
         return "Bookings/availableRooms";
     }
-
-
     @GetMapping("/add/{roomId}")
     public String createFromBooking(@PathVariable("roomId") int roomId,
                                     @RequestParam("checkInDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate checkInDate,
@@ -231,7 +211,7 @@ public class BookingController {
 
     @PostMapping("/save")
     public String saveCreateFromBooking(Booking booking,BindingResult result,
-                                        @AuthenticationPrincipal UserDetails userDetails){
+                                        @AuthenticationPrincipal UserDetails userDetails, Model model) throws MessagingException {
         if (result.hasErrors()) {
             return "/Bookings/add";
         }
@@ -240,11 +220,44 @@ public class BookingController {
                 .orElseThrow(() -> new RuntimeException("User not found"));
         booking.setUser(user);
         booking.setTotalPrice(gb_totalPrice);
+        String pin = bookingService.generateRandomString();
+        booking.setPin(pin);
         bookingService.createBooking(booking);
-
-        System.out.println(booking);
+        sendBookingToEmail(booking,user);
         return "redirect:/homeUser" ;
-//                + user.getId();
+    }
+    // for user
+    @GetMapping("/listBookingOfUser")
+    public String getAllBookingOfUser(@AuthenticationPrincipal UserDetails userDetails, Model model){
+        try {
+            String username = userDetails.getUsername();
+            User user = userService.findByUsername(username)
+                    .orElseThrow(() -> new RuntimeException("User not found"));
+            model.addAttribute("bookings",bookingService.ShowBookingListOfUser(user.getId()));
+            return "Bookings/listBookingUser";
+        }catch (Exception e){
+            model.addAttribute("Errors",e);
+            return "errors";
+        }
+    }
+    public void sendBookingToEmail(Booking booking, User user) throws MessagingException {
+        String subject = "Booking Confirmation";
+        String htmlBody = "<div style='border: 3px solid #ccc; border-radius: 10px; overflow: hidden;'>" +
+                "<div style='background-color: #f8f9fa; padding: 20px;'>" +
+                "<h2 style='color: #007bff; margin-bottom: 10px;'>Booking Confirmation</h2>" +
+                "<p>Dear " + user.getUsername() + ",</p>" +
+                "<p>Your booking has been confirmed.</p>" +
+                "<h3>Booking Details:</h3>" +
+                "<ul style='list-style-type: none; padding-left: 0;'>" +
+                "<li><strong>Check-in Date:</strong> " + booking.getCheckInDate() + "</li>" +
+                "<li><strong>Check-out Date:</strong> " + booking.getCheckOutDate() + "</li>" +
+                "<li><strong>Total Price:</strong> $" + booking.getTotalPrice() + "</li>" +
+                "<li><strong>Pin:</strong> " + booking.getPin() + "</li>" +
+                "</ul>" +
+                "<p>Thank you for booking with us!</p>" +
+                "</div>" +
+                "</div>";
+            mailService.sendMail(user.getEmail(), subject, htmlBody);
     }
 
 }

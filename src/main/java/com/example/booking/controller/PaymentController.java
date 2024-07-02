@@ -4,12 +4,12 @@ import com.example.booking.config.PaypalPaymentIntent;
 import com.example.booking.config.PaypalPaymentMethod;
 import com.example.booking.entity.Booking;
 import com.example.booking.entity.Payment;
-import com.example.booking.service.BookingService;
-import com.example.booking.service.PaymentService;
-import com.example.booking.service.PaymentTypeService;
+import com.example.booking.entity.User;
+import com.example.booking.service.*;
 import com.example.booking.util.URLUtils;
 import com.paypal.api.payments.Links;
 import com.paypal.base.rest.PayPalRESTException;
+import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,15 +17,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import com.example.booking.service.PaypalService;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
-import java.util.Date;
 
 @Controller
 @RequestMapping("/payments")
@@ -33,15 +33,21 @@ public class PaymentController {
     private final PaymentService paymentService;
     private final BookingService bookingService;
     private final PaymentTypeService paymentTypeService;
+    private final UserService userService;
+    private final MailService mailService;
 
 
     @Autowired
-    public PaymentController(PaymentService paymentService, BookingService bookingService, PaymentTypeService paymentTypeService) {
+    public PaymentController(PaymentService paymentService, BookingService bookingService,
+                             PaymentTypeService paymentTypeService,
+                             UserService userService,
+                             MailService mailService) {
         this.paymentService = paymentService;
         this.bookingService = bookingService;
         this.paymentTypeService = paymentTypeService;
+        this.userService = userService;
+        this.mailService = mailService;
     }
-
     @GetMapping("/showAdminPaymentList")
     public String showAdminPaymentList(@RequestParam(defaultValue = "0") int page, Model model) {
         try {
@@ -57,7 +63,6 @@ public class PaymentController {
             return "errors";
         }
     }
-
     // Payment method is cash
     @GetMapping("/add/{bookingId}")
     public String showAddPaymentForm(@PathVariable("bookingId") int bookingId, Model model) {
@@ -74,7 +79,6 @@ public class PaymentController {
             return "errors";
         }
     }
-
     @PostMapping("/save/{bookingId}")
     public String savePayment(@PathVariable("bookingId") int bookingId, Payment payment, Model model) {
         try {
@@ -105,7 +109,6 @@ public class PaymentController {
             return "errors";
         }
     }
-
     @PostMapping("/pay")
     public String payWithPaypal(HttpServletRequest request, Model model) {
         try {
@@ -141,7 +144,6 @@ public class PaymentController {
         }
         return "redirect:/";
     }
-
     @GetMapping("/pay/cancel")
     public String cancelPay() {
         return "Paypal/cancel";
@@ -150,8 +152,12 @@ public class PaymentController {
     @GetMapping("/pay/success")
     public String successPay(@RequestParam("paymentId") String paymentId,
                              @RequestParam("PayerID") String payerId,
-                             Model model) {
+                             Model model
+            ,@AuthenticationPrincipal UserDetails userDetails) {
         try {
+            String username = userDetails.getUsername();
+            User user = userService.findByUsername(username)
+                    .orElseThrow(() -> new RuntimeException("User not found"));
             com.paypal.api.payments.Payment payment = PaypalService.executePayment(paymentId, payerId);
             if (payment.getState().equals("approved")) {
                 Booking booking = bookingService.findBookingById(GB_BookingId);
@@ -162,19 +168,52 @@ public class PaymentController {
                 newPayment.setTotalPayment(booking.getTotalPrice());
                 newPayment.setPaymentTime(LocalDate.now().toString());
                 paymentService.createPayment(newPayment);
-
-
+                sendPaymentToEmail(newPayment,user);
+                bookingService.updateCheckInStatus(booking.getBookingId());
                 bookingService.updatePaymentStatus(booking.getBookingId());
-
                 model.addAttribute("payment", newPayment);
                 return "Paypal/success";
             }
         } catch (PayPalRESTException e) {
             log.error("Error while processing PayPal payment: " + e.getMessage());
             model.addAttribute("Errors", e.getMessage());
+        } catch (MessagingException e) {
+            throw new RuntimeException(e);
         }
         return "redirect:/";
     }
-
+    @GetMapping("/listPaymentOfUser")
+    public String getAllPaymentOfUser(@AuthenticationPrincipal UserDetails userDetails, Model model)
+    {
+        try {
+            String username = userDetails.getUsername();
+            User user = userService.findByUsername(username)
+                    .orElseThrow(() -> new RuntimeException("User not found"));
+            model.addAttribute("payments",paymentService.listOfUser(user.getId()));
+            return "Payments/listOfUser";
+        }catch (Exception e){
+            model.addAttribute("Errors",e);
+            return "errors";
+        }
+    }
+    public void sendPaymentToEmail(Payment payment, User user) throws MessagingException {
+        String subject = "Payment Confirmation";
+        String htmlBody = "<div style='border: 3px solid #ccc; border-radius: 10px; overflow: hidden;'>" +
+                "<div style='background-color: #f8f9fa; padding: 20px;'>" +
+                "<h2 style='color: #007bff; margin-bottom: 10px;'>Payment Confirmation</h2>" +
+                "<p>Dear " + user.getUsername() + ",</p>" +
+                "<p>Your pay has been confirmed.</p>" +
+                "<h3>Pay Details:</h3>" +
+                "<ul style='list-style-type: none; padding-left: 0;'>" +
+                "<li><strong>Payment Time:</strong> " + payment.getPaymentTime() + "</li>" +
+                "<li><strong>Total Price:</strong> " + payment.getTotalPayment() + "</li>" +
+                "<li><strong>Booking ID:</strong> $" + payment.getBooking().getBookingId() + "</li>" +
+                "<li><strong>Payment ID:</strong> " + payment.getPaymentId() + "</li>" +
+                "</ul>" +
+                "<p>Thank you for booking with us!</p>" +
+                "</div>" +
+                "</div>";
+        mailService.sendMail(user.getEmail(), subject, htmlBody);
+    }
 
 }

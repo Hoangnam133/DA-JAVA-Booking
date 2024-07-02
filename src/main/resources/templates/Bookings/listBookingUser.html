@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Bookings</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+<section >
+    <div class="container mt-5">
+        <h2 class="mb-4">Your Bookings</h2>
+        <div th:if="${Errors}">
+            <div class="alert alert-danger" role="alert">
+                <p th:text="${Errors}"></p>
+            </div>
+        </div>
+        <div class="row">
+            <div th:if="${bookings != null}" class="col-12">
+                <div class="card-columns">
+                    <div th:each="booking : ${bookings}" class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Booking ID: <span th:text="${booking.bookingId}">Booking ID</span></h5>
+                            <p class="card-text">Check-in Date: <span th:text="${booking.checkInDate}">Check-in Date</span></p>
+                            <p class="card-text">Check-out Date: <span th:text="${booking.checkOutDate}">Check-out Date</span></p>
+                            <p class="card-text">Total Price: $<span th:text="${booking.totalPrice}">Total Price</span></p>
+                            <p class="card-text">Room: <span th:text="${booking.room.roomNumber}">Room</span></p>
+                            <p class="card-text">
+                            <p class="card-text">
+                            <div th:if="${booking.checkInStatus}">
+                                <span class="badge badge-success">Đã xác nhận</span>
+                                <div th:if="${booking.paymentStatus}">
+                                    <span class="badge badge-success">Đã thanh toán</span>
+                                </div>
+                                <div th:if="${!booking.paymentStatus}">
+                                    <span class="badge badge-warning">Thanh toán với PayPal</span>
+                                </div>
+                            </div>
+                            <div th:if="${!booking.checkInStatus}">
+                                <div th:if="${!booking.cancelStatus}">
+                                    <span class="badge badge-secondary">Hủy đặt phòng</span>
+                                    <span class="badge badge-warning"><a th:href="@{'/payments/bookingDetail/' + ${booking.bookingId}}" class="btn btn-sm btn-success mb-1">PayPal</a></span>
+                                </div>
+                                <div th:if="${booking.cancelStatus}">
+                                    <span class="badge badge-danger">Đã hủy</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+</body>
+</html>
