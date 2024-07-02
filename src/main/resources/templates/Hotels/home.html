@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layout}" xmlns:sec="http://www.w3.org/1999/xhtml">
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/Layout-Admin"
+      layout:decorate="~{Layout-Admin}" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <title>Hotels Home Page</title>
@@ -28,7 +28,7 @@
 </head>
 <body>
 <section layout:fragment="content">
-    <main>
+
         <div class="container">
             <h2>Welcome to Hotels Management</h2>
 
@@ -87,7 +87,7 @@
                 <a th:href="@{/hotels/new}" class="btn btn-success">Add New Hotel</a>
             </div>
         </div>
-    </main>
+
 </section>
 
 <!-- Bootstrap JS and dependencies -->

@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/Layout-User">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" type="text/css" th:href="@{/static/output.css}" />
+    <title>Layout-User</title>
+</head>
+<body>
+<header class="sticky bg-[#FFF9E5] px-[10rem] py-6">
+    <div class="container">
+        <div class="flex items-center justify-between">
+            <a href="#!" class="flex items-center gap-3">
+                <img src="/static/hinhanh/logo.png" alt="" class="h-10 w-10" />
+                <p class="mt-1 font-sans text-4xl font-black text-[#219aa7]">
+                    DTN TEAM
+                </p>
+            </a>
+
+            <!-- Navigation -->
+            <nav>
+                <ul class="flex">
+                    <li>
+                        <a
+                                class="cursor-pointer p-[1.31rem] text-[1rem] text-[#4E5358] hover:font-semibold"
+                                href="#!"
+                        >Home</a
+                        >
+                    </li>
+                    <li>
+                        <a
+                                class="cursor-pointer p-[1.31rem] text-[1rem] text-[#4E5358] hover:font-semibold"
+                                href="#!"
+                        >About</a
+                        >
+                    </li>
+                    <li>
+                        <a
+                                class="cursor-pointer p-[1.31rem] text-[1rem] text-[#4E5358] hover:font-semibold"
+                                href="#!"
+                        >Room</a
+                        >
+                    </li>
+                    <li>
+                        <a
+                                class="cursor-pointer p-[1.31rem] text-[1rem] text-[#4E5358] hover:font-semibold"
+                                href="#!"
+                        >Blog</a
+                        >
+                    </li>
+                    <li>
+                        <a
+                                class="cursor-pointer p-[1.31rem] text-[1rem] text-[#4E5358] hover:font-semibold"
+                                href="#!"
+                        >Rate</a
+                        >
+                    </li>
+                </ul>
+            </nav>
+
+            <!-- Action -->
+            <div class="flex items-center gap-8 text-[1rem] font-semibold">
+                <a th:href="${'/login'}">Login</a>
+                <a
+                        th:href="${'/register'}"
+                        class="rounded-full bg-[#FF5B26] px-6 py-2 text-white hover:opacity-90"
+                >Sign up</a
+                >
+            </div>
+        </div>
+    </div>
+</header>
+<main >
+    <section layout:fragment="content">
+
+    </section>
+</main>
+<footer class="h-[36.75rem] bg-[#FFF9E5]">
+    <div class="container">
+        <div class="px-[10rem] pt-[6.25rem]">
+            <div class="grid grid-cols-[repeat(3,11rem)_1fr] gap-[6.38rem]">
+                <!-- Col - 1 -->
+                <div>
+                    <h2 class="mb-4 text-[1.375rem] font-bold text-[#4E5358]">Booking</h2>
+                    <ul>
+                        <li>
+                            <a
+                                    href="#!"
+                                    class="inline-block py-2 text-[1rem] text-[#4E5358] hover:underline"
+                            >My Booking</a
+                            >
+                        </li>
+                        <li>
+                            <a
+                                    href="#!"
+                                    class="inline-block py-2 text-[1rem] text-[#4E5358] hover:underline"
+                            >Submit Trip Feedback</a
+                            >
+                        </li>
+                        <li>
+                            <a
+                                    href="#!"
+                                    class="inline-block py-2 text-[1rem] text-[#4E5358] hover:underline"
+                            >Safe Travels Hub</a
+                            >
+                        </li>
+                        <li>
+                            <a
+                                    href="#!"
+                                    class="inline-block py-2 text-[1rem] text-[#4E5358] hover:underline"
+                            >Travel Alerts</a
+                            >
+                        </li>
+                        <li>
+                            <a
+                                    href="#!"
+                                    class="inline-block py-2 text-[1rem] text-[#4E5358] hover:underline"
+                            >Vaccinations & Testing</a
+                            >
+                        </li>
+                        <li>
+                            <a
+                                    href="#!"
+                                    class="inline-block py-2 text-[1rem] text-[#4E5358] hover:underline"
+                            >Flexible Booking</a
+                            >
+                        </li>
+                    </ul>
+                </div>
+                <!-- Col - 2 -->
+                <div>
+                    <h2 class="mb-4 text-[1.375rem] font-bold text-[#191B1D]">Company</h2>
+                    <ul>
+                        <li>
+                            <a
+                                    href="#!"
+                                    class="inline-block py-2 text-[1rem] text-[#4E5358] hover:underline"
+                            >About us</a
+                            >
+                        </li>
+                        <li>
+                            <a
+                                    href="#!"
+                                    class="inline-block py-2 text-[1rem] text-[#4E5358] hover:underline"
+                            >News & Blog</a
+                            >
+                        </li>
+                        <li>
+                            <a
+                                    href="#!"
+                                    class="inline-block py-2 text-[1rem] text-[#4E5358] hover:underline"
+                            >Press Center</a
+                            >
+                        </li>
+                        <li>
+                            <a
+                                    href="#!"
+                                    class="inline-block py-2 text-[1rem] text-[#4E5358] hover:underline"
+                            >Investors</a
+                            >
+                        </li>
+                        <li>
+                            <a
+                                    href="#!"
+                                    class="inline-block py-2 text-[1rem] text-[#4E5358] hover:underline"
+                            >Suppliers</a
+                            >
+                        </li>
+                        <li>
+                            <a
+                                    href="#!"
+                                    class="inline-block py-2 text-[1rem] text-[#4E5358] hover:underline"
+                            >Terms & Conditions</a
+                            >
+                        </li>
+                        <li>
+                            <a
+                                    href="#!"
+                                    class="inline-block py-2 text-[1rem] text-[#4E5358] hover:underline"
+                            >Privacy Policy</a
+                            >
+                        </li>
+                    </ul>
+                </div>
+                <!-- Col - 3 -->
+                <div>
+                    <h2 class="mb-4 text-[1.375rem] font-bold text-[#191B1D]">Contact</h2>
+                    <ul>
+                        <li>
+                            <a
+                                    href="#!"
+                                    class="inline-block py-2 text-[1rem] text-[#4E5358] hover:underline"
+                            >Get In Touch</a
+                            >
+                        </li>
+                        <li>
+                            <a
+                                    href="#!"
+                                    class="inline-block py-2 text-[1rem] text-[#4E5358] hover:underline"
+                            >Live Chat</a
+                            >
+                        </li>
+                        <li>
+                            <a
+                                    href="#!"
+                                    class="inline-block py-2 text-[1rem] text-[#4E5358] hover:underline"
+                            >FAQ</a
+                            >
+                        </li>
+                        <li>
+                            <a
+                                    href="#!"
+                                    class="inline-block py-2 text-[1rem] text-[#4E5358] hover:underline"
+                            >Testimonials</a
+                            >
+                        </li>
+                    </ul>
+                </div>
+                <!-- Col - 4 -->
+                <div>
+                    <h2 class="mb-6 text-[1.375rem] font-bold text-[#191B1D]">
+                        Subscribe our newsletter
+                    </h2>
+                    <div class="flex gap-4">
+                        <input
+                                type="text"
+                                placeholder="Enter your email"
+                                class="h-14 w-[17.8125rem] rounded-full border-[1px] border-solid border-[#b1b1b1] bg-transparent p-4"
+                        />
+                        <button
+                                class="rounded-full bg-[#FF5B26] px-[2.19rem] py-[0.94rem] text-[1.125rem] font-semibold text-white hover:opacity-90"
+                        >
+                            Subscribe
+                        </button>
+                    </div>
+                    <h2
+                            class="mb-6 mt-[2.12rem] text-[1.375rem] font-bold text-[#191B1D]"
+                    >
+                        Follow us
+                    </h2>
+                    <div class="flex gap-4">
+                        <div
+                                class="flex h-9 w-9 cursor-pointer items-center justify-center rounded-full bg-[#191B1D] hover:bg-[#FF5B26]"
+                        >
+                            <a href="#!">
+                                <img src="/static/hinhanh/facebook.svg" alt="" />
+                            </a>
+                        </div>
+                        <div
+                                class="flex h-9 w-9 cursor-pointer items-center justify-center rounded-full bg-[#191B1D] hover:bg-[#FF5B26]"
+                        >
+                            <a href="#!">
+                                <img src="/static/hinhanh/linkedin.svg" alt="" />
+                            </a>
+                        </div>
+                        <div
+                                class="flex h-9 w-9 cursor-pointer items-center justify-center rounded-full bg-[#191B1D] hover:bg-[#FF5B26]"
+                        >
+                            <a href="#!">
+                                <img src="/static/hinhanh/twitter.svg" alt="" />
+                            </a>
+                        </div>
+                        <div
+                                class="flex h-9 w-9 cursor-pointer items-center justify-center rounded-full bg-[#191B1D] hover:bg-[#FF5B26]"
+                        >
+                            <a href="#!">
+                                <img src="/static/hinhanh/instagram.svg" alt="" />
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div
+                    class="mt-[3.44rem] border-t-[1px] border-[#b1b1b1] pt-[1.87rem] text-center"
+            >
+                <p class="text-[1rem] text-[#4E5358]">
+                    Copyright 2023 UIHUT All Rights Reserved
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+</body>
+</html>
