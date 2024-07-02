@@ -1,88 +1,75 @@
 <!DOCTYPE html>
-<html lang="en"  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layout}">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/Layout-User"
+      layout:decorate="~{Fragments/Layout-User}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User Information</title>
-    <style>
-        .container {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            width: 300px;
-        }
-        h1 {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-        .form-group {
-            margin-bottom: 15px;
-        }
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-        }
-        .form-group input {
-            width: 100%;
-            padding: 8px;
-            box-sizing: border-box;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            background-color: #f4f4f4;
-        }
-        .form-group ul {
-            list-style: none;
-            padding: 0;
-        }
-        .form-group ul li {
-            background: #eee;
-            margin: 5px 0;
-            padding: 5px;
-            border-radius: 4px;
-        }
-        .form-group button {
-            width: 48%;
-            padding: 10px;
-            border: none;
-            border-radius: 4px;
-            background-color: #007bff;
-            color: #fff;
-            cursor: pointer;
-            margin-right: 4%;
-        }
-        .form-group button:last-child {
-            margin-right: 0;
-        }
-        .form-group button:hover {
-            background-color: #0056b3;
-        }
-    </style>
+
 </head>
 <body>
-<section layout:fragment="content">
-    <div class="container">
-        <h1>User Information</h1>
-        <div class="user-info">
-            <div class="form-group">
-                <label for="username">Username:</label>
-                <input type="text" id="username" th:value="${user.username}" readonly>
+<section layout:fragment="content"  class="flex items-center justify-center bg-gray-100 p-10">
+        <div
+                class="relative flex w-2/4 flex-col items-center justify-center overflow-hidden rounded-2xl bg-white pb-8 shadow-xl"
+        >
+            <img
+                    th:src="@{/static/hinhanh/bg-profile.jpg}"
+                    alt=""
+                    class="bg-custom h-60 w-full"
+            />
+            <h2
+                    class="absolute left-5 top-8 text-3xl font-bold text-white drop-shadow-2xl"
+            >
+                My Profile
+            </h2>
+
+            <img
+                    th:src="@{/static/hinhanh/user-profile.png}"
+                    alt=""
+                    class="mt-[-20px] h-32 w-32 rounded-full"
+            />
+            <div class="mt-2 text-xl font-semibold" th:text="${user.username}" ></div>
+            <div class="mt-10 flex w-[30rem] flex-col gap-4">
+                <div class="flex items-center justify-between">
+                    <span class="text-lg">Số điện thoại: </span>
+                    <span th:text="${user.phone}" ></span>
+                </div>
+                <div class="flex items-center justify-between">
+                    <span class="text-lg">Email của bạn:</span>
+                    <span th:text="${user.email}" ></span>
+                </div>
             </div>
-            <div class="form-group">
-                <label for="email">Email:</label>
-                <input type="email" id="email" th:value="${user.email}" readonly>
-            </div>
-            <div class="form-group">
-                <label for="phone">Phone:</label>
-                <input type="text" id="phone" th:value="${user.phone}" readonly>
-            </div>
-            <div class="form-group">
-                <button onclick="window.location.href='/changePassword'">Change Password</button>
+
+            <div class="mr-10 mt-14 flex w-full justify-end">
+                <a
+                        href="/changePassword"
+                        class="rounded-full bg-[#FF5B26] px-[2.19rem] py-[0.94rem] text-[1.125rem] font-semibold text-white hover:opacity-90"
+                >Thay đổi mật khẩu</a
+                >
             </div>
         </div>
-    </div>
+    </section>
+<!--    <div class="container">-->
+<!--        <h1>User Information</h1>-->
+<!--        <div class="user-info">-->
+<!--            <div class="form-group">-->
+<!--                <label for="username">Username:</label>-->
+<!--                <input type="text" id="username" th:value="${user.username}" readonly>-->
+<!--            </div>-->
+<!--            <div class="form-group">-->
+<!--                <label for="email">Email:</label>-->
+<!--                <input type="email" id="email" th:value="${user.email}" readonly>-->
+<!--            </div>-->
+<!--            <div class="form-group">-->
+<!--                <label for="phone">Phone:</label>-->
+<!--                <input type="text" id="phone" th:value="${user.phone}" readonly>-->
+<!--            </div>-->
+<!--            <div class="form-group">-->
+<!--                <button onclick="window.location.href='/changePassword'">Change Password</button>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
 </section>
 
 </body>
