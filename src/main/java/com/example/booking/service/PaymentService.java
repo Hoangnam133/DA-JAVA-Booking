@@ -39,6 +39,9 @@ public class PaymentService {
     public double getTotalPayments() {
         return paymentRepository.findAll().stream().mapToDouble(Payment::getTotalPayment).sum();
     }
+    public List<Payment> listOfUser(Long userId){
+        return paymentRepository.findAllByBooking_User_Id(userId);
+    }
 
 
 }

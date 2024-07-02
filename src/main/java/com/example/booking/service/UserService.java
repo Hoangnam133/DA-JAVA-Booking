@@ -205,10 +205,15 @@ public class UserService implements UserDetailsService {
 
     // Phương thức cập nhật mật khẩu mới
     public void updatePasswordByEmail(String email, String newPassword) {
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("User not found with this email: " + email));
-        user.setPassword(passwordEncoder.encode(newPassword));
-        userRepository.save(user);
+        try {
+            User user = userRepository.findByEmail(email)
+                    .orElseThrow(() -> new RuntimeException("User not found with this email: " + email));
+            user.setPassword(passwordEncoder.encode(newPassword));
+            user.setToken("");
+            userRepository.save(user);
+        }catch (Exception e) {
+            throw new RuntimeException("Unable to update password, please try again");
+        }
     }
 
 

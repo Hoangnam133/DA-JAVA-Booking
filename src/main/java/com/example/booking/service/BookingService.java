@@ -15,13 +15,12 @@ import java.util.Random;
 @Service
 public class BookingService {
     private final BookingRepository bookingRepository;
-
     @Autowired
     public BookingService(BookingRepository bookingRepository) {
         this.bookingRepository = bookingRepository;
 
     }
-    public static String generateRandomString() {
+    public String generateRandomString() {
         String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
         Random random = new Random();
         StringBuilder sb = new StringBuilder();
@@ -39,7 +38,6 @@ public class BookingService {
         booking.setCheckInStatus(false);
         booking.setCancelStatus(false);
         booking.setPaymentStatus(false);
-        booking.setPin(generateRandomString());
         bookingRepository.save(booking);
     }
 
@@ -58,8 +56,14 @@ public class BookingService {
         existingBooking.setPaymentStatus(true);
         bookingRepository.save(existingBooking);
     }
+    public void updateCheckInStatus(int bookingId){
+        Booking existingBooking = bookingRepository.findById(bookingId)
+                .orElseThrow(() -> new IllegalArgumentException("Booking with ID " + bookingId + " not found."));
+        existingBooking.setCheckInStatus(true);
+        bookingRepository.save(existingBooking);
+    }
     public List<Booking> ShowBookingListOfUser(Long userId){
-        List<Booking> bookings = bookingRepository.findByUser_IdAndCheckInStatus(userId,false);
+        List<Booking> bookings = bookingRepository.findByUser_Id(userId);
         if (bookings == null){
             throw new RuntimeException("No bookings found");
         }

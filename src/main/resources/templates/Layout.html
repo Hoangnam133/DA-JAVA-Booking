@@ -100,87 +100,87 @@
     </div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-<!--<script th:inline="javascript">-->
-<!--    /*<![CDATA[*/-->
-<!--    var totalPayments = /*[[${totalPayments}]]*/ 0;-->
-<!--    var totalExtraCharges = /*[[${totalExtraCharges}]]*/ 0;-->
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    var totalPayments = /*[[${totalPayments}]]*/ 0;
+    var totalExtraCharges = /*[[${totalExtraCharges}]]*/ 0;
 
-<!--    // Data for bar chart-->
-<!--    var barChartData = {-->
-<!--        labels: ['Total Payments', 'Total Extra Charges'],-->
-<!--        datasets: [{-->
-<!--            label: 'Revenue',-->
-<!--            data: [totalPayments, totalExtraCharges],-->
-<!--            backgroundColor: [-->
-<!--                'rgba(255, 99, 132, 0.5)', // Red for Payments-->
-<!--                'rgba(54, 162, 235, 0.5)' // Blue for Extra Charges-->
-<!--            ],-->
-<!--            borderColor: [-->
-<!--                'rgba(255, 99, 132, 1)',-->
-<!--                'rgba(54, 162, 235, 1)'-->
-<!--            ],-->
-<!--            borderWidth: 1-->
-<!--        }]-->
-<!--    };-->
+    // Data for bar chart
+    var barChartData = {
+        labels: ['Total Payments', 'Total Extra Charges'],
+        datasets: [{
+            label: 'Revenue',
+            data: [totalPayments, totalExtraCharges],
+            backgroundColor: [
+                'rgba(255, 99, 132, 0.5)', // Red for Payments
+                'rgba(54, 162, 235, 0.5)' // Blue for Extra Charges
+            ],
+            borderColor: [
+                'rgba(255, 99, 132, 1)',
+                'rgba(54, 162, 235, 1)'
+            ],
+            borderWidth: 1
+        }]
+    };
 
-<!--    // Data for pie chart (calculated percentages)-->
-<!--    var total = totalPayments + totalExtraCharges;-->
-<!--    var paymentPercentage = (totalPayments / total) * 100;-->
-<!--    var extraChargePercentage = (totalExtraCharges / total) * 100;-->
+    // Data for pie chart (calculated percentages)
+    var total = totalPayments + totalExtraCharges;
+    var paymentPercentage = (totalPayments / total) * 100;
+    var extraChargePercentage = (totalExtraCharges / total) * 100;
 
-<!--    var pieChartData = {-->
-<!--        labels: ['Total Payments', 'Total Extra Charges'],-->
-<!--        datasets: [{-->
-<!--            label: 'Revenue Distribution',-->
-<!--            data: [paymentPercentage, extraChargePercentage],-->
-<!--            backgroundColor: [-->
-<!--                'rgba(255, 99, 132, 0.5)', // Red for Payments-->
-<!--                'rgba(54, 162, 235, 0.5)' // Blue for Extra Charges-->
-<!--            ],-->
-<!--            borderColor: [-->
-<!--                'rgba(255, 99, 132, 1)',-->
-<!--                'rgba(54, 162, 235, 1)'-->
-<!--            ],-->
-<!--            borderWidth: 1-->
-<!--        }]-->
-<!--    };-->
+    var pieChartData = {
+        labels: ['Total Payments', 'Total Extra Charges'],
+        datasets: [{
+            label: 'Revenue Distribution',
+            data: [paymentPercentage, extraChargePercentage],
+            backgroundColor: [
+                'rgba(255, 99, 132, 0.5)', // Red for Payments
+                'rgba(54, 162, 235, 0.5)' // Blue for Extra Charges
+            ],
+            borderColor: [
+                'rgba(255, 99, 132, 1)',
+                'rgba(54, 162, 235, 1)'
+            ],
+            borderWidth: 1
+        }]
+    };
 
-<!--    // Create bar chart-->
-<!--    var barChartCtx = document.getElementById('barChart').getContext('2d');-->
-<!--    var barChart = new Chart(barChartCtx, {-->
-<!--        type: 'bar',-->
-<!--        data: barChartData,-->
-<!--        options: {-->
-<!--            responsive: true,-->
-<!--            maintainAspectRatio: false,-->
-<!--            scales: {-->
-<!--                y: {-->
-<!--                    beginAtZero: true-->
-<!--                }-->
-<!--            }-->
-<!--        }-->
-<!--    });-->
+    // Create bar chart
+    var barChartCtx = document.getElementById('barChart').getContext('2d');
+    var barChart = new Chart(barChartCtx, {
+        type: 'bar',
+        data: barChartData,
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
 
-<!--    // Create pie chart-->
-<!--    var pieChartCtx = document.getElementById('pieChart').getContext('2d');-->
-<!--    var pieChart = new Chart(pieChartCtx, {-->
-<!--        type: 'pie',-->
-<!--        data: pieChartData,-->
-<!--        options: {-->
-<!--            responsive: true,-->
-<!--            maintainAspectRatio: false,-->
-<!--            plugins: {-->
-<!--                legend: {-->
-<!--                    position: 'top',-->
-<!--                },-->
-<!--                title: {-->
-<!--                    display: true,-->
-<!--                    text: 'Revenue Distribution'-->
-<!--                }-->
-<!--            }-->
-<!--        }-->
-<!--    });-->
-<!--    /*]]>*/-->
-<!--</script>-->
+    // Create pie chart
+    var pieChartCtx = document.getElementById('pieChart').getContext('2d');
+    var pieChart = new Chart(pieChartCtx, {
+        type: 'pie',
+        data: pieChartData,
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'top',
+                },
+                title: {
+                    display: true,
+                    text: 'Revenue Distribution'
+                }
+            }
+        }
+    });
+    /*]]>*/
+</script>
 </body>
 </html>
