@@ -32,11 +32,17 @@ public class  UserController {
     public String getLayoutUser(){
             return "Users/home";
     }
+
+    @GetMapping("/about")
+    public String getAbout() {
+        return "Users/about";
+    }
     @GetMapping("/register")
     public String register(@NotNull Model model) {
         model.addAttribute("user", new User()); // Thêm một đối tượng User mới vào model
         return "Users/register";
     }
+
 
     @PostMapping("/register")
     public String register(@Valid @ModelAttribute("user") User user, // Validate đối tượng User

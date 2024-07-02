@@ -1,42 +1,494 @@
 <!DOCTYPE html >
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/Layout-User"
+      layout:decorate="~{Fragments/Layout-User}">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
 </head>
-<section >
-    <main>
-        <h1>
-            User
-        </h1>
-        <div class="container mt-5">
-            <h1 class="text-center">Search Available Rooms</h1>
-            <form action="#" th:action="@{/bookings/AvailableRooms}" method="get" class="mt-4">
-                <div class="form-group">
-                    <label for="checkInDate">Check-In Date:</label>
-                    <input type="date" id="checkInDate" name="checkInDate" class="form-control" required>
+<!--<section >-->
+<!--    <main>-->
+<!--        <h1>-->
+<!--            User-->
+<!--        </h1>-->
+<!--        <div class="container mt-5">-->
+<!--            <h1 class="text-center">Search Available Rooms</h1>-->
+<!--            <form action="#" th:action="@{/bookings/AvailableRooms}" method="get" class="mt-4">-->
+<!--                <div class="form-group">-->
+<!--                    <label for="checkInDate">Check-In Date:</label>-->
+<!--                    <input type="date" id="checkInDate" name="checkInDate" class="form-control" required>-->
+<!--                </div>-->
+<!--                <div class="form-group">-->
+<!--                    <label for="checkOutDate">Check-Out Date:</label>-->
+<!--                    <input type="date" id="checkOutDate" name="checkOutDate" class="form-control" required>-->
+<!--                </div>-->
+<!--                <button type="submit" class="btn btn-primary">Search</button>-->
+<!--            </form>-->
+<!--        </div>-->
+<!--        <div>-->
+<!--            <a th:href="@{/informationUser}" class="btn btn-primary">Information User</a>-->
+<!--        </div>-->
+<!--        <div>-->
+<!--            <a th:href="@{bookings/listBookingOfUser}" class="btn btn-primary">Information User</a>-->
+<!--        </div>-->
+<!--    </main>-->
+<!--</section>-->
+<section layout:fragment="content">
+    <!-- Hero -->
+    <section class="relative bg-[#FFF9E5] pb-20 pt-8">
+        <div class="container px-[10rem]">
+            <img
+                     th:src="@{/static/hinhanh/bg-map.png}"
+                    alt=""
+                    class="absolute right-2 top-2 w-[48rem]"
+            />
+            <section class="grid grid-cols-2">
+                <!-- Left -->
+                <div class="z-10">
+                    <h1
+                            class="relative z-10 w-[29rem] text-7xl font-bold text-[#191B1D]"
+                    >
+                        Let’s make your best trip ever
+                        <img
+                                 th:src="@{/static/hinhanh/hero-decorate.png}"
+                                alt=""
+                                class="absolute bottom-[-0.4rem] left-[-2.19rem] -z-10"
+                        />
+                    </h1>
+                    <p class="mt-4 w-[30rem] text-[1.125rem] text-[#4E5358]">
+                        Create a fully customized day-by-day itinerary for free. Imagine
+                        checking one place for your travel details and getting a heads
+                        up as things happen throughout your trip
+                    </p>
+                    <form th:action="@{/bookings/AvailableRooms}" method="get" class="mt-6 w-full">
+                        <div
+                                class="flex h-[5.25rem] w-full items-center justify-between rounded-full bg-white p-3"
+                        >
+                            <!-- <div
+                              class="flex h-full items-center gap-1 border-r-[1px] border-solid border-[#D9DEE2] pl-4"
+                            >
+                              <img  th:src="@{/static/hinhanh/location.svg" alt="" class="h-6 w-6" />
+                              <input
+                                class="h-full border-none pr-3 outline-none"
+                                type="text"
+                                placeholder="Where do you want to go?"
+                              />
+                            </div> -->
+                            <div
+                                    class="h-full border-r-[1px] border-solid border-[#D9DEE2] pl-6 pr-14"
+                            >
+                                <input
+                                        type="date"
+                                        id="checkInDate" name="checkInDate"
+                                        class="h-full outline-none"
+                                />
+                            </div>
+                            <div class="h-full px-4">
+                                <input
+                                        type="date"
+                                        id="checkOutDate" name="checkOutDate"
+                                        class="h-full outline-none"
+                                />
+                            </div>
+                            <button
+                                    type="submit"
+                                    class="h-full rounded-full bg-[#FF5B26] px-[2.19rem] py-[0.94rem] text-white hover:opacity-90"
+                            >
+                                Search
+                            </button>
+                        </div>
+                    </form>
+
+                    <h3 class="mt-10 text-[1.375rem] font-bold text-[#191B1D]">
+                        As featured in
+                    </h3>
+                    <div class="mt-4 flex items-center gap-[1.63rem]">
+                        <img  th:src="@{/static/hinhanh/hero-logo-1.svg}" alt="" />
+                        <img  th:src="@{/static/hinhanh/hero-logo-2.svg}" alt="" />
+                        <img  th:src="@{/static/hinhanh/hero-logo-3.svg}" alt="" />
+                        <img  th:src="@{/static/hinhanh/hero-logo-4.svg}" alt="" />
+                        <img  th:src="@{/static/hinhanh/hero-logo-5.svg}" alt="" />
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label for="checkOutDate">Check-Out Date:</label>
-                    <input type="date" id="checkOutDate" name="checkOutDate" class="form-control" required>
+
+                <!-- Right -->
+                <div class="flex w-full justify-end gap-5">
+                    <div>
+                        <img
+                                 th:src="@{/static/hinhanh/hero-img-1.png}"
+                                alt=""
+                                class="h-40 w-[16rem] rounded-xl object-cover"
+                        />
+                        <img
+                                 th:src="@{/static/hinhanh/hero-img-2.png}"
+                                alt=""
+                                class="mt-5 h-[21rem] w-[16rem] rounded-xl object-cover"
+                        />
+                    </div>
+                    <img
+                             th:src="@{/static/hinhanh/hero-img-3.png}"
+                            alt=""
+                            class="z-1 mt-16 h-[33rem] w-[16rem] rounded-xl object-cover"
+                    />
                 </div>
-                <button type="submit" class="btn btn-primary">Search</button>
-            </form>
+            </section>
         </div>
-        <div>
-            <a th:href="@{/informationUser}" class="btn btn-primary">Information User</a>
+    </section>
+    <!-- Help -->
+    <section>
+        <div class="container px-[10rem] py-[4rem]">
+            <section
+                    class="flex flex-col items-center justify-center text-center"
+            >
+                <h2 class="w-[25rem] text-5xl font-bold text-[#191B1D]">
+                    How we can help you to travel?
+                </h2>
+                <div
+                        class="mt-[4.37rem] flex items-center justify-center gap-[1.87rem]"
+                >
+                    <div
+                            class="flex w-[23.125rem] flex-col items-center rounded-xl px-5 py-[2.38rem] hover:cursor-pointer hover:shadow-2xl"
+                    >
+                        <img  th:src="@{/static/hinhanh/help-1.svg}" class="h-16 w-[3.73rem]" alt="" />
+                        <h3
+                                class="mb-4 mt-[1.87rem] text-[1.375rem] font-bold leading-7 text-[#191B1D]"
+                        >
+                            Destinations
+                        </h3>
+                        <p class="text-base text-[#4E5358]">
+                            Explore destinations around the world from 110 countries. We
+                            are providing the best travel guide services.
+                        </p>
+                    </div>
+                    <div
+                            class="flex w-[23.125rem] flex-col items-center rounded-xl px-5 py-[2.38rem] hover:cursor-pointer hover:shadow-2xl"
+                    >
+                        <img  th:src="@{/static/hinhanh/help-2.svg}" class="w-[60px]" alt="" />
+                        <h3
+                                class="mb-4 mt-[1.87rem] text-[1.375rem] font-bold leading-7 text-[#191B1D]"
+                        >
+                            Itineraries
+                        </h3>
+                        <p class="text-base text-[#4E5358]">
+                            Discover detailed itineraries from 3 days to 1 week fro
+                            multiple destinations . We are providing the best travel guide
+                            services.
+                        </p>
+                    </div>
+                    <div
+                            class="flex w-[23.125rem] flex-col items-center rounded-xl px-5 py-[2.38rem] hover:cursor-pointer hover:shadow-2xl"
+                    >
+                        <img  th:src="@{/static/hinhanh/help-3.svg}" class="w-[60px]" alt="" />
+                        <h3
+                                class="mb-4 mt-[1.87rem] text-[1.375rem] font-bold leading-7 text-[#191B1D]"
+                        >
+                            Travel Tips
+                        </h3>
+                        <p class="text-base text-[#4E5358]">
+                            Learn from the best. Travel tips gathered from our 10 years of
+                            full-time travel. We are providing the best travel guide
+                            services.
+                        </p>
+                    </div>
+                </div>
+            </section>
         </div>
-        <div>
-            <a th:href="@{bookings/listBookingOfUser}" class="btn btn-primary">Information User</a>
+    </section>
+    <!-- Popular -->
+    <section>
+        <div class="container px-[10rem] pb-[8rem] pt-[4rem]">
+            <section
+                    class="flex flex-col items-center justify-center text-center"
+            >
+                <h2 class="w-[25rem] text-5xl font-bold text-[#191B1D]">
+                    Popular tours
+                </h2>
+                <p
+                        class="mt-[1.12rem] w-[32.625rem] text-[1.125rem] text-[#4E5358]"
+                >
+                    Create a fully customized day-by-day itinerary for free. Imagine
+                    checking one place for your travel.
+                </p>
+                <div
+                        class="mt-[4.37rem] flex items-center justify-center gap-[1.87rem]"
+                >
+                    <!-- Item 1 -->
+                    <article
+                            class="relative flex w-[23.125rem] flex-col rounded-xl hover:cursor-pointer"
+                    >
+                <span
+                        class="absolute right-[1.12rem] top-[1.12rem] rounded-full bg-white px-6 py-2 text-base font-semibold text-[#FF5B26]"
+                >$450</span
+                >
+                        <img
+                                 th:src="@{/static/hinhanh/popular-1.png}"
+                                alt=""
+                                class="h-[23.125rem] w-[23.125rem]"
+                        />
+                        <div class="mt-4 flex flex-col items-start">
+                  <span class="text-sm font-normal text-[#4E5358]"
+                  >Lago Di Braies, Italy</span
+                  >
+                            <h3 class="text-[1.375rem] font-bold">
+                                The gorgeous lake of Italy
+                            </h3>
+                            <div class="mt-3 flex items-center gap-3">
+                    <span
+                            class="rounded-full bg-[#FFF7DA] px-3 py-1 text-xs font-semibold leading-6"
+                    >10</span
+                    ><span class="text-xs text-[#4E5358]">(3.9K Reviews)</span>
+                            </div>
+                        </div>
+                    </article>
+                    <!-- Item 2 -->
+                    <article
+                            class="relative flex w-[23.125rem] flex-col rounded-xl hover:cursor-pointer"
+                    >
+                <span
+                        class="absolute right-[1.12rem] top-[1.12rem] rounded-full bg-white px-6 py-2 text-base font-semibold text-[#FF5B26]"
+                >$450</span
+                >
+                        <img
+                                 th:src="@{/static/hinhanh/popular-2.png}"
+                                alt=""
+                                class="h-[23.125rem] w-[23.125rem]"
+                        />
+                        <div class="mt-4 flex flex-col items-start">
+                  <span class="text-sm font-normal text-[#4E5358]"
+                  >Tibidabo, Barcelona, Spain</span
+                  >
+                            <h3 class="text-[1.375rem] font-bold">
+                                The tallest hill in Barcelona
+                            </h3>
+                            <div class="mt-3 flex items-center gap-3">
+                    <span
+                            class="rounded-full bg-[#FFF7DA] px-3 py-1 text-xs font-semibold leading-6"
+                    >10</span
+                    ><span class="text-xs text-[#4E5358]">(3.9K Reviews)</span>
+                            </div>
+                        </div>
+                    </article>
+                    <!-- Item 3 -->
+                    <article
+                            class="relative flex w-[23.125rem] flex-col rounded-xl hover:cursor-pointer"
+                    >
+                <span
+                        class="absolute right-[1.12rem] top-[1.12rem] rounded-full bg-white px-6 py-2 text-base font-semibold text-[#FF5B26]"
+                >$450</span
+                >
+                        <img
+                                 th:src="@{/static/hinhanh/popular-3.png}"
+                                alt=""
+                                class="h-[23.125rem] w-[23.125rem]"
+                        />
+                        <div class="mt-4 flex flex-col items-start">
+                  <span class="text-sm font-normal text-[#4E5358]"
+                  >Cocoa Beach, Florida</span
+                  >
+                            <h3 class="text-[1.375rem] font-bold">
+                                The beauty of Cocoa Beach
+                            </h3>
+                            <div class="mt-3 flex items-center gap-3">
+                    <span
+                            class="rounded-full bg-[#FFF7DA] px-3 py-1 text-xs font-semibold leading-6"
+                    >10</span
+                    ><span class="text-xs text-[#4E5358]">(3.9K Reviews)</span>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+                <a
+                        href="#!"
+                        class="mt-[4.38rem] rounded-full bg-[#FF5B26] px-[2.19rem] py-[0.94rem] text-[1.125rem] font-semibold text-white hover:opacity-90"
+                >View All Trips</a
+                >
+            </section>
         </div>
-    </main>
+    </section>
+    <!-- Feature -->
+    <section class="relative bg-[#FFF9E5] px-[19.75rem] py-[4.38rem]">
+        <img
+                 th:src="@{/static/hinhanh/feature-deco-1.svg}"
+                alt=""
+                class="absolute left-14 top-[9.87rem]"
+        />
+        <img
+                 th:src="@{/static/hinhanh/feature-deco-2.svg}"
+                alt=""
+                class="absolute right-[9.69rem] top-20"
+        />
+
+        <h2
+                class="w-[35rem] text-[2.375rem] font-bold leading-10 text-[#191B1D]"
+        >
+            Not just your regular travel agency we are much more
+        </h2>
+        <div class="mt-[2.37rem] flex gap-[4.38rem]">
+            <div class="flex flex-col text-lg text-[#4E5358]">
+                <strong class="text-bold text-7xl text-[#FF5B26]">20+</strong>
+                Elite Airlines
+            </div>
+            <div class="flex flex-col text-lg text-[#4E5358]">
+                <strong class="text-bold text-7xl text-[#FF5B26]">1M+</strong>
+                Satisfied Travelers
+            </div>
+            <div class="flex flex-col text-lg text-[#4E5358]">
+                <strong class="text-bold text-7xl text-[#FF5B26]">50+</strong>
+                Awards Win
+            </div>
+            <div class="flex flex-col text-lg text-[#4E5358]">
+                <strong class="text-bold text-7xl text-[#FF5B26]">12+</strong>
+                Years of Experience
+            </div>
+        </div>
+    </section>
+    <!-- Blog -->
+    <section class="mt-16 py-16">
+        <div class="container px-[10rem]">
+            <section class="flex items-center justify-between">
+                <h2 class="w-[32rem] text-5xl font-bold text-[#191B1D]">
+                    Latest travel diary
+                </h2>
+                <a
+                        href="#!"
+                        class="rounded-full bg-[#FF5B26] px-[2.19rem] py-[0.94rem] text-[1.125rem] font-semibold text-white hover:opacity-90"
+                >Read All Blog</a
+                >
+            </section>
+            <div
+                    class="mt-[4.38rem] grid grid-cols-[29.375rem_1fr] gap-[1.87rem]"
+            >
+                <!-- Right -->
+                <article>
+                    <img  th:src="@{/static/hinhanh/blog-1.png}" alt="" class="hover:cursor-pointer" />
+                    <h3
+                            class="mt-5 text-[1.375rem] font-bold leading-7 text-[#191B1D] hover:cursor-pointer hover:text-cyan-400"
+                    >
+                        8 Amazing Places to Celebrate New Year 2023
+                    </h3>
+                    <p class="my-4 text-base text-[#4E5358]">
+                        Whether it’s champagne to ring in the New Year, a countdown
+                        party, or an intimate dinner, everyone plans something special.
+                        Whether it’s champagne to ring in the New...
+                    </p>
+                    <a
+                            href="#!"
+                            class="text-base font-semibold text-[#191B1D] hover:text-[#FF5B26]"
+                    >Learn More</a
+                    >
+                </article>
+                <!-- Left -->
+                <div class="gap flex flex-col gap-[1.87rem]">
+                    <article class="flex items-center gap-5">
+                        <img
+                                 th:src="@{/static/hinhanh/blog-2.png}"
+                                alt=""
+                                class="h-[12.5rem] w-[17.5rem] hover:cursor-pointer"
+                        />
+                        <div>
+                            <h3
+                                    class="text-[1.375rem] font-bold leading-7 text-[#191B1D] hover:cursor-pointer hover:text-cyan-400"
+                            >
+                                8 Amazing Places to Celebrate New Year 2023
+                            </h3>
+                            <p class="my-4 text-base text-[#4E5358]">
+                                Whether it’s champagne to ring in the New Year, a countdown
+                                party, or an intimate dinner, everyone plans something
+                                special. Whether it’s champagne to ring in the New...
+                            </p>
+                            <a
+                                    href="#!"
+                                    class="text-base font-semibold text-[#191B1D] hover:text-[#FF5B26]"
+                            >Learn More</a
+                            >
+                        </div>
+                    </article>
+                    <article class="flex items-center gap-5">
+                        <img
+                                 th:src="@{/static/hinhanh/blog-3.png}"
+                                alt=""
+                                class="h-[12.5rem] w-[17.5rem] hover:cursor-pointer"
+                        />
+                        <div>
+                            <h3
+                                    class="text-[1.375rem] font-bold leading-7 text-[#191B1D] hover:cursor-pointer hover:text-cyan-400"
+                            >
+                                8 Amazing Places to Celebrate New Year 2023
+                            </h3>
+                            <p class="my-4 text-base text-[#4E5358]">
+                                Whether it’s champagne to ring in the New Year, a countdown
+                                party, or an intimate dinner, everyone plans something
+                                special. Whether it’s champagne to ring in the New...
+                            </p>
+                            <a
+                                    href="#!"
+                                    class="text-base font-semibold text-[#191B1D] hover:text-[#FF5B26]"
+                            >Learn More</a
+                            >
+                        </div>
+                    </article>
+                    <article class="flex items-center gap-5">
+                        <img
+                                 th:src="@{/static/hinhanh/blog-4.png}"
+                                alt=""
+                                class="h-[12.5rem] w-[17.5rem] hover:cursor-pointer"
+                        />
+                        <div>
+                            <h3
+                                    class="text-[1.375rem] font-bold leading-7 text-[#191B1D] hover:cursor-pointer hover:text-cyan-400"
+                            >
+                                8 Amazing Places to Celebrate New Year 2023
+                            </h3>
+                            <p class="my-4 text-base text-[#4E5358]">
+                                Whether it’s champagne to ring in the New Year, a countdown
+                                party, or an intimate dinner, everyone plans something
+                                special. Whether it’s champagne to ring in the New...
+                            </p>
+                            <a
+                                    href="#!"
+                                    class="text-base font-semibold text-[#191B1D] hover:text-[#FF5B26]"
+                            >Learn More</a
+                            >
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Banner -->
+    <section class="relative mt-16 bg-[#1EB482]">
+        <img  th:src="@{/static/hinhanh/banner-map.png}" alt="" class="absolute left-[16%]" />
+        <div class="container px-[10rem]">
+            <section
+                    class="flex items-center justify-between gap-12 py-[6.25rem]"
+            >
+                <img
+                         th:src="@{/static/hinhanh/blog-3.png}"
+                        alt=""
+                        class="h-[18.75rem] w-[18.75rem] rounded-full"
+                />
+                <div>
+                    <h2 class="text-[3.25rem] font-bold leading-[3.75rem] text-white">
+                        Travel matter
+                    </h2>
+                    <p class="mt-[1.12rem] text-lg text-white">
+                        We believe sustainable tourism matters. MAKE TRAVEL MATTER® is
+                        our commitment to preserving the planet.
+                    </p>
+                </div>
+                <button
+                        class="min-w-[13rem] rounded-full bg-[#FFC200] px-[2.19rem] py-[0.94rem] text-lg font-semibold text-[#191B1D] hover:opacity-90"
+                >
+                    Find Destination
+                </button>
+            </section>
+        </div>
+    </section>
 </section>
-
 <body>
-
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<!--    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>-->
 </body>
 </html>

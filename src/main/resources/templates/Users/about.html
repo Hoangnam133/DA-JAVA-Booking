@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/Layout-User"
+      layout:decorate="~{Fragments/Layout-User}">
+<head>
+    <meta charset="UTF-8">
+    <title>About</title>
+</head>
+<body>
+<section class="bg-[#FFF9E5]" layout:fragment="content">
+    <section class="relative pb-20 pt-8">
+        <div class="container px-[10rem]">
+            <section class="flex flex-col items-center justify-center">
+                <img  th:src="@{/static/hinhanh/about-1.png}" alt="" />
+                <h2
+                        class="mt-9 w-[40rem] text-center text-7xl font-bold text-[#191B1D]"
+                >
+                    Connecting People & Places
+                </h2>
+                <p class="mt-4 w-[36rem] text-center text-lg text-[#4E5358]">
+                    Though exploration is often associated with places, at its very
+                    heart, it’s about the people. For nearly 70 years, the
+                    person-to-person experience has been at the very core of Liberty
+                    Travel’s mission.
+                </p>
+            </section>
+        </div>
+    </section>
+
+    <section class="bg-[#FFEEB7]">
+        <div class="container px-[10rem] py-[4rem]">
+            <section class="flex gap-8">
+                <div class="flex-1">
+                    <h2 class="mb-8 w-[30rem] text-5xl font-bold">
+                        Our journey begins with travel
+                    </h2>
+                    <img  th:src="@{/static/hinhanh/about-2.png}" alt="" class="ml-36 block" />
+                </div>
+                <div class="flex-1">
+                    <p class="text-lg font-semibold">Our Story</p>
+                    <p class="mt-4 text-lg">
+                        In 1951 we opened our doors in New York City, with a clear focus
+                        on customer service as we offered the very first complete
+                        vacation package. Soon after, we were helping Americans discover
+                        the world with international trips. Today, from being a part of
+                        one of the world’s largest travel companies, Flight Centre
+                        Travel Group to supporting small travel businesses with
+                        Independent by Liberty Travel, our commitment to creating
+                        connections, providing one-on-one service, and crafting the
+                        perfect vacation remains stronger than ever.
+                    </p>
+                </div>
+            </section>
+        </div>
+    </section>
+
+    <section>
+        <div class="container px-[10rem] pb-[8rem] pt-[4rem]">
+            <section class="flex flex-col items-center">
+                <h2 class="mt-1 font-sans text-4xl font-black text-[#219aa7]">
+                    MY TEAM
+                </h2>
+                <div class="mt-16 flex gap-8">
+                    <div>
+                        <div
+                                class="flex h-96 w-96 items-center justify-center rounded-xl bg-emerald-300"
+                        >
+                            <img
+                                     th:src="@{/static/hinhanh/user-1.png}"
+                                    alt=""
+                                    class="h-full w-full object-cover"
+                            />
+                        </div>
+                        <p class="mt-4 text-2xl font-bold">Đạt</p>
+                    </div>
+                    <div>
+                        <div
+                                class="flex h-96 w-96 items-center justify-center rounded-xl bg-red-300"
+                        >
+                            <img
+                                     th:src="@{/static/hinhanh/user-3.png}"
+                                    alt=""
+                                    class="h-full w-full object-cover"
+                            />
+                        </div>
+                        <p class="mt-4 text-2xl font-bold">Toàn</p>
+                    </div>
+                    <div>
+                        <div
+                                class="flex h-96 w-96 items-center justify-center rounded-xl bg-sky-200"
+                        >
+                            <img
+                                     th:src="@{/static/hinhanh/user-2.png}"
+                                    alt=""
+                                    class="h-full w-full object-cover"
+                            />
+                        </div>
+                        <p class="mt-4 text-2xl font-bold">Nam</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </section>
+
+    <section class="relative bg-[#FFF9E5] px-[19.75rem] py-[4.38rem]">
+        <img
+                 th:src="@{/static/hinhanh/feature-deco-1.svg}"
+                alt=""
+                class="absolute left-14 top-[9.87rem]"
+        />
+        <img
+                 th:src="@{/static/hinhanh/feature-deco-2.svg}"
+                alt=""
+                class="absolute right-[9.69rem] top-20"
+        />
+
+        <h2
+                class="w-[35rem] text-[2.375rem] font-bold leading-10 text-[#191B1D]"
+        >
+            Not just your regular travel agency we are much more
+        </h2>
+        <div class="mt-[2.37rem] flex gap-[4.38rem]">
+            <div class="flex flex-col text-lg text-[#4E5358]">
+                <strong class="text-bold text-7xl text-[#FF5B26]">20+</strong>
+                Elite Airlines
+            </div>
+            <div class="flex flex-col text-lg text-[#4E5358]">
+                <strong class="text-bold text-7xl text-[#FF5B26]">1M+</strong>
+                Satisfied Travelers
+            </div>
+            <div class="flex flex-col text-lg text-[#4E5358]">
+                <strong class="text-bold text-7xl text-[#FF5B26]">50+</strong>
+                Awards Win
+            </div>
+            <div class="flex flex-col text-lg text-[#4E5358]">
+                <strong class="text-bold text-7xl text-[#FF5B26]">12+</strong>
+                Years of Experience
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <div class="container px-[10rem] py-[4rem]">
+            <section
+                    class="flex flex-col items-center justify-center text-center"
+            >
+                <h2 class="w-[25rem] text-5xl font-bold text-[#191B1D]">
+                    How we can help you to travel?
+                </h2>
+                <div
+                        class="mt-[4.37rem] flex items-center justify-center gap-[1.87rem]"
+                >
+                    <div
+                            class="flex w-[23.125rem] flex-col items-center rounded-xl bg-white px-5 py-[2.38rem] hover:cursor-pointer hover:shadow-2xl"
+                    >
+                        <img  th:src="@{/static/hinhanh/help-1.svg}" class="h-16 w-[3.73rem]" alt="" />
+                        <h3
+                                class="mb-4 mt-[1.87rem] text-[1.375rem] font-bold leading-7 text-[#191B1D]"
+                        >
+                            Destinations
+                        </h3>
+                        <p class="text-base text-[#4E5358]">
+                            Explore destinations around the world from 110 countries. We
+                            are providing the best travel guide services.
+                        </p>
+                    </div>
+                    <div
+                            class="flex w-[23.125rem] flex-col items-center rounded-xl bg-white px-5 py-[2.38rem] hover:cursor-pointer hover:shadow-2xl"
+                    >
+                        <img  th:src="@{/static/hinhanh/help-2.svg}" class="w-[60px]" alt="" />
+                        <h3
+                                class="mb-4 mt-[1.87rem] text-[1.375rem] font-bold leading-7 text-[#191B1D]"
+                        >
+                            Itineraries
+                        </h3>
+                        <p class="text-base text-[#4E5358]">
+                            Discover detailed itineraries from 3 days to 1 week fro
+                            multiple destinations . We are providing the best travel guide
+                            services.
+                        </p>
+                    </div>
+                    <div
+                            class="flex w-[23.125rem] flex-col items-center rounded-xl bg-white px-5 py-[2.38rem] hover:cursor-pointer hover:shadow-2xl"
+                    >
+                        <img  th:src="@{/static/hinhanh/help-3.svg}" class="w-[60px]" alt="" />
+                        <h3
+                                class="mb-4 mt-[1.87rem] text-[1.375rem] font-bold leading-7 text-[#191B1D]"
+                        >
+                            Travel Tips
+                        </h3>
+                        <p class="text-base text-[#4E5358]">
+                            Learn from the best. Travel tips gathered from our 10 years of
+                            full-time travel. We are providing the best travel guide
+                            services.
+                        </p>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </section>
+    <!-- Banner -->
+    <section class="relative mt-16 bg-[#1EB482]">
+        <img  th:src="@{/static/hinhanh/banner-map.png}" alt="" class="absolute left-[16%]" />
+        <div class="container px-[10rem]">
+            <section
+                    class="flex items-center justify-between gap-12 py-[6.25rem]"
+            >
+                <img
+                        src="./img/blog-3.png"
+                        alt=""
+                        class="h-[18.75rem] w-[18.75rem] rounded-full"
+                />
+                <div>
+                    <h2 class="text-[3.25rem] font-bold leading-[3.75rem] text-white">
+                        Travel matter
+                    </h2>
+                    <p class="mt-[1.12rem] text-lg text-white">
+                        We believe sustainable tourism matters. MAKE TRAVEL MATTER® is
+                        our commitment to preserving the planet.
+                    </p>
+                </div>
+                <button
+                        class="min-w-[13rem] rounded-full bg-[#FFC200] px-[2.19rem] py-[0.94rem] text-lg font-semibold text-[#191B1D] hover:opacity-90"
+                >
+                    Find Destination
+                </button>
+            </section>
+        </div>
+    </section>
+</section>
+</body>
+</html>
