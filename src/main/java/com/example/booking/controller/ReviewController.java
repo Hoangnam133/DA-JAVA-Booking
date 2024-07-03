@@ -15,6 +15,9 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+
 @Controller
 @RequestMapping("/reviews")
 public class ReviewController {
@@ -89,6 +92,10 @@ public class ReviewController {
             return "Reviews/add";
         }
         review.setPayment(paymentService.checkPayment(checkPaymentId));
+        LocalDate timeNow = LocalDate.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        String conv = timeNow.format(formatter);
+        review.setReviewTime(conv);
         reviewService.createReview(review);
         return "redirect:/reviews/list";
     }
