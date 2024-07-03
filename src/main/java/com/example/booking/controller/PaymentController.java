@@ -48,6 +48,7 @@ public class PaymentController {
         this.userService = userService;
         this.mailService = mailService;
     }
+
     @GetMapping("/showAdminPaymentList")
     public String showAdminPaymentList(@RequestParam(defaultValue = "0") int page, Model model) {
         try {
@@ -80,12 +81,19 @@ public class PaymentController {
         }
     }
     @PostMapping("/save/{bookingId}")
-    public String savePayment(@PathVariable("bookingId") int bookingId, Payment payment, Model model) {
+    public String savePayment(@PathVariable("bookingId") int bookingId, Payment payment,
+                              Model model, @AuthenticationPrincipal UserDetails userDetails) {
         try {
+            String username = userDetails.getUsername();
+            User user = userService.findByUsername(username)
+                    .orElseThrow(() -> new RuntimeException("User not found"));
 
             Booking booking = bookingService.findBookingById(bookingId);
             payment.setBooking(booking);
+            payment.setPaymentPin(bookingService.generateRandomString());
             paymentService.createPayment(payment);
+            sendPaymentToEmail(payment,user);
+
             bookingService.updatePaymentStatus(booking.getBookingId());
             return "redirect:/payments/showAdminPaymentList";
         } catch (Exception e) {
@@ -167,6 +175,8 @@ public class PaymentController {
                 newPayment.setPaymentType(paymentTypeService.getPaymentTypeById(1));
                 newPayment.setTotalPayment(booking.getTotalPrice());
                 newPayment.setPaymentTime(LocalDate.now().toString());
+                newPayment.setPaymentPin(bookingService.generateRandomString());
+
                 paymentService.createPayment(newPayment);
                 sendPaymentToEmail(newPayment,user);
                 bookingService.updateCheckInStatus(booking.getBookingId());
@@ -209,6 +219,7 @@ public class PaymentController {
                 "<li><strong>Total Price:</strong> " + payment.getTotalPayment() + "</li>" +
                 "<li><strong>Booking ID:</strong> $" + payment.getBooking().getBookingId() + "</li>" +
                 "<li><strong>Payment ID:</strong> " + payment.getPaymentId() + "</li>" +
+                "<li><strong>Payment Pin:</strong> " + payment.getPaymentPin() + "</li>" +
                 "</ul>" +
                 "<p>Thank you for booking with us!</p>" +
                 "</div>" +

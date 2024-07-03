@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Payment</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <script>
+        window.addEventListener('DOMContentLoaded', (event) => {
+            const now = new Date();
+            const day = String(now.getDate()).padStart(2, '0');
+            const month = String(now.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+            const year = now.getFullYear();
+            const formattedDate = `${day}-${month}-${year}`; // dd-MM-yyyy
+            document.getElementById('formattedPaymentTime').value = formattedDate;
+            const hiddenFormattedDate = `${year}-${month}-${day}`; // yyyy-MM-dd
+            document.getElementById('paymentTime').value = hiddenFormattedDate;
+        });
+    </script>
+</head>
+<body>
+<header class="bg-primary text-white text-center py-3">
+    <h1>Add Payment</h1>
+</header>
+<main class="container mt-4">
+    <form th:action="@{/reviews/save}" th:object="${review}" method="post">
+        <div class="form-group">
+            <label for="comment">comment :</label>
+            <input type="text" id="comment" name="comment" th:field="*{comment}" class="form-control" >
+        </div>
+        <div class="form-group">
+            <label for="imageReview1">imageReview1 :</label>
+            <input type="text" id="imageReview1" name="imageReview1" th:field="*{imageReview1}" class="form-control" >
+        </div>
+        <div class="form-group">
+            <label for="imageReview2">imageReview2 :</label>
+            <input type="text" id="imageReview2" name="imageReview2" th:field="*{imageReview2}" class="form-control" >
+        </div>
+
+        <button type="submit" class="btn btn-primary">Save review</button>
+    </form>
+</main>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
