@@ -41,7 +41,7 @@ public class HandleImageService {
             Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
 
             // Return the relative path with the unique file name
-            return "/hinhanh/" + uniqueFileName; // Return the stored file path with unique name
+            return "/static/hinhanh/" + uniqueFileName; // Return the stored file path with unique name
         } catch (IOException ex) {
             throw new IOException("Could not store file " + originalFilename + ". Please try again!", ex);
         }
