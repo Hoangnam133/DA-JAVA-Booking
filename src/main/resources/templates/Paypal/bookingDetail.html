@@ -1,38 +1,144 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/Layout-User"
+      layout:decorate="~{Fragments/Layout-User}">
 <head>
     <meta charset="UTF-8">
     <title>Booking Details</title>
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <!-- jQuery -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <!-- Popper.js -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-    <!-- Bootstrap JS -->
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </head>
 <body>
-<div class="container">
-    <h1 class="mt-4">Booking Details</h1>
+<section class="px-20 py-[1.5rem]"  layout:fragment="content">
+    <div class="container px-[10rem]">
+        <!-- Booking Detail -->
+        <section>
+            <div class="flex justify-end">
+                <div class="flex flex-col gap-2">
+                    <p class="text-2xl font-bold">Xác nhận đặt phòng</p>
+                    <p class="text-lg">
+                        Mã đặt phòng: <strong class="text-[#FF5B26]" th:text="${booking.bookingId}"></strong>
+                    </p>
+                    <p class="text-lg">
+                        Mã pin: <strong class="text-[#FF5B26]" th:text="${booking.pin}"></strong>
+                    </p>
+                </div>
+            </div>
+            <div class="mt-6 rounded-sm border-2 border-slate-950 p-4">
+                <div class="grid grid-cols-[1fr_repeat(3,150px)] border-b-2 pb-4">
+                    <div class="flex gap-2 border-r-2">
+                        <img
+                                th:src="${booking.room.hotel.hotelImage1}"
+                                alt=""
+                                class="h-20 w-20 rounded-md object-cover"
+                        />
+                        <div>
+                            <p class="font-semibold" th:text="${booking.room.hotel.hotelName}"></p>
 
-    <div class="card mt-4">
-        <div class="card-body">
-            <h5 class="card-title">Booking Information</h5>
-            <p class="card-text"><strong>Booking ID:</strong> <span th:text="${booking.bookingId}"></span></p>
-            <p class="card-text"><strong>Check-in Date:</strong> <span th:text="${booking.checkInDate}"></span></p>
-            <p class="card-text"><strong>Check-out Date:</strong> <span th:text="${booking.checkOutDate}"></span></p>
-            <p class="card-text"><strong>Total Price:</strong> <span th:text="${booking.totalPrice}"></span></p>
-            <p class="card-text"><strong>Payment Status:</strong> <span th:text="${booking.paymentStatus}"></span></p>
-            <p class="card-text"><strong>Check-in Status:</strong> <span th:text="${booking.checkInStatus}"></span></p>
-            <p class="card-text"><strong>Pin:</strong> <span th:text="${booking.pin}"></span></p>
+                            <div class="flex items-center gap-1">
+                                <span class="font-semibold">Địa chỉ:</span>
+                                <p th:text="${booking.room.hotel.hotelAddress}">
+                                </p>
+                            </div>
+                            <div class="flex items-center gap-1">
+                                <span class="font-semibold">Điện thoại:</span>
+                                <p th:text="${booking.room.hotel.hotelPhone}">
 
-            <form th:action="@{/payments/pay}" method="post">
-                <button type="submit" class="btn btn-primary">Pay with PayPal</button>
+                                </p>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="flex flex-col items-center border-r-2">
+                        <p class="text-sm">Nhận phòng</p>
+                        <p class="mt-1 text-xl font-bold" th:text="${booking.checkInDate}"></p>
+                        <div class="mt-2 flex items-center gap-1">
+                            <img th:src="@{/static/hinhanh/oclock.svg}" alt="" class="mt-1 h-3 w-3" />
+                            <span>14:00 - 23:00</span>
+                        </div>
+                    </div>
+                    <div class="flex flex-col items-center border-r-2">
+                        <p class="text-sm">Trả phòng</p>
+                        <p class="mt-1 text-xl font-bold" th:text="${booking.checkOutDate}"></p>
+                        <div class="mt-2 flex items-center gap-1">
+                            <img th:src="@{/static/hinhanh/oclock.svg}" alt="" class="mt-1 h-3 w-3" />
+                            <span>7:00 - 12:00</span>
+                        </div>
+                    </div>
+                    <div class="flex justify-center gap-2">
+                        <div>
+                            <span class="text-sm">Căn</span>
+                            <p class="text-2xl font-bold">1</p>
+                        </div>
+                        <span class="mt-5 text-3xl text-gray-400">/</span>
+                        <div class="ml-1">
+                            <span class="text-sm">Đêm</span>
+                            <p class="text-2xl font-bold" th:text="${T(java.time.temporal.ChronoUnit).DAYS.between(booking.checkInDate, booking.checkOutDate)}"></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-4">
+                    <h2 class="text-2xl font-bold">Thông tin phòng</h2>
+                    <div class="mt-4 flex justify-between px-10">
+                        <div>
+                            <p class="text-xl font-semibold" th:text="${booking.room.roomType.roomTypeName}"></p>
+                            <div class="flex items-center gap-1">
+                                <span class="font-semibold">Tên khách hàng:</span>
+                                <p th:text="${booking.user.username}">
+
+                                </p>
+                            </div>
+                            <div class="flex items-center gap-1">
+                                <span class="font-semibold">Mô tả:</span>
+                                <p th:text="${booking.room.description}"> </p>
+                            </div>
+                            <div class="flex items-center gap-1">
+                                <span class="font-semibold">Sức chứa:</span>
+                                <p th:text="${booking.room.roomType.capacity}"></p>
+                            </div>
+
+                        </div>
+                        <div>
+                            <span class="text-xl font-semibold">Giá:</span>
+                            <span class="text-xl font-medium" th:text="${booking.totalPrice} + ' VND'"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <form th:action="@{/payments/pay}" method="post" class="mt-6 flex justify-center">
+                <button
+                        type="submit"
+                        class="rounded-full bg-[#012169] px-[2.19rem] py-[0.94rem] text-[1.125rem] font-semibold text-white hover:opacity-90"
+                >
+                    Thanh toán bằng PayPal
+                </button>
             </form>
-        </div>
+        </section>
     </div>
-    <a th:href="@{/hotels/homeAdmin}" class="btn btn-secondary mt-4">Back to Home</a>
-</div>
+</section>
+<!--<div class="container">-->
+
+<!--    <h1 class="mt-4">Booking Details</h1>-->
+
+<!--    <div class="card mt-4">-->
+<!--        <div class="card-body">-->
+<!--            <h5 class="card-title">Booking Information</h5>-->
+<!--            <p class="card-text"><strong>Booking ID:</strong> <span th:text="${booking.bookingId}"></span></p>-->
+<!--            <p class="card-text"><strong>Check-in Date:</strong> <span th:text="${booking.checkInDate}"></span></p>-->
+<!--            <p class="card-text"><strong>Check-out Date:</strong> <span th:text="${booking.checkOutDate}"></span></p>-->
+<!--            <p class="card-text"><strong>Total Price:</strong> <span th:text="${booking.totalPrice}"></span></p>-->
+<!--            <p class="card-text"><strong>Payment Status:</strong> <span th:text="${booking.paymentStatus}"></span></p>-->
+<!--            <p class="card-text"><strong>Check-in Status:</strong> <span th:text="${booking.checkInStatus}"></span></p>-->
+<!--            <p class="card-text"><strong>Pin:</strong> <span th:text="${booking.pin}"></span></p>-->
+
+<!--            <form th:action="@{/payments/pay}" method="post">-->
+<!--                <button type="submit" class="btn btn-primary">Pay with PayPal</button>-->
+<!--            </form>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--    <a th:href="@{/hotels/homeAdmin}" class="btn btn-secondary mt-4">Back to Home</a>-->
+<!--</div>-->
 </body>
 </html>
