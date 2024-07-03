@@ -1,39 +1,287 @@
 <!DOCTYPE html>
-<html lang="en" >
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/Layout-User"
+      layout:decorate="~{Fragments/Layout-User}">
 <head>
-    <meta charset="UTF-8">
+
     <title>Book Room</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
 </head>
 <body>
-<div class="container mt-5">
-    <h1 class="text-center">Book Room</h1>
-    <form th:action="@{/bookings/save}" th:object="${booking}" method="post" class="mt-4">
-        <div class="form-group">
-            <label for="checkInDate">Check-In Date:</label>
-            <input type="text" id="checkInDate" name="checkInDate" th:field="*{checkInDate}" th:format="'dd/MM/yyyy'"
-                   readonly="readonly" class="form-control" required>
-        </div>
-        <div class="form-group">
-            <label for="checkOutDate">Check-Out Date:</label>
-            <input type="text" id="checkOutDate" name="checkOutDate" th:field="*{checkOutDate}" th:format="'dd/MM/yyyy'"
-                   readonly="readonly" class="form-control" required>
-        </div>
-        <div class="form-group">
-            <label for="totalPrice">Total Price:</label>
-            <input type="text" id="totalPrice" name="totalPrice" th:field="*{totalPrice}"
-                   class="form-control" readonly="readonly" disabled>
-        </div>
-        <div class="form-group">
-            <label for="room">Room:</label>
-            <input type="text" id="room" name="room" th:field="*{room}" readonly="readonly"
-                   class="form-control">
-        </div>
-        <button type="submit" class="btn btn-primary">Book Now</button>
-    </form>
-</div>
+<section layout:fragment="content" class="bg-gray-100">
+        <form th:action="@{/bookings/save}" th:object="${booking}" method="post">
+           <div>
+               <input type="text" id="checkInDate" name="checkInDate" th:field="*{checkInDate}" th:format="'dd/MM/yyyy'"
+                      hidden="hidden" class="form-control" required>
+               <input type="text" id="checkOutDate" name="checkOutDate" th:field="*{checkOutDate}" th:format="'dd/MM/yyyy'"
+                      hidden="hidden" class="form-control" required>
+               <input type="text" id="totalPrice" name="totalPrice" th:field="*{totalPrice}"
+                      class="form-control" hidden="hidden" disabled>
+               <input type="text" id="room" name="room" th:field="*{room}" hidden="hidden"
+                      class="form-control">
+           </div>
+            <section class="py-[1.5rem]">
+                <div class="container px-[10rem]">
+                    <div class="grid grid-cols-[400px_1fr] gap-x-6 gap-y-4">
+                        <div class="flex flex-col gap-x-6 gap-y-4">
+                            <div class="w-full rounded-lg bg-white p-4 shadow-md">
+                                <span class="text-xs text-gray-600">Khách sạn</span>
+                                <h2 class="mt-1 text-lg font-bold" th:text="${booking.room.hotel.hotelName}"></h2>
+                                <div class="mt-4 flex flex-wrap items-center gap-x-4 gap-y-2">
+                                    <div class="flex items-center gap-2 text-sm text-gray-700">
+                                        <img
+                                                class="icon h-4 w-4"
+                                                th:src="@{/static/hinhanh/ban-smoking.svg}"
+                                                alt=""
+                                        />
+                                        Phòng không hút thuốc
+                                    </div>
+                                    <div class="flex items-center gap-2 text-sm text-gray-700">
+                                        <img class="icon h-4 w-4"  th:src="@{/static/hinhanh/wifi.svg}" alt="" />
+                                        Wifi miễn phí
+                                    </div>
+                                    <div class="flex items-center gap-2 text-sm text-gray-700">
+                                        <img class="icon h-4 w-4"  th:src="@{/static/hinhanh/bell.svg}" alt="" />
+                                        Dịch vụ phòng
+                                    </div>
+                                    <div class="flex items-center gap-2 text-sm text-gray-700">
+                                        <img class="icon h-4 w-4"  th:src="@{/static/hinhanh/family.svg}" alt="" />
+                                        Phòng gia đình
+                                    </div>
+                                    <div class="flex items-center gap-2 text-sm text-gray-700">
+                                        <img
+                                                class="icon h-4 w-4"
+                                                th:src="@{/static/hinhanh/temperature.svg}"
+                                                alt=""
+                                        />
+                                        Điều hòa nhiệt độ
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="w-full rounded-lg bg-white p-4 shadow-md">
+                                <h2 class="mt-1 text-lg font-bold">
+                                    Chi tiết đặt phòng của bạn
+                                </h2>
+                                <div class="mt-2 flex items-center justify-between">
+                                    <div class="flex flex-col gap-1 border-r-2 pr-2">
+                                        <span class="text-base font-medium">Nhận phòng</span>
+                                        <strong class="block w-[160px]" th:text="${booking.checkInDate}"
+                                        ></strong
+                                        >
+                                        <span class="text-sm text-gray-600">14:00 - 23:00</span>
+                                    </div>
+                                    <div class="flex flex-col gap-1">
+                                        <span class="text-base font-medium">Trả phòng</span>
+                                        <strong class="block w-[160px]" th:text="${booking.checkOutDate}"
+                                        ></strong
+                                        >
+                                        <span class="text-sm text-gray-600">07:00 - 12:00</span>
+                                    </div>
+                                </div>
+                                <div class="mt-4">
+                                    <p class="text-base font-medium">Tổng thời gian lưu trú</p>
+                                    <span class="mt-1 block text-lg font-semibold" th:text="${T(java.time.temporal.ChronoUnit).DAYS.between(booking.checkInDate, booking.checkOutDate)} + ' đêm'"></span>
+                                </div>
+                                <div class="mt-4 border-t-[1.5px] pt-4">
+                                    <span class="text-base font-medium">Bạn đã chọn</span>
+                                    <span class="mt-1 block text-lg font-semibold" th:text="'1 phòng cho ' + ${booking.room.roomType.capacity} + ' người'"
+                                    ></span
+                                    >
+                                    <div class="mt-4 rounded-md bg-[#FFF9E5] p-4">
+                    <span class="mt-1 block text-base font-semibold" th:text="'1 x ' + ${booking.room.roomType.roomTypeName}"
+                    ></span
+                    >
+                                        <span class="mt-1 block text-sm" th:text=" ${booking.room.roomType.capacity} + ' người lớn'"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="w-full rounded-lg bg-white p-4 shadow-md">
+                                <h2 class="mt-1 text-lg font-bold">Tóm tắt giá</h2>
+                                <div class="mt-3">
+                                    <div class="flex items-center justify-between">
+                                        <span th:text="'VND ' + ${booking.room.price} + ' x ' + ${T(java.time.temporal.ChronoUnit).DAYS.between(booking.checkInDate, booking.checkOutDate)} + ' đêm'"></span>
+                                        <span th:text="'VND ' + ${booking.totalPrice}"></span>
+                                    </div>
+                                    <!--                            <div class="mt-2 flex items-center justify-between">-->
+                                    <!--                                <span>Ưu đãi từ chủ khách sạn</span>-->
+                                    <!--                                <span>- VND 10.000</span>-->
+                                    <!--                            </div>-->
+                                    <!--                            <p class="mt-2 text-sm">-->
+                                    <!--                                Bạn đang được giảm giá vì chỗ nghỉ này đang có ưu đãi trong-->
+                                    <!--                                thời gian có hạn cho một số phòng khớp với tìm kiếm của bạn-->
+                                    <!--                            </p>-->
+                                </div>
+                                <div>
+                                    <div
+                                            class="mt-4 flex items-center justify-between rounded-md bg-[#FFF9E5] p-4"
+                                    >
+                                        <span class="text-xl font-bold">Tổng cộng</span>
+                                        <div class="flex flex-col items-end">
+                                            <strong class="mt-1 block text-xl font-bold" th:text="'VND ' + ${booking.totalPrice}"
+                                            ></strong
+                                            >
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex flex-col gap-x-6 gap-y-4">
+                            <div class="w-full rounded-lg bg-white p-4 shadow-md">
+                                <div class="flex items-center gap-4">
+                                    <div
+                                            class="flex h-14 w-14 items-center justify-center rounded-full border-4 border-amber-400 bg-gray-100"
+                                    >
+                                        <img  th:src="@{/static/hinhanh/user.svg}" alt="" />
+                                    </div>
+                                    <div>
+                                        <p class="text-lg font-medium">Bạn đã được đăng nhập</p>
+                                        <p class="text-base" th:text="${booking.user.email}"></p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="w-full rounded-lg bg-white p-4 shadow-md">
+                                <h2 class="text-xl font-bold">Mách nhỏ:</h2>
+                                <div class="mt-3">
+                                    <div class="flex items-center gap-3">
+                                        <img th:src="@{/static/hinhanh/card.png}" class="icon h-4 w-4" alt="" />
+                                        Không cần thẻ tín dụng
+                                    </div>
+                                    <div class="flex items-center gap-3">
+                                        <img th:src="@{/static/hinhanh/check.svg}" class="icon h-4 w-4" alt="" />
+                                        Đảm bảo đặt phòng không cần trả tiền. Bạn sẽ thanh toán
+                                        trong lúc nghỉ
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="w-full rounded-lg bg-white p-4 shadow-md">
+                                <h2 class="text-xl font-bold">Thông tin phòng</h2>
+                                <div class="mt-3 flex flex-col gap-4">
+                                    <div class="flex items-center gap-3">
+                                        <img th:src="@{/static/hinhanh/bed.svg}" class="icon h-4 w-4" alt="" />
+                                        <div class="flex items-center gap-2">
+                                            <span class="font-semibold">Phòng:</span> <span th:text="${booking.room.roomNumber}"></span>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-center gap-3">
+                                        <img th:src="@{/static/hinhanh/user.svg}" class="icon h-4 w-4" alt="" />
+                                        <div class="flex items-center gap-2">
+                                            <span class="font-semibold">Khách:</span> <span th:text="${booking.room.roomType.capacity} + ' người'"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="mt-4 flex flex-wrap items-center gap-x-4 gap-y-2">
+                                    <div class="flex items-center gap-2 text-sm text-gray-700">
+                                        <img
+                                                class="icon h-4 w-4"
+                                                th:src="@{/static/hinhanh/ban-smoking.svg}"
+                                                alt=""
+                                        />
+                                        Phòng không hút thuốc
+                                    </div>
+                                    <div class="flex items-center gap-2 text-sm text-gray-700">
+                                        <img class="icon h-4 w-4" th:src="@{/static/hinhanh/wifi.svg}" alt="" />
+                                        Wifi miễn phí
+                                    </div>
+                                    <div class="flex items-center gap-2 text-sm text-gray-700">
+                                        <img class="icon h-4 w-4" th:src="@{/static/hinhanh/bell.svg}" alt="" />
+                                        Dịch vụ phòng
+                                    </div>
+                                    <div class="flex items-center gap-2 text-sm text-gray-700">
+                                        <img class="icon h-4 w-4" th:src="@{/static/hinhanh/family.svg}" alt="" />
+                                        Phòng gia đình
+                                    </div>
+                                    <div class="flex items-center gap-2 text-sm text-gray-700">
+                                        <img
+                                                class="icon h-4 w-4"
+                                                th:src="@{/static/hinhanh/temperature.svg}"
+                                                alt=""
+                                        />
+                                        Điều hòa nhiệt độ
+                                    </div>
+                                </div>
+                                <!--                        <div class="mt-6 border-t-2 pt-4">-->
+                                <!--                            <h3 class="text-lg font-bold">-->
+                                <!--                                Quyền lợi khuyến mãi của bạn-->
+                                <!--                            </h3>-->
+                                <!--                            <div class="mt-2 flex items-center gap-4">-->
+                                <!--                                <div-->
+                                <!--                                        class="flex h-6 w-6 items-center justify-center rounded-full bg-amber-400"-->
+                                <!--                                >-->
+                                <!--                                    <img-->
+                                <!--                                            th:src="@{/static/hinhanh/check.svg}"-->
+                                <!--                                            alt=""-->
+                                <!--                                            class="icon-white h-4 w-4"-->
+                                <!--                                    />-->
+                                <!--                                </div>-->
+                                <!--                                <div>-->
+                                <!--                                    <p class="font-medium">Giảm giá 10%</p>-->
+                                <!--                                    <p>Bạn được giảm 10% từ khách sạn này</p>-->
+                                <!--                                </div>-->
+                                <!--                            </div>-->
+                                <!--                        </div>-->
+                            </div>
+                            <div class="w-full rounded-lg bg-white p-4 shadow-md">
+                                <h3 class="text-lg font-bold">Lịch thanh toán của bạn</h3>
+                                <p class="mt-2 text-base text-green-600">
+                                    Không cần thanh toán hôm nay. Bạn sẽ trả khi đến nghỉ.
+                                </p>
+                                <p class="mt-2 text-base text-green-600">
+                                    Bạn cũng có thể thanh toán trả trước bằng dịch vụ PayPal sau
+                                    khi xác nhận đặt phòng.
+                                </p>
+                            </div>
+                            <div class="w-full rounded-lg bg-white p-4 shadow-md">
+                                <h2 class="text-xl font-bold">Thời gian nhận phòng của bạn</h2>
+                                <p class="mt-2">
+                                    Phòng của bạn sẽ sẵn sáng để nhận trong khoảng từ 14:00 đến
+                                    23:00
+                                </p>
+                                <p class="mt-2">
+                                    Lễ tân 24 giờ - Luôn có trợ giúp mỗi khi bạn cần!
+                                </p>
+                            </div>
+                            <div class="mt-4 flex justify-end">
+                                <button type="submit"
+                                        class="rounded-lg bg-[#FF5B26] px-6 py-2 text-[1.125rem] font-semibold text-white"
+                                >
+                                    Xác nhận hoàn tất đặt phòng
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </form>
+</section>
+<!--<div class="container mt-5">-->
+<!--    <h1 class="text-center">Book Room</h1>-->
+<!--    <form th:action="@{/bookings/save}" th:object="${booking}" method="post" class="mt-4">-->
+<!--        <div class="form-group">-->
+<!--            <label for="checkInDate">Check-In Date:</label>-->
+<!--            <input type="text" id="checkInDate" name="checkInDate" th:field="*{checkInDate}" th:format="'dd/MM/yyyy'"-->
+<!--                   readonly="readonly" class="form-control" required>-->
+<!--        </div>-->
+<!--        <div class="form-group">-->
+<!--            <label for="checkOutDate">Check-Out Date:</label>-->
+<!--            <input type="text" id="checkOutDate" name="checkOutDate" th:field="*{checkOutDate}" th:format="'dd/MM/yyyy'"-->
+<!--                   readonly="readonly" class="form-control" required>-->
+<!--        </div>-->
+<!--        <div class="form-group">-->
+<!--            <label for="totalPrice">Total Price:</label>-->
+<!--            <input type="text" id="totalPrice" name="totalPrice" th:field="*{totalPrice}"-->
+<!--                   class="form-control" readonly="readonly" disabled>-->
+<!--        </div>-->
+<!--        <div class="form-group">-->
+<!--            <label for="room">Room:</label>-->
+<!--            <input type="text" id="room" name="room" th:field="*{room}" readonly="readonly"-->
+<!--                   class="form-control">-->
+<!--        </div>-->
+<!--        <button type="submit" class="btn btn-primary">Book Now</button>-->
+<!--    </form>-->
+<!--</div>-->
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
 </body>
 </html>
