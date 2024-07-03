@@ -22,6 +22,8 @@ public class Payment {
     private String paymentTime;
     private double totalPayment;
 
+    private String paymentPin;
+
     @ManyToOne // Quan hệ nhiều một (many-to-one) với PaymentType
     @JoinColumn(name = "paymentTypeId")
     private PaymentType paymentType;

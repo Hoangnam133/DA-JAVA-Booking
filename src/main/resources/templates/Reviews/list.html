@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Review list</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container">
+    <h2 class="mt-4">Review list</h2>
+    <div th:if="${error}" class="alert alert-danger" role="alert">
+        <span th:text="${error}"></span>
+    </div>
+
+    <div th:each="review : ${reviews}" class="card mt-4">
+        <div class="card-body">
+            <h5 class="card-title" th:text="${review.reviewTime}">Review Time</h5>
+            <p class="card-text" th:text="${review.comment}">Comment</p>
+            <div th:if="${review.imageReview1}" class="mb-2">
+                <img th:src="@{${review.imageReview1}}" alt="Image 1" class="img-fluid">
+            </div>
+            <div th:if="${review.imageReview2}" class="mb-2">
+                <img th:src="@{${review.imageReview2}}" alt="Image 2" class="img-fluid">
+            </div>
+        </div>
+    </div>
+
+    <nav aria-label="Page navigation" th:if="${totalPages > 1}" class="mt-4">
+        <ul class="pagination">
+            <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
+                <a class="page-link" th:href="@{'/reviews/list?page=' + ${currentPage - 1}}" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+            <li class="page-item" th:each="i : ${#numbers.sequence(0, totalPages - 1)}" th:classappend="${currentPage == i} ? 'active'">
+                <a class="page-link" th:href="@{'/reviews/list?page=' + ${i}}" th:text="${i + 1}">1</a>
+            </li>
+            <li class="page-item" th:classappend="${currentPage == totalPages - 1} ? 'disabled'">
+                <a class="page-link" th:href="@{'/reviews/list?page=' + ${currentPage + 1}}" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</div>
+</body>
+</html>

@@ -42,6 +42,9 @@ public class PaymentService {
     public List<Payment> listOfUser(Long userId){
         return paymentRepository.findAllByBooking_User_Id(userId);
     }
+    public Payment getPaymentByIdAndPin(int paymentId, String pin){
+        return paymentRepository.findByPaymentIdAndPaymentPin(paymentId, pin);
+    }
 
 
 }
