@@ -1,55 +1,143 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/Layout-User"
+      layout:decorate="~{Fragments/Layout-User}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Your Bookings</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
 </head>
 <body>
-<section >
-    <div class="container mt-5">
-        <h2 class="mb-4">Your Bookings</h2>
-        <div th:if="${Errors}">
-            <div class="alert alert-danger" role="alert">
-                <p th:text="${Errors}"></p>
-            </div>
-        </div>
-        <div class="row">
-            <div th:if="${bookings != null}" class="col-12">
-                <div class="card-columns">
-                    <div th:each="booking : ${bookings}" class="card">
-                        <div class="card-body">
-                            <h5 class="card-title">Booking ID: <span th:text="${booking.bookingId}">Booking ID</span></h5>
-                            <p class="card-text">Check-in Date: <span th:text="${booking.checkInDate}">Check-in Date</span></p>
-                            <p class="card-text">Check-out Date: <span th:text="${booking.checkOutDate}">Check-out Date</span></p>
-                            <p class="card-text">Total Price: $<span th:text="${booking.totalPrice}">Total Price</span></p>
-                            <p class="card-text">Room: <span th:text="${booking.room.roomNumber}">Room</span></p>
-                            <p class="card-text">
-                            <p class="card-text">
-                            <div th:if="${booking.checkInStatus}">
-                                <span class="badge badge-success">Đã xác nhận</span>
-                                <div th:if="${booking.paymentStatus}">
-                                    <span class="badge badge-success">Đã thanh toán</span>
-                                </div>
-                                <div th:if="${!booking.paymentStatus}">
-                                    <span class="badge badge-warning">Thanh toán với PayPal</span>
-                                </div>
-                            </div>
-                            <div th:if="${!booking.checkInStatus}">
-                                <div th:if="${!booking.cancelStatus}">
-                                    <span class="badge badge-secondary">Hủy đặt phòng</span>
-                                    <span class="badge badge-warning"><a th:href="@{'/payments/bookingDetail/' + ${booking.bookingId}}" class="btn btn-sm btn-success mb-1">PayPal</a></span>
-                                </div>
-                                <div th:if="${booking.cancelStatus}">
-                                    <span class="badge badge-danger">Đã hủy</span>
-                                </div>
+<!--<section layout:fragment="content">-->
+<!--    <div class="container mt-5">-->
+<!--        <h2 class="mb-4">Your Bookings</h2>-->
+<!--        <div th:if="${Errors}">-->
+<!--            <div class="alert alert-danger" role="alert">-->
+<!--                <p th:text="${Errors}"></p>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--        <div class="row">-->
+<!--            <div th:if="${bookings != null}" class="col-12">-->
+<!--                <div class="card-columns">-->
+<!--                    <div th:each="booking : ${bookings}" class="card">-->
+<!--                        <div class="card-body">-->
+<!--                            <h5 class="card-title">Booking ID: <span th:text="${booking.bookingId}">Booking ID</span></h5>-->
+<!--                            <p class="card-text">Check-in Date: <span th:text="${booking.checkInDate}">Check-in Date</span></p>-->
+<!--                            <p class="card-text">Check-out Date: <span th:text="${booking.checkOutDate}">Check-out Date</span></p>-->
+<!--                            <p class="card-text">Total Price: $<span th:text="${booking.totalPrice}">Total Price</span></p>-->
+<!--                            <p class="card-text">Room: <span th:text="${booking.room.roomNumber}">Room</span></p>-->
+<!--                            <p class="card-text">-->
+<!--                            <p class="card-text">-->
+<!--                            <div th:if="${booking.checkInStatus}">-->
+<!--                                <span class="badge badge-success">Đã xác nhận</span>-->
+<!--                                <div th:if="${booking.paymentStatus}">-->
+<!--                                    <span class="badge badge-success">Đã thanh toán</span>-->
+<!--                                </div>-->
+<!--                                <div th:if="${!booking.paymentStatus}">-->
+<!--                                    <span class="badge badge-warning">Thanh toán với PayPal</span>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                            <div th:if="${!booking.checkInStatus}">-->
+<!--                                <div th:if="${!booking.cancelStatus}">-->
+<!--                                    <span class="badge badge-secondary">Hủy đặt phòng</span>-->
+<!--                                    <span class="badge badge-warning"><a th:href="@{'/payments/bookingDetail/' + ${booking.bookingId}}" class="btn btn-sm btn-success mb-1">PayPal</a></span>-->
+<!--                                </div>-->
+<!--                                <div th:if="${booking.cancelStatus}">-->
+<!--                                    <span class="badge badge-danger">Đã hủy</span>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</section>-->
+
+
+<section class="px-16 py-[1.5rem]" layout:fragment="content">
+    <div class="container px-[10rem]">
+        <!-- Booking Empty -->
+<!--      <div-->
+<!--          class="flex flex-col items-center justify-center rounded-md border-4 p-20" th:if="${bookings == null}"-->
+<!--        >-->
+<!--          <img-->
+<!--             th:src="@{/static/hinhanh/TripsGlobe.png}"-->
+<!--            alt=""-->
+<!--            class="h-[190px] w-[170px]"-->
+<!--          />-->
+<!--          <h3 class="mt-8 text-3xl font-semibold">-->
+<!--            Hiện bạn không có chuyến đi nào-->
+<!--          </h3>-->
+<!--          <p class="w mt-4 w-[650px] text-center text-lg">-->
+<!--            Trang này thể hiện tất cả các đặt chỗ của bạn. Nếu bạn đã đặt chỗ-->
+<!--            sẽ hiển thị ở đây. Nếu chưa có chỗ nghĩ xin vui lòng tìm kiếm-->
+<!--            chuyến đi.-->
+<!--          </p>-->
+<!--          <a-->
+<!--            href="/homeUser"-->
+<!--            class="mt-10 rounded-full bg-[#FF5B26] px-[2.19rem] py-[0.94rem] text-[1.125rem] font-semibold text-white hover:opacity-90"-->
+<!--            >Bắt đầu tìm kiếm</a-->
+<!--          >-->
+<!--        </div>-->
+        <!-- Booking List -->
+        <section th:if="${bookings != null}">
+            <h2 class="text-2xl font-bold">Chi tiết đặt phòng của bạn</h2>
+            <div class="mt-8 flex flex-col gap-8">
+                <div th:each="booking : ${bookings}">
+              <span class="mb-3 block text-sm text-[#4E5358]" th:text="${booking.checkInDate} + ' - ' + ${booking.checkOutDate}"
+              ></span>
+                    <article
+                            class="flex w-3/4 justify-between gap-3 rounded-md bg-white p-4 shadow-2xl"
+                    >
+                        <div class="flex gap-4">
+                            <img
+                                    th:src="${booking.room.roomImage1}"
+                                    alt=""
+                                    class="h-20 w-20 rounded-md object-cover"
+                            />
+                            <div class="flex flex-col gap-2">
+                                <h3 class="text-lg font-semibold" th:text="${booking.room.roomType.roomTypeName}"></h3>
+                                <span class="font-medium">Room:  <span class="font-medium" th:text="${booking.room.roomNumber}"></span></span>
                             </div>
                         </div>
-                    </div>
+                        <div class="flex flex-col items-end justify-between">
+                            <strong class="text-xl"> <strong class="text-xl " th:text="${booking.totalPrice}"></strong> VND</strong>
+                            <div>
+                                <span
+                                        class="rounded-lg bg-green-600 px-[2.19rem] py-1 text-[1.125rem] font-semibold text-white" th:if="${booking.checkInStatus}">
+                                    Đã xác nhận
+                                </span>
+                                <span
+                                        class="rounded-lg bg-green-600 px-[2.19rem] py-1 text-[1.125rem] font-semibold text-white" th:if="${booking.paymentStatus}">
+                                    Thanh toán thành công
+                                </span>
+                            </div>
+                             <div th:if="${!booking.checkInStatus}">
+                                <div th:if="${!booking.cancelStatus}"  class="flex items-center gap-6">
+                                    <a th:href="@{'/payments/bookingDetail/' + ${booking.bookingId}}"
+                                    ><img
+                                            th:src="@{/static/hinhanh/pay-pal.png}"
+                                            class="w-18 h-6 object-cover"
+                                            alt=""
+                                    />
+                                    </a>
+                                    <a
+                                            href="#!"
+                                            class="rounded-lg bg-red-500 px-[2.19rem] py-1 text-[1.125rem] font-semibold text-white"
+                                    >Hủy đặt phòng</a
+                                    >
+                                </div>
+                                 <div th:if="${booking.cancelStatus}">
+                                     <span class="rounded-lg bg-green-600 px-[2.19rem] py-1 text-[1.125rem] font-semibold text-white">Đã hủy</span>
+                                 </div>
+                            </div>
+                        </div>
+                    </article>
                 </div>
             </div>
-        </div>
+        </section>
     </div>
 </section>
 
