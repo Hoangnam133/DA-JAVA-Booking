@@ -34,7 +34,7 @@ public class RoomController {
     }
     @GetMapping("/list")
     public String showRoomList(@RequestParam(defaultValue = "0") int page, Model model) {
-        Pageable pageable = PageRequest.of(page, 6);
+        Pageable pageable = PageRequest.of(page, 4);
         Page<Room> roomPage = roomService.showRoomList(pageable);
         model.addAttribute("rooms", roomPage.getContent());
         model.addAttribute("totalPages", roomPage.getTotalPages());

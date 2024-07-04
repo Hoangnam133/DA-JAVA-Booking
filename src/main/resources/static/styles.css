@@ -22,3 +22,11 @@
             20% 0
     );
 }
+.disabled {
+    pointer-events: none;
+    opacity: 0.5;
+}
+
+.active {
+    background-color: #e0f7ff; /* Tailwind class bg-blue-100 equivalent */
+}
