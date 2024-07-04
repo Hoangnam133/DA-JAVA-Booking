@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en" >
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/static/output.css" />
+
+    <title>Bill List - page</title>
+</head>
+<body class="font-sans">
+<main>
+    <section class="flex h-screen flex-col items-center justify-center">
+        <img src="/static/hinhanh/404.png" alt="" class="h-[22rem] w-[26rem]" />
+        <h2 class="mt-8 text-2xl font-bold">Page Not Found</h2>
+
+        <div th:if="${errors}" class="mt-4 w-[30rem] text-center text-lg text-[#4E5358]" role="alert">
+            <ul>
+                <li th:each="error : ${errors}" th:text="${error}"></li>
+            </ul>
+        </div>
+
+        <a
+                href="/homeUser"
+                class="mt-4 rounded-full bg-[#FF5B26] px-7 py-3 text-2xl font-semibold text-white hover:opacity-90"
+        >
+            Trở về trang chủ</a
+        >
+    </section>
+</main>
+</body>
+</html>
