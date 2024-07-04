@@ -230,7 +230,7 @@ public class BookingController {
     }
 
     public void sendBookingToEmail(Booking booking, User user) throws MessagingException {
-        String subject = "Booking Confirmation";
+        String subject = "Booking Confirmation  ";
         String htmlBody = "<div style='border: 3px solid #ccc; border-radius: 10px; overflow: hidden;'>" +
                 "<div style='background-color: #f8f9fa; padding: 20px;'>" +
                 "<h2 style='color: #007bff; margin-bottom: 10px;'>Booking Confirmation</h2>" +
