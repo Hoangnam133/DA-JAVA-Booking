@@ -1,7 +1,6 @@
 package com.example.booking.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,8 +23,6 @@ public class Booking {
     private double totalPrice;
     private boolean paymentStatus;
     private boolean cancelStatus;
-    @Column(length = 255)
-    @Size(min = 10 ,max = 255, message = "Cancellation reason from 10 to 255 characters")
     private String cancellationReason;
     private boolean checkInStatus;
     private String pin;
