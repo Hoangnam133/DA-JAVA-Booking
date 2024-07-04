@@ -3,9 +3,9 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{Fragments/Layout-Admin}">
 <head>
-    <meta charset="UTF-8">
+
     <title>Add Room</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
     <script>
         function previewImage(event, previewId) {
             const reader = new FileReader();
@@ -19,57 +19,249 @@
     </script>
 </head>
 <body>
-<section layout:fragment="content">
-    <div class="container">
-        <h2>Add Room</h2>
-        <form th:action="@{/rooms/save}" th:object="${room}" method="post" class="needs-validation" enctype="multipart/form-data" novalidate>
-            <input type="hidden" th:field="*{hotel.hotelId}">
-            <div class="form-group">
-                <label for="roomNumber">Room Number:</label>
-                <input type="text" class="form-control" id="roomNumber" th:field="*{roomNumber}" required>
-                <div class="invalid-feedback" th:if="${#fields.hasErrors('roomNumber')}" th:errors="*{roomNumber}"></div>
+<section class="flex w-full justify-center" layout:fragment="content">
+    <div class="w-4/6 rounded-xl bg-white p-5 shadow-2xl">
+        <h2 class="inline border-b-4 pb-2 text-2xl font-bold">
+            Thêm phòng
+        </h2>
+        <form th:action="@{/rooms/save}" th:object="${room}" method="post" enctype="multipart/form-data" novalidate class="mt-6">
+            <div class="flex flex-col gap-3 border-b-2 pb-3">
+                <div class="flex justify-between gap-4">
+                    <div class="flex w-full flex-col gap-2">
+                        <label for="roomNumber" class="text-xs font-medium">Số phòng</label>
+                        <input
+                                type="text"
+                                class="h-10 rounded-md border-2 p-4 text-lg text-black"
+                                id="roomNumber" th:field="*{roomNumber}" required
+                        />
+                        <p class="ml-2 text-sm font-semibold text-red-500" th:if="${#fields.hasErrors('roomNumber')}" th:errors="*{roomNumber}">
+
+                        </p>
+                    </div>
+                    <div class="flex w-full flex-col gap-2">
+                        <label for="price" class="text-xs font-medium">Giá phòng</label>
+                        <input
+                                id="price" th:field="*{price}" required
+                                type="text"
+                                class="h-10 rounded-md border-2 p-4 text-lg text-black"
+                        />
+                        <p class="ml-2 text-sm font-semibold text-red-500" th:if="${#fields.hasErrors('price')}" th:errors="*{price}">
+
+                        </p>
+                    </div>
+                    <div class="flex w-full flex-col gap-2">
+                        <label for="roomType" class="text-xs font-medium">Loại phòng</label>
+                        <select id="roomType" th:field="*{roomType.roomTypeId}" required
+                                class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
+                        >
+                            <option th:each="type : ${roomType}" th:value="${type.roomTypeId}" th:text="${type.roomTypeName} +', sức chứa : '+ ${type.capacity}"></option>
+                        </select>
+
+                    </div>
+                </div>
+                <div class="flex w-full flex-col gap-2">
+                    <label for="description" class="text-xs font-medium"
+                    >Mô tả căn phòng</label
+                    >
+                    <input
+                            id="description" th:field="*{description}" required
+                            type="text"
+                            class="h-10 rounded-md border-2 p-4 text-lg text-black"
+                    />
+                    <p class="ml-2 text-sm font-semibold text-red-500" th:if="${#fields.hasErrors('description')}" th:errors="*{description}">
+
+                    </p>
+                </div>
+                <div class="flex items-center">
+                    <input
+                            id="roomStatus" th:field="*{roomStatus}"
+                            type="checkbox"
+                            value=""
+                            class="h-4 w-4 rounded border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600"
+                    />
+                    <label
+                            for="roomStatus"
+                            class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                    >Trạng thái hoạt động
+                    </label>
+                </div>
             </div>
-            <div class="form-group">
-                <label for="description">Description:</label>
-                <textarea class="form-control" id="description" th:field="*{description}" required></textarea>
-                <div class="invalid-feedback" th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></div>
-            </div>
-            <div class="form-group">
-                <label for="price">Price:</label>
-                <input type="number" class="form-control" id="price" th:field="*{price}" required>
-                <div class="invalid-feedback" th:if="${#fields.hasErrors('price')}" th:errors="*{price}"></div>
-            </div>
-            <div class="form-group">
-                <label for="roomType">Room Type:</label>
-                <select class="form-control" id="roomType" th:field="*{roomType.roomTypeId}" required>
-                    <option th:each="type : ${roomType}" th:value="${type.roomTypeId}" th:text="${type.roomTypeName} +', sức chứa :'+ ${type.capacity}"></option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="roomImage1">Room Image 1:</label>
-                <input type="file" class="form-control-file mt-2" id="roomImage1File" name="roomImage1File" accept="image/*" onchange="previewImage(event, 'roomImage1Preview')">
-                <img id="roomImage1Preview" src="#" alt="Room Image 1 Preview" style="display:none; max-width:100px; margin-top:10px;">
-            </div>
-            <div class="form-group">
-                <label for="roomImage2">Room Image 2:</label>
-                <input type="file" class="form-control-file mt-2" id="roomImage2File" name="roomImage2File" accept="image/*" onchange="previewImage(event, 'roomImage2Preview')">
-                <img id="roomImage2Preview" src="#" alt="Room Image 2 Preview" style="display:none; max-width:100px; margin-top:10px;">
-            </div>
-            <div class="form-group form-check">
-                <input type="checkbox" class="form-check-input" id="roomStatus" th:field="*{roomStatus}">
-                <label class="form-check-label" for="roomStatus">Room Status</label>
-            </div>
-            <div class="form-group">
-                <button type="submit" class="btn btn-primary">Save</button>
-            </div>
-            <div th:if="${errors}" class="alert alert-danger" role="alert">
-                <ul>
-                    <li th:each="error : ${errors}" th:text="${error}"></li>
-                </ul>
+            <div class="mt-2">
+                <h3 class="text-xl font-semibold">Chọn hình ảnh</h3>
+                <div class="mt-2 grid grid-cols-3 gap-6">
+                    <div class="flex flex-col gap-2">
+                        <div class="flex justify-center">
+                            <img
+                                    src="#"
+                                    alt=""
+                                    class="h-24 w-32 rounded-md object-cover hidden"
+                                    id="roomImage1Preview"
+                            />
+                        </div>
+                        <div class="flex flex-col gap-2">
+                            <div class="flex w-full items-center justify-center">
+                                <label
+                                        for="roomImage1File"
+                                        class="flex h-28 w-full cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 hover:bg-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:hover:border-gray-500 dark:hover:bg-gray-600 dark:hover:bg-gray-800"
+                                >
+                                    <div
+                                            class="flex flex-col items-center justify-center pb-6 pt-5"
+                                    >
+                                        <svg
+                                                class="mb-4 h-8 w-8 text-gray-500 dark:text-gray-400"
+                                                aria-hidden="true"
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                fill="none"
+                                                viewBox="0 0 20 16"
+                                        >
+                                            <path
+                                                    stroke="currentColor"
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                    stroke-width="2"
+                                                    d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"
+                                            />
+                                        </svg>
+                                        <p
+                                                class="mb-2 text-sm text-gray-500 dark:text-gray-400"
+                                        >
+                                            <span class="font-semibold">Click to upload</span>
+                                            or drag and drop
+                                        </p>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400">
+                                            SVG, PNG, JPG or GIF (MAX. 800x400px)
+                                        </p>
+                                    </div>
+                                    <input
+                                            id="roomImage1File" name="roomImage1File" accept="image/*" onchange="previewImage(event, 'roomImage1Preview')"
+                                            type="file"
+                                            class="hidden"
+                                    />
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex flex-col gap-2">
+                        <div class="flex justify-center">
+                            <img
+                                    src="#"
+                                    alt=""
+                                    class="h-24 w-32 rounded-md object-cover hidden"
+                                    id="roomImage2Preview"
+                            />
+                        </div>
+                        <div class="flex flex-col gap-2">
+                            <div class="flex w-full items-center justify-center">
+                                <label
+                                        for="roomImage2File"
+                                        class="flex h-28 w-full cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 hover:bg-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:hover:border-gray-500 dark:hover:bg-gray-600 dark:hover:bg-gray-800"
+                                >
+                                    <div
+                                            class="flex flex-col items-center justify-center pb-6 pt-5"
+                                    >
+                                        <svg
+                                                class="mb-4 h-8 w-8 text-gray-500 dark:text-gray-400"
+                                                aria-hidden="true"
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                fill="none"
+                                                viewBox="0 0 20 16"
+                                        >
+                                            <path
+                                                    stroke="currentColor"
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                    stroke-width="2"
+                                                    d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"
+                                            />
+                                        </svg>
+                                        <p
+                                                class="mb-2 text-sm text-gray-500 dark:text-gray-400"
+                                        >
+                                            <span class="font-semibold">Click to upload</span>
+                                            or drag and drop
+                                        </p>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400">
+                                            SVG, PNG, JPG or GIF (MAX. 800x400px)
+                                        </p>
+                                    </div>
+                                    <input
+                                            id="roomImage2File" name="roomImage2File" accept="image/*" onchange="previewImage(event, 'roomImage2Preview')"
+                                            type="file"
+                                            class="hidden"
+                                    />
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-center">
+                        <button
+                                type="submit"
+                                class="h-14 w-40 rounded-full bg-[#FF5B26] px-6 py-2 text-lg font-bold text-white hover:opacity-90"
+                        >
+                            Thêm phòng
+                        </button>
+                    </div>
+                </div>
             </div>
         </form>
+                    <div th:if="${errors}" class="alert alert-danger" role="alert">
+                        <ul>
+                            <li th:each="error : ${errors}" th:text="${error}"></li>
+                        </ul>
+                    </div>
     </div>
 </section>
+<!--<section layout:fragment="content">-->
+<!--    <div class="container">-->
+<!--        <h2>Add Room</h2>-->
+<!--        <form th:action="@{/rooms/save}" th:object="${room}" method="post" class="needs-validation" enctype="multipart/form-data" novalidate>-->
+<!--            <input type="hidden" th:field="*{hotel.hotelId}">-->
+<!--            <div class="form-group">-->
+<!--                <label for="roomNumber">Room Number:</label>-->
+<!--                <input type="text" class="form-control" id="roomNumber" th:field="*{roomNumber}" required>-->
+<!--                <div class="invalid-feedback" th:if="${#fields.hasErrors('roomNumber')}" th:errors="*{roomNumber}"></div>-->
+<!--            </div>-->
+<!--            <div class="form-group">-->
+<!--                <label for="description">Description:</label>-->
+<!--                <textarea class="form-control" id="description" th:field="*{description}" required></textarea>-->
+<!--                <div class="invalid-feedback" th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></div>-->
+<!--            </div>-->
+<!--            <div class="form-group">-->
+<!--                <label for="price">Price:</label>-->
+<!--                <input type="number" class="form-control" id="price" th:field="*{price}" required>-->
+<!--                <div class="invalid-feedback" th:if="${#fields.hasErrors('price')}" th:errors="*{price}"></div>-->
+<!--            </div>-->
+<!--            <div class="form-group">-->
+<!--                <label for="roomType">Room Type:</label>-->
+<!--                <select class="form-control" id="roomType" th:field="*{roomType.roomTypeId}" required>-->
+<!--                    <option th:each="type : ${roomType}" th:value="${type.roomTypeId}" th:text="${type.roomTypeName} +', sức chứa :'+ ${type.capacity}"></option>-->
+<!--                </select>-->
+<!--            </div>-->
+<!--            <div class="form-group">-->
+<!--                <label for="roomImage1">Room Image 1:</label>-->
+<!--                <input type="file" class="form-control-file mt-2" id="roomImage1File" name="roomImage1File" accept="image/*" onchange="previewImage(event, 'roomImage1Preview')">-->
+<!--                <img id="roomImage1Preview" src="#" alt="Room Image 1 Preview" style="display:none; max-width:100px; margin-top:10px;">-->
+<!--            </div>-->
+<!--            <div class="form-group">-->
+<!--                <label for="roomImage2">Room Image 2:</label>-->
+<!--                <input type="file" class="form-control-file mt-2" id="roomImage2File" name="roomImage2File" accept="image/*" onchange="previewImage(event, 'roomImage2Preview')">-->
+<!--                <img id="roomImage2Preview" src="#" alt="Room Image 2 Preview" style="display:none; max-width:100px; margin-top:10px;">-->
+<!--            </div>-->
+<!--            <div class="form-group form-check">-->
+<!--                <input type="checkbox" class="form-check-input" id="roomStatus" th:field="*{roomStatus}">-->
+<!--                <label class="form-check-label" for="roomStatus">Room Status</label>-->
+<!--            </div>-->
+<!--            <div class="form-group">-->
+<!--                <button type="submit" class="btn btn-primary">Save</button>-->
+<!--            </div>-->
+<!--            <div th:if="${errors}" class="alert alert-danger" role="alert">-->
+<!--                <ul>-->
+<!--                    <li th:each="error : ${errors}" th:text="${error}"></li>-->
+<!--                </ul>-->
+<!--            </div>-->
+<!--        </form>-->
+<!--    </div>-->
+<!--</section>-->
 
 </body>
 </html>

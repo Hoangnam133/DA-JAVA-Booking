@@ -2,16 +2,9 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{Fragments/Layout-Admin}">
 <head>
-  <meta charset="UTF-8">
+
   <title>Update Hotel</title>
-  <!-- Bootstrap CSS -->
-  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-  <style>
-    .hotel-image {
-      max-width: 100px; /* Limit maximum width */
-      height: auto; /* Maintain aspect ratio */
-    }
-  </style>
+
   <script>
     function previewImage(event, previewId, currentImageId) {
       const reader = new FileReader();
@@ -29,104 +22,362 @@
   </script>
 </head>
 <body>
-<section layout:fragment="content">
-  <main>
-    <div class="container">
-      <h2 class="my-4">Update Hotel</h2>
+<section class="flex w-full justify-center" layout:fragment="content">
+  <div class="w-4/6 rounded-xl bg-white p-5 shadow-2xl">
+    <h2 class="inline border-b-4 pb-2 text-2xl font-bold">
+      Cập nhật khách sạn
+    </h2>
+          <div th:if="${errors != null}" class="alert alert-danger">
+            <ul>
+              <li th:each="error : ${errors}" th:text="${error}"></li>
+            </ul>
+          </div>
+    <form th:action="@{/hotels/saveEdit/{hotelId}(hotelId=${hotel.hotelId})}" th:object="${hotel}" method="post" enctype="multipart/form-data" class="mt-6">
+      <input type="hidden" th:field="*{hotelId}">
+      <div class="flex flex-col gap-3 border-b-2 pb-3">
+        <div class="flex justify-between gap-4">
+          <div class="flex w-full flex-col gap-2">
+            <label for="hotelName" class="text-xs font-medium"
+            >Tên khách sạn</label
+            >
+            <input
+                    type="text"
+                    class="h-10 rounded-md border-2 p-4 text-lg text-black"
+                    id="hotelName" th:field="*{hotelName}" required
+            />
+             <p class="ml-2 text-sm font-semibold text-red-500" th:if="${#fields.hasErrors('hotelName')}" th:errors="*{hotelName}">
 
-      <div th:if="${errors != null}" class="alert alert-danger">
-        <ul>
-          <li th:each="error : ${errors}" th:text="${error}"></li>
-        </ul>
+            </p>
+          </div>
+          <div class="flex w-full flex-col gap-2">
+            <label for="hotelPhone" class="text-xs font-medium"
+            >Số điện thoại</label
+            >
+            <input
+                    type="text"
+                    class="h-10 rounded-md border-2 p-4 text-lg text-black"
+                    id="hotelPhone" th:field="*{hotelPhone}" required
+            />
+            <p class="ml-2 text-sm font-semibold text-red-500" th:if="${#fields.hasErrors('hotelPhone')}" th:errors="*{hotelPhone}">
+
+            </p>
+          </div>
+        </div>
+
+        <div class="flex w-full flex-col gap-2">
+          <label for="hotelAddress" class="text-xs font-medium">Địa chỉ</label>
+          <input
+                  type="text"
+                  class="h-10 rounded-md border-2 p-4 text-lg text-black"
+                  id="hotelAddress" th:field="*{hotelAddress}"
+          />
+          <p class="ml-2 text-sm font-semibold text-red-500" th:if="${#fields.hasErrors('hotelAddress')}" th:errors="*{hotelAddress}">
+
+          </p>
+        </div>
+        <div class="flex items-center">
+          <input
+                  id="hotelStatus" th:field="*{hotelStatus}"
+                  type="checkbox"
+                  value=""
+                  class="h-4 w-4 rounded border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600"
+          />
+          <label
+                  for="hotelStatus"
+                  class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+          >Trạng thái hoạt động
+          </label>
+        </div>
       </div>
+      <div class="mt-2">
+        <h3 class="text-xl font-semibold">Chọn hình ảnh</h3>
+        <div class="mt-2 grid grid-cols-3 gap-6">
+          <div class="flex flex-col gap-2">
+            <div class="flex justify-center">
+              <img
+                      th:src="@{${hotel.hotelImage1}}" id="currentImage1" alt="Current Image"
+                      class="h-24 w-32 rounded-md object-cover"
+              />
+            </div>
+            <div class="flex flex-col gap-2">
+              <div class="flex justify-center">
 
-      <form th:action="@{/hotels/saveEdit/{hotelId}(hotelId=${hotel.hotelId})}"
-            th:object="${hotel}" method="post" enctype="multipart/form-data">
-        <input type="hidden" th:field="*{hotelId}">
+               <img
+                       id="newImagePreview" src="#" alt="New Image Preview"
+                    class="h-24 w-32 rounded-md object-cover hidden"
+              />
+              </div>
 
-        <div class="form-group">
-          <label for="hotelName">Hotel Name:</label>
-          <input type="text" class="form-control" id="hotelName" th:field="*{hotelName}" required>
-          <div th:if="${#fields.hasErrors('hotelName')}" th:errors="*{hotelName}" class="text-danger"></div>
-        </div>
+              <div class="flex w-full items-center justify-center">
+                <label
+                        for="imageFile"
+                        class="flex h-28 w-full cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 hover:bg-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:hover:border-gray-500 dark:hover:bg-gray-600 dark:hover:bg-gray-800"
+                >
+                  <div
+                          class="flex flex-col items-center justify-center pb-6 pt-5"
+                  >
+                    <svg
+                            class="mb-4 h-8 w-8 text-gray-500 dark:text-gray-400"
+                            aria-hidden="true"
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 20 16"
+                    >
+                      <path
+                              stroke="currentColor"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                              stroke-width="2"
+                              d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"
+                      />
+                    </svg>
+                    <p
+                            class="mb-2 text-sm text-gray-500 dark:text-gray-400"
+                    >
+                      <span class="font-semibold">Click to upload</span>
+                      or drag and drop
+                    </p>
+                    <p class="text-xs text-gray-500 dark:text-gray-400">
+                      SVG, PNG, JPG or GIF (MAX. 800x400px)
+                    </p>
+                  </div>
+                  <input
+                          id="imageFile"
+                          type="file"
+                          class="hidden"
+                          name="imageFile" onchange="previewImage(event, 'newImagePreview', 'currentImage1')"
+                  />
+                </label>
+              </div>
+            </div>
+          </div>
+          <div class="flex flex-col gap-2">
+            <div class="flex justify-center">
+              <img
+                      th:src="@{${hotel.hotelImage2}}" id="currentImage2" alt="Current Image"
+                      class="h-24 w-32 rounded-md object-cover"
+              />
+            </div>
+            <div class="flex flex-col gap-2">
+              <div class="flex justify-center">
+              <img
+                      id="newImagePreview1" src="#" alt="New Image Preview"
+                      class="h-24 w-32 rounded-md object-cover hidden"
+              />
+              </div>
 
-        <div class="form-group">
-          <label for="hotelPhone">Hotel Phone:</label>
-          <input type="text" class="form-control" id="hotelPhone" th:field="*{hotelPhone}">
-          <div th:if="${#fields.hasErrors('hotelPhone')}" th:errors="*{hotelPhone}" class="text-danger"></div>
-        </div>
+              <div class="flex w-full items-center justify-center">
+                <label
+                        for="imageFile1"
+                        class="flex h-28 w-full cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 hover:bg-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:hover:border-gray-500 dark:hover:bg-gray-600 dark:hover:bg-gray-800"
+                >
+                  <div
+                          class="flex flex-col items-center justify-center pb-6 pt-5"
+                  >
+                    <svg
+                            class="mb-4 h-8 w-8 text-gray-500 dark:text-gray-400"
+                            aria-hidden="true"
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 20 16"
+                    >
+                      <path
+                              stroke="currentColor"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                              stroke-width="2"
+                              d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"
+                      />
+                    </svg>
+                    <p
+                            class="mb-2 text-sm text-gray-500 dark:text-gray-400"
+                    >
+                      <span class="font-semibold">Click to upload</span>
+                      or drag and drop
+                    </p>
+                    <p class="text-xs text-gray-500 dark:text-gray-400">
+                      SVG, PNG, JPG or GIF (MAX. 800x400px)
+                    </p>
+                  </div>
+                  <input
+                          id="imageFile1"
+                          type="file"
+                          class="hidden"
+                          name="imageFile1" onchange="previewImage(event, 'newImagePreview1', 'currentImage2')"
+                  />
+                </label>
+              </div>
+            </div>
+          </div>
+          <div class="flex flex-col gap-2">
+            <div class="flex justify-center">
+              <img
+                      th:src="@{${hotel.hotelImage3}}" id="currentImage3" alt="Current Image"
+                      class="h-24 w-32 rounded-md object-cover"
+              />
+            </div>
+            <div class="flex flex-col gap-2">
+              <div class="flex justify-center">
+                <img
+                        id="newImagePreview2" src="#" alt="New Image Preview"
+                        class="h-24 w-32 rounded-md object-cover hidden"
+                />
+              </div>
 
-        <div class="form-group">
-          <label for="hotelAddress">Hotel Address:</label>
-          <input type="text" class="form-control" id="hotelAddress" th:field="*{hotelAddress}" required>
-          <div th:if="${#fields.hasErrors('hotelAddress')}" th:errors="*{hotelAddress}" class="text-danger"></div>
-        </div>
-
-        <div class="form-check mb-3">
-          <input type="checkbox" class="form-check-input" id="hotelStatus" th:field="*{hotelStatus}">
-          <label class="form-check-label" for="hotelStatus">Active</label>
-        </div>
-
-        <!-- Current Image -->
-        <div class="form-group">
-          <label for="imageFile">Current Image:</label>
-          <div>
-            <img th:src="@{${hotel.hotelImage1}}" id="currentImage1" alt="Current Image" width="100" />
+              <div class="flex w-full items-center justify-center">
+                <label
+                        for="imageFile2"
+                        class="flex h-28 w-full cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 hover:bg-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:hover:border-gray-500 dark:hover:bg-gray-600 dark:hover:bg-gray-800"
+                >
+                  <div
+                          class="flex flex-col items-center justify-center pb-6 pt-5"
+                  >
+                    <svg
+                            class="mb-4 h-8 w-8 text-gray-500 dark:text-gray-400"
+                            aria-hidden="true"
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 20 16"
+                    >
+                      <path
+                              stroke="currentColor"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                              stroke-width="2"
+                              d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"
+                      />
+                    </svg>
+                    <p
+                            class="mb-2 text-sm text-gray-500 dark:text-gray-400"
+                    >
+                      <span class="font-semibold">Click to upload</span>
+                      or drag and drop
+                    </p>
+                    <p class="text-xs text-gray-500 dark:text-gray-400">
+                      SVG, PNG, JPG or GIF (MAX. 800x400px)
+                    </p>
+                  </div>
+                  <input
+                          id="imageFile2"
+                          type="file"
+                          class="hidden"
+                          name="imageFile2" onchange="previewImage(event, 'newImagePreview2', 'currentImage3')"
+                  />
+                </label>
+              </div>
+            </div>
           </div>
         </div>
-
-        <!-- Choose New Image -->
-        <div class="form-group">
-          <label for="imageFile">Choose New Image:</label>
-          <input type="file" class="form-control-file" id="imageFile" name="imageFile" onchange="previewImage(event, 'newImagePreview', 'currentImage1')" />
-          <div>
-            <img id="newImagePreview" src="#" alt="New Image Preview" width="100" style="margin-top: 10px; display: none;" />
-          </div>
-        </div>
-
-        <!-- Current Image1 -->
-        <div class="form-group">
-          <label for="imageFile1">Current Image1:</label>
-          <div>
-            <img th:src="@{${hotel.hotelImage2}}" id="currentImage2" alt="Current Image1" width="100" />
-          </div>
-        </div>
-
-        <!-- Choose New Image1 -->
-        <div class="form-group">
-          <label for="imageFile1">Choose New Image1:</label>
-          <input type="file" class="form-control-file" id="imageFile1" name="imageFile1" onchange="previewImage(event, 'newImagePreview1', 'currentImage2')" />
-          <div>
-            <img id="newImagePreview1" src="#" alt="New Image1 Preview" width="100" style="margin-top: 10px; display: none;" />
-          </div>
-        </div>
-
-        <!-- Current Image2 -->
-        <div class="form-group">
-          <label for="imageFile2">Current Image2:</label>
-          <div>
-            <img th:src="@{${hotel.hotelImage3}}" id="currentImage3" alt="Current Image2" width="100" />
-          </div>
-        </div>
-
-        <!-- Choose New Image2 -->
-        <div class="form-group">
-          <label for="imageFile2">Choose New Image2:</label>
-          <input type="file" class="form-control-file" id="imageFile2" name="imageFile2" onchange="previewImage(event, 'newImagePreview2', 'currentImage3')" />
-          <div>
-            <img id="newImagePreview2" src="#" alt="New Image2 Preview" width="100" style="margin-top: 10px; display: none;" />
-          </div>
-        </div>
-
-        <button type="submit" class="btn btn-primary">Update Hotel</button>
-      </form>
-    </div>
-  </main>
+      </div>
+      <div class="mt-4 flex justify-center">
+        <button
+                type="submit"
+                class="rounded-full bg-[#FF5B26] px-6 py-2 font-bold text-white hover:opacity-90"
+        >
+          Cập nhật
+        </button>
+      </div>
+    </form>
+  </div>
 </section>
+<!--<section layout:fragment="content">-->
+<!--  <main>-->
+<!--    <div class="container">-->
+<!--      <h2 class="my-4">Update Hotel</h2>-->
 
-<!-- Bootstrap JS and dependencies -->
+<!--      <div th:if="${errors != null}" class="alert alert-danger">-->
+<!--        <ul>-->
+<!--          <li th:each="error : ${errors}" th:text="${error}"></li>-->
+<!--        </ul>-->
+<!--      </div>-->
+
+<!--      <form th:action="@{/hotels/saveEdit/{hotelId}(hotelId=${hotel.hotelId})}"-->
+<!--            th:object="${hotel}" method="post" enctype="multipart/form-data">-->
+<!--        <input type="hidden" th:field="*{hotelId}">-->
+
+<!--        <div class="form-group">-->
+<!--          <label for="hotelName">Hotel Name:</label>-->
+<!--          <input type="text" class="form-control" id="hotelName" th:field="*{hotelName}" required>-->
+<!--          <div th:if="${#fields.hasErrors('hotelName')}" th:errors="*{hotelName}" class="text-danger"></div>-->
+<!--        </div>-->
+
+<!--        <div class="form-group">-->
+<!--          <label for="hotelPhone">Hotel Phone:</label>-->
+<!--          <input type="text" class="form-control" id="hotelPhone" th:field="*{hotelPhone}">-->
+<!--          <div th:if="${#fields.hasErrors('hotelPhone')}" th:errors="*{hotelPhone}" class="text-danger"></div>-->
+<!--        </div>-->
+
+<!--        <div class="form-group">-->
+<!--          <label for="hotelAddress">Hotel Address:</label>-->
+<!--          <input type="text" class="form-control" id="hotelAddress" th:field="*{hotelAddress}" required>-->
+<!--          <div th:if="${#fields.hasErrors('hotelAddress')}" th:errors="*{hotelAddress}" class="text-danger"></div>-->
+<!--        </div>-->
+
+<!--        <div class="form-check mb-3">-->
+<!--          <input type="checkbox" class="form-check-input" id="hotelStatus" th:field="*{hotelStatus}">-->
+<!--          <label class="form-check-label" for="hotelStatus">Active</label>-->
+<!--        </div>-->
+
+<!--        &lt;!&ndash; Current Image &ndash;&gt;-->
+<!--        <div class="form-group">-->
+<!--          <label for="imageFile">Current Image:</label>-->
+<!--          <div>-->
+<!--            <img th:src="@{${hotel.hotelImage1}}" id="currentImage1" alt="Current Image" width="100" />-->
+<!--          </div>-->
+<!--        </div>-->
+
+<!--        &lt;!&ndash; Choose New Image &ndash;&gt;-->
+<!--        <div class="form-group">-->
+<!--          <label for="imageFile">Choose New Image:</label>-->
+<!--          <input type="file" class="form-control-file" id="imageFile" name="imageFile" onchange="previewImage(event, 'newImagePreview', 'currentImage1')" />-->
+<!--          <div>-->
+<!--            <img id="newImagePreview" src="#" alt="New Image Preview" width="100" style="margin-top: 10px; display: none;" />-->
+<!--          </div>-->
+<!--        </div>-->
+
+<!--        &lt;!&ndash; Current Image1 &ndash;&gt;-->
+<!--        <div class="form-group">-->
+<!--          <label for="imageFile1">Current Image1:</label>-->
+<!--          <div>-->
+<!--            <img th:src="@{${hotel.hotelImage2}}" id="currentImage2" alt="Current Image1" width="100" />-->
+<!--          </div>-->
+<!--        </div>-->
+
+<!--        &lt;!&ndash; Choose New Image1 &ndash;&gt;-->
+<!--        <div class="form-group">-->
+<!--          <label for="imageFile1">Choose New Image1:</label>-->
+<!--          <input type="file" class="form-control-file" id="imageFile1" name="imageFile1" onchange="previewImage(event, 'newImagePreview1', 'currentImage2')" />-->
+<!--          <div>-->
+<!--            <img id="newImagePreview1" src="#" alt="New Image1 Preview" width="100" style="margin-top: 10px; display: none;" />-->
+<!--          </div>-->
+<!--        </div>-->
+
+<!--        &lt;!&ndash; Current Image2 &ndash;&gt;-->
+<!--        <div class="form-group">-->
+<!--          <label for="imageFile2">Current Image2:</label>-->
+<!--          <div>-->
+<!--            <img th:src="@{${hotel.hotelImage3}}" id="currentImage3" alt="Current Image2" width="100" />-->
+<!--          </div>-->
+<!--        </div>-->
+
+<!--        &lt;!&ndash; Choose New Image2 &ndash;&gt;-->
+<!--        <div class="form-group">-->
+<!--          <label for="imageFile2">Choose New Image2:</label>-->
+<!--          <input type="file" class="form-control-file" id="imageFile2" name="imageFile2" onchange="previewImage(event, 'newImagePreview2', 'currentImage3')" />-->
+<!--          <div>-->
+<!--            <img id="newImagePreview2" src="#" alt="New Image2 Preview" width="100" style="margin-top: 10px; display: none;" />-->
+<!--          </div>-->
+<!--        </div>-->
+
+<!--        <button type="submit" class="btn btn-primary">Update Hotel</button>-->
+<!--      </form>-->
+<!--    </div>-->
+<!--  </main>-->
+<!--</section>-->
+
+
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
 </body>
 </html>

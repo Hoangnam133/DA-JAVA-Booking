@@ -3,124 +3,343 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{Fragments/Layout-Admin}">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Room List</title>
-    <!-- Bootstrap CSS -->
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        .btn-custom {
-            background-color: #007bff;
-            border-color: #007bff;
-            color: white;
-            border-radius: 15px;
-        }
 
-        .btn-custom:hover {
-            background-color: #0056b3;
-            border-color: #004085;
-            color: white;
-        }
-
-        .room-image {
-            width: 100px;
-            height: auto;
-        }
-    </style>
 </head>
 <body>
 <section layout:fragment="content">
-    <div class="container">
-        <h1 class="my-4">Room List</h1>
-        <!-- Form for searching rooms -->
-        <form class="form-inline mb-3" th:action="@{/rooms/searchRoom}" method="get">
-            <div class="form-group mr-2">
-                <label for="roomNumberSearch">Room Number:</label>
-                <input type="text" class="form-control ml-2" id="roomNumberSearch" name="roomNumber">
-            </div>
-            <button type="submit" class="btn btn-primary">Search</button>
-        </form>
-
-        <!-- Add Room button -->
-        <div class="mb-3">
-            <div sec:authorize="hasAuthority('ADMIN')">
-                <a th:href="@{/rooms/add}" class="btn btn-custom">Add Room</a>
+    <h2 class="mb-6 text-3xl font-bold">Danh sách phòng</h2>
+    <div
+            class="mb-0 flex w-full min-w-0 flex-col break-words rounded-2xl border-0 border-solid border-transparent bg-white bg-clip-border shadow-xl"
+    >
+        <div
+                class="mb-14 flex items-center justify-between rounded-t-2xl bg-white p-6 pb-0 text-lg font-medium"
+        >
+            <h6>Tất cả phòng</h6>
+            <div class="flex items-center gap-4">
+                <form action="" class="flex gap-2"  th:action="@{/rooms/searchRoom}" method="get">
+                    <input
+                            type="text"
+                            class="h-12 rounded-lg border-2 p-4 text-black"
+                            placeholder="Nhập số phòng"
+                            id="roomNumberSearch" name="roomNumber"
+                    />
+                    <button
+                            type="submit"
+                            class="rounded-lg bg-gradient-to-tl from-purple-700 to-pink-500 px-3 py-2 font-bold text-white hover:opacity-90"
+                    >
+                        Tìm kiếm
+                    </button>
+                </form>
+                <span class="text-2xl">|</span>
+                <a th:href="@{/rooms/list}" class="flex items-center rounded-lg bg-gradient-to-tl from-purple-700 to-pink-500 px-3 py-2 font-bold text-white hover:opacity-90">
+                    Hiển thị tất cả
+                </a>
             </div>
         </div>
-        <div class="mb-3">
-            <a th:href="@{/rooms/list}" class="btn btn-custom">All Rooms</a>
-        </div>
-
         <!-- Error Message -->
         <div th:if="${errorMessage}" class="alert alert-danger" role="alert">
             <span th:text="${errorMessage}"></span>
         </div>
+        <div th:if="${rooms}">
+            <div class="overflow-x-auto p-0">
+                <table
+                        class="mb-0 w-full items-center border-gray-200 align-top text-slate-500"
+                >
+                    <thead class="align-bottom">
+                    <tr>
+                        <th
+                                class="border-b-solid tracking-none whitespace-nowrap border-b border-gray-200 bg-transparent px-6 py-3 text-left align-middle text-sm font-bold uppercase text-slate-400 opacity-70 shadow-none"
+                        >
+                            Số phòng
+                        </th>
+                        <th
+                                class="border-b-solid tracking-none whitespace-nowrap border-b border-gray-200 bg-transparent px-2 text-left align-middle text-sm font-bold uppercase text-slate-400 opacity-70 shadow-none"
+                        >
+                            Mô tả
+                        </th>
+                        <th
+                                class="border-b-solid tracking-none whitespace-nowrap border-b border-gray-200 bg-transparent px-2 text-left align-middle text-sm font-bold uppercase text-slate-400 opacity-70 shadow-none"
+                        >
+                            Giá
+                        </th>
+                        <th
+                                class="border-b-solid tracking-none whitespace-nowrap border-b border-gray-200 bg-transparent px-2 text-left align-middle text-sm font-bold uppercase text-slate-400 opacity-70 shadow-none"
+                        >
+                            Loại phòng
+                        </th>
+                        <th
+                                class="border-b-solid tracking-none whitespace-nowrap border-b border-gray-200 bg-transparent px-2 text-left align-middle text-sm font-bold uppercase text-slate-400 opacity-70 shadow-none"
+                        >
+                            Sức chứa
+                        </th>
+                        <th
+                                class="border-b-solid tracking-none whitespace-nowrap border-b border-gray-200 bg-transparent px-2 text-left align-middle text-sm font-bold uppercase text-slate-400 opacity-70 shadow-none"
+                        >
+                            Trạng thái
+                        </th>
+                        <th
+                                class="border-b-solid tracking-none whitespace-nowrap border-b border-gray-200 bg-transparent px-2 text-left align-middle text-sm font-bold uppercase text-slate-400 opacity-70 shadow-none"
+                        >
+                            Hình 1
+                        </th>
 
-        <!-- Table to display room list -->
-        <table class="table table-striped" th:if="${rooms}">
-            <thead class="thead-dark">
-            <tr>
-                <th>Room Number</th>
-                <th>Description</th>
-                <th>Price</th>
-                <th>Room Type</th>
-                <th>Capacity</th>
-                <th>Active</th>
-                <th>Image 1</th>
-                <th>Image 2</th>
-                <th>Edit</th>
-            </tr>
-            </thead>
-            <tbody>
-            <!-- Iterate over the list of rooms -->
-            <tr th:each="room : ${rooms}">
-                <td th:text="${room.roomNumber}"></td>
-                <td th:text="${room.description}"></td>
-                <td th:text="${room.price}"></td>
-                <td th:text="${room.roomType.roomTypeName}"></td>
-                <td th:text="${room.roomType.capacity}"></td>
-                <td th:text="${room.roomStatus ? 'Active' : 'Inactive'}"></td>
-                <td>
-                    <img th:src="@{${room.roomImage1}}" alt="Room Image 1" class="room-image"
-                         th:if="${room.roomImage1}">
-                </td>
-                <td>
-                    <img th:src="@{${room.roomImage2}}" alt="Room Image 2" class="room-image"
-                         th:if="${room.roomImage2}">
-                </td>
-                <td>
-                    <div sec:authorize="hasAuthority('ADMIN')">
-                        <a th:href="@{'/rooms/edit/' + ${room.roomId}}" class="btn btn-warning btn-sm">Edit</a>
-                    </div>
-                </td>
-            </tr>
-            </tbody>
-        </table>
+                        <th
+                                class="border-b-solid tracking-none whitespace-nowrap border-b border-gray-200 bg-transparent px-2 text-left align-middle text-sm font-bold uppercase text-slate-400 opacity-70 shadow-none"
+                        >
+                            Hình 2
+                        </th>
+                        <th
+                                sec:authorize="hasAuthority('ADMIN')"    class="border-b-solid tracking-none whitespace-nowrap border-b border-gray-200 bg-transparent px-2 text-left align-middle text-sm font-bold uppercase text-slate-400 opacity-70 shadow-none"
+                        >
+                            Hành động
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="room : ${rooms}">
+                        <td
+                                class="whitespace-nowrap border-b bg-transparent p-2 align-middle shadow-transparent"
+                        >
+                            <div class="flex items-center px-6 py-1">
+                                <div class="flex flex-col justify-center">
+                                    <p class="mb-0 text-sm font-bold leading-normal" th:text="${room.roomNumber}">
 
-        <!-- Pagination controls -->
-        <nav aria-label="Page navigation" th:if="${totalPages > 1}">
-            <ul class="pagination">
-                <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
-                    <a class="page-link" th:href="@{'/rooms/list?page=' + ${currentPage - 1}}" aria-label="Previous">
-                        <span aria-hidden="true">&laquo;</span>
-                    </a>
-                </li>
-                <li class="page-item" th:each="i : ${#numbers.sequence(0, totalPages - 1)}" th:classappend="${currentPage == i} ? 'active'">
-                    <a class="page-link" th:href="@{'/rooms/list?page=' + ${i}}" th:text="${i + 1}">1</a>
-                </li>
-                <li class="page-item" th:classappend="${currentPage == totalPages - 1} ? 'disabled'">
-                    <a class="page-link" th:href="@{'/rooms/list?page=' + ${currentPage + 1}}" aria-label="Next">
-                        <span aria-hidden="true">&raquo;</span>
-                    </a>
-                </li>
-            </ul>
-        </nav>
+                                    </p>
+                                </div>
+                            </div>
+                        </td>
+                        <td
+                                class="max-w-40 border-b p-2 align-middle"
+                        >
+                            <p class="mb-0 text-xs font-semibold leading-tight line-clamp-3 " th:text="${room.description}">
+
+                            </p>
+                        </td>
+                        <td
+                                class="whitespace-nowrap border-b bg-transparent p-2 align-middle shadow-transparent"
+                        >
+                            <p class="mb-0 text-xs font-semibold leading-tight" th:text="${room.price}">
+
+                            </p>
+                        </td>
+                        <td
+                                class="whitespace-nowrap border-b bg-transparent p-2 align-middle shadow-transparent"
+                        >
+                            <p class="mb-0 text-xs font-semibold leading-tight"  th:text="${room.roomType.roomTypeName}">
+
+                            </p>
+                        </td>
+                        <td
+                                class="whitespace-nowrap border-b bg-transparent p-2 align-middle shadow-transparent"
+                        >
+                            <p class="mb-0 text-xs font-semibold leading-tight" th:text="${room.roomType.capacity} + ' người'">
+
+                            </p>
+                        </td>
+                        <td
+                                class="whitespace-nowrap border-b bg-transparent p-2 text-left align-middle text-sm leading-normal shadow-transparent"
+                        >
+                        <span
+                                th:classappend="${room.roomStatus} ? 'from-green-600 to-lime-400' : 'from-slate-600 to-slate-400'"     th:text="${room.roomStatus ? 'Active' : 'IsActive'}"  class="inline-block whitespace-nowrap rounded-full bg-gradient-to-tl from-green-600 to-lime-400 px-6 py-3 text-left align-baseline text-xs font-bold uppercase leading-none text-white"
+                        >
+                        </span>
+                        </td>
+                        <td
+                                class="whitespace-nowrap border-b bg-transparent p-2 align-middle shadow-transparent"
+                        >
+                            <img
+                                    th:src="@{${room.roomImage1}}"
+                                    alt=""
+                                    class="h-14 w-14 rounded-md object-cover"
+                                    th:if="${room.roomImage1}"
+                            />
+                        </td>
+                        <td
+                                class="whitespace-nowrap border-b bg-transparent p-2 align-middle shadow-transparent"
+                        >
+                            <img
+                                    th:src="@{${room.roomImage2}}"
+                                    alt=""
+                                    class="h-14 w-14 rounded-md object-cover"
+                                    th:if="${room.roomImage2}"
+                            />
+                        </td>
+
+                        <td class="whitespace-nowrap border-b pr-4 align-middle">
+                            <div class="flex items-center gap-4" sec:authorize="hasAuthority('ADMIN')">
+                                <a th:href="@{'/rooms/edit/' + ${room.roomId}}" class="text-xs font-semibold leading-tight text-slate-400">
+                                    <span class="flex h-10 w-10 items-center justify-center rounded-md bg-amber-400">
+                                        <img src="/static/hinhanh/edit.svg" alt="" class="h-4 w-4"/>
+                                    </span>
+                                </a>
+                                <span>|</span>
+                                <a th:href="@{/rooms/add}" class="text-xs font-semibold leading-tight text-slate-400">
+                                    <span class="flex h-10 w-10 items-center justify-center rounded-md bg-amber-400">
+                                        <img src="/static/hinhanh/add.svg" alt="" class="h-4 w-4"/>
+                                    </span>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
+    <nav class="mt-4 flex justify-end " th:if="${totalPages > 1}">
+        <ul class="flex h-10 items-center -space-x-px text-base">
+            <li th:classappend="${currentPage == 0} ? 'disabled'">
+                <a
+                        th:href="@{'/rooms/list?page=' + ${currentPage - 1}}"
+                        class="ms-0 flex h-10 items-center justify-center rounded-s-lg border border-e-0 border-gray-300 bg-white px-4 leading-tight text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                >
+
+                    <svg
+                            class="h-3 w-3 rtl:rotate-180"
+                            aria-hidden="true"
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 6 10"
+                    >
+                        <path
+                                stroke="currentColor"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M5 1 1 5l4 4"
+                        />
+                    </svg>
+                </a>
+            </li>
+            <li th:each="i : ${#numbers.sequence(0, totalPages - 1)}" >
+                <a
+                        th:href="@{'/rooms/list?page=' + ${i}}" th:text="${i + 1}"
+                        th:classappend="${currentPage == i} ? 'active' : 'bg-white'"
+                        class="flex h-10 items-center justify-center border border-gray-300  px-4 leading-tight text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                >1</a
+                >
+            </li>
+
+            <li th:classappend="${currentPage == totalPages - 1} ? 'disabled'">
+                <a
+                        th:href="@{'/rooms/list?page=' + ${currentPage + 1}}"
+                        class="flex h-10 items-center justify-center rounded-e-lg border border-gray-300 bg-white px-4 leading-tight text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                >
+
+                    <svg
+                            class="h-3 w-3 rtl:rotate-180"
+                            aria-hidden="true"
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 6 10"
+                    >
+                        <path
+                                stroke="currentColor"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                                d="m1 9 4-4-4-4"
+                        />
+                    </svg>
+                </a>
+            </li>
+        </ul>
+    </nav>
 </section>
+<!--<section layout:fragment="content">-->
+<!--    <div class="container">-->
+<!--        <h1 class="my-4">Room List</h1>-->
+<!--        &lt;!&ndash; Form for searching rooms &ndash;&gt;-->
+<!--        <form class="form-inline mb-3" th:action="@{/rooms/searchRoom}" method="get">-->
+<!--            <div class="form-group mr-2">-->
+<!--                <label for="roomNumberSearch">Room Number:</label>-->
+<!--                <input type="text" class="form-control ml-2" id="roomNumberSearch" name="roomNumber">-->
+<!--            </div>-->
+<!--            <button type="submit" class="btn btn-primary">Search</button>-->
+<!--        </form>-->
+
+<!--        &lt;!&ndash; Add Room button &ndash;&gt;-->
+<!--        <div class="mb-3">-->
+<!--            <div sec:authorize="hasAuthority('ADMIN')">-->
+<!--                <a th:href="@{/rooms/add}" class="btn btn-custom">Add Room</a>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--        <div class="mb-3">-->
+<!--            <a th:href="@{/rooms/list}" class="btn btn-custom">All Rooms</a>-->
+<!--        </div>-->
+
+<!--        &lt;!&ndash; Error Message &ndash;&gt;-->
+<!--        <div th:if="${errorMessage}" class="alert alert-danger" role="alert">-->
+<!--            <span th:text="${errorMessage}"></span>-->
+<!--        </div>-->
+
+<!--        &lt;!&ndash; Table to display room list &ndash;&gt;-->
+<!--        <table class="table table-striped" th:if="${rooms}">-->
+<!--            <thead class="thead-dark">-->
+<!--            <tr>-->
+<!--                <th>Room Number</th>-->
+<!--                <th>Description</th>-->
+<!--                <th>Price</th>-->
+<!--                <th>Room Type</th>-->
+<!--                <th>Capacity</th>-->
+<!--                <th>Active</th>-->
+<!--                <th>Image 1</th>-->
+<!--                <th>Image 2</th>-->
+<!--                <th>Edit</th>-->
+<!--            </tr>-->
+<!--            </thead>-->
+<!--            <tbody>-->
+<!--            &lt;!&ndash; Iterate over the list of rooms &ndash;&gt;-->
+<!--            <tr th:each="room : ${rooms}">-->
+<!--                <td th:text="${room.roomNumber}"></td>-->
+<!--                <td th:text="${room.description}"></td>-->
+<!--                <td th:text="${room.price}"></td>-->
+<!--                <td th:text="${room.roomType.roomTypeName}"></td>-->
+<!--                <td th:text="${room.roomType.capacity}"></td>-->
+<!--                <td th:text="${room.roomStatus ? 'Active' : 'Inactive'}"></td>-->
+<!--                <td>-->
+<!--                    <img th:src="@{${room.roomImage1}}" alt="Room Image 1" class="room-image"-->
+<!--                         th:if="${room.roomImage1}">-->
+<!--                </td>-->
+<!--                <td>-->
+<!--                    <img th:src="@{${room.roomImage2}}" alt="Room Image 2" class="room-image"-->
+<!--                         th:if="${room.roomImage2}">-->
+<!--                </td>-->
+<!--                <td>-->
+<!--                    <div sec:authorize="hasAuthority('ADMIN')">-->
+<!--                        <a th:href="@{'/rooms/edit/' + ${room.roomId}}" class="btn btn-warning btn-sm">Edit</a>-->
+<!--                    </div>-->
+<!--                </td>-->
+<!--            </tr>-->
+<!--            </tbody>-->
+<!--        </table>-->
+
+<!--        &lt;!&ndash; Pagination controls &ndash;&gt;-->
+<!--        <nav aria-label="Page navigation" th:if="${totalPages > 1}">-->
+<!--            <ul class="pagination">-->
+<!--                <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">-->
+<!--                    <a class="page-link" th:href="@{'/rooms/list?page=' + ${currentPage - 1}}" aria-label="Previous">-->
+<!--                        <span aria-hidden="true">&laquo;</span>-->
+<!--                    </a>-->
+<!--                </li>-->
+<!--                <li class="page-item" th:each="i : ${#numbers.sequence(0, totalPages - 1)}" th:classappend="${currentPage == i} ? 'active'">-->
+<!--                    <a class="page-link" th:href="@{'/rooms/list?page=' + ${i}}" th:text="${i + 1}">1</a>-->
+<!--                </li>-->
+<!--                <li class="page-item" th:classappend="${currentPage == totalPages - 1} ? 'disabled'">-->
+<!--                    <a class="page-link" th:href="@{'/rooms/list?page=' + ${currentPage + 1}}" aria-label="Next">-->
+<!--                        <span aria-hidden="true">&raquo;</span>-->
+<!--                    </a>-->
+<!--                </li>-->
+<!--            </ul>-->
+<!--        </nav>-->
+<!--    </div>-->
+<!--</section>-->
 
 <!-- Bootstrap JS and dependencies -->
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
 </body>
 </html>

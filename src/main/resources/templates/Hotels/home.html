@@ -1,6 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{Fragments/Layout-Admin}">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/Layout-Admin"
+      layout:decorate="~{Fragments/Layout-Admin}" xmlns:sec="http://www.w3.org/1999/xhtml">
     <meta charset="UTF-8">
     <title>Hotels Home Page</title>
 
@@ -60,7 +60,7 @@
                         </th>
 
                         <th
-                                class="text-xxs border-b-solid tracking-none whitespace-nowrap border-b border-gray-200 bg-transparent px-2 text-left align-middle font-bold uppercase text-slate-400 opacity-70 shadow-none"
+                                sec:authorize="hasAuthority('ADMIN')" class="text-xxs border-b-solid tracking-none whitespace-nowrap border-b border-gray-200 bg-transparent px-2 text-left align-middle font-bold uppercase text-slate-400 opacity-70 shadow-none"
                         >
                             Hành động
                         </th>
@@ -150,24 +150,8 @@
                                         <img src="/static/hinhanh/edit.svg" alt="" class="h-4 w-4"/>
                                     </span>
                                 </a>
-
-                                <span>|</span>
-
-                                <a th:href="@{/hotels/new}" class="text-xs font-semibold leading-tight text-slate-400">
-                                    <span class="flex h-10 w-10 items-center justify-center rounded-md bg-amber-400">
-                                        <img src="/static/hinhanh/add.svg" alt="" class="h-4 w-4"/>
-                                    </span>
-                                </a>
                             </div>
 
-                            <div class="flex items-center gap-4" sec:authorize="hasAuthority('EMPLOYEE')">
-                                <a th:href="@{/hotels/detail/{hotelId}(hotelId=${hotel.hotelId})}" class="text-xs font-semibold leading-tight text-slate-400">
-                                    <span class="flex h-10 w-10 items-center justify-center rounded-md bg-amber-400">
-                                        <img src="/static/hinhanh/eye.svg" alt="" class="h-4 w-4"/>
-                                    </span>
-                                </a>
-
-                            </div>
                         </td>
                     </tr>
                     </tbody>
