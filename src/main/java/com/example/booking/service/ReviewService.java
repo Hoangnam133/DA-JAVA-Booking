@@ -16,12 +16,10 @@ import java.util.List;
 @Service
 public class ReviewService {
     private final ReviewRepository reviewRepository;
-    private final PaymentRepository paymentRepository;
 
     @Autowired
-    public ReviewService(ReviewRepository reviewRepository, PaymentRepository paymentRepository) {
+    public ReviewService(ReviewRepository reviewRepository) {
         this.reviewRepository = reviewRepository;
-        this.paymentRepository = paymentRepository;
     }
     public void createReview(Review review) {
         reviewRepository.save(review);

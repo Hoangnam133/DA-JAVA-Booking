@@ -41,9 +41,7 @@ public class BookingService {
         bookingRepository.save(booking);
     }
 
-    public void cancelBooking (Booking booking, String reasonCancel){
-        booking.setCancelStatus(true);
-        booking.setCancellationReason(reasonCancel);
+    public void cancelBooking (Booking booking){
         bookingRepository.save(booking);
     }
 
@@ -68,13 +66,6 @@ public class BookingService {
             throw new RuntimeException("No bookings found");
         }
         return bookings;
-    }
-    public List<Booking> ShowCancelBookingListOfUser(Long userId){
-        List<Booking> bookingsIsCanceled = bookingRepository.findAllByUser_IdAndCancelStatus(userId,true);
-        if (bookingsIsCanceled == null){
-            throw new RuntimeException("No bookings found");
-        }
-        return bookingsIsCanceled;
     }
     public Page<Booking> showBookingListOfAdmin(Pageable pageable) {
         return bookingRepository.findAllByCheckInStatusFalseAndCancelStatusFalseAndPaymentStatusFalseOrderByCheckInDateDesc(pageable);
