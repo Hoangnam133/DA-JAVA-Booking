@@ -5,95 +5,243 @@
 <head>
     <meta charset="UTF-8">
     <title>Hotels Home Page</title>
-    <!-- Bootstrap CSS -->
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        th, td {
-            border: 1px solid black;
-            padding: 8px;
-            text-align: left;
-        }
-        th {
-            background-color: #f2f2f2;
-        }
-        .hotel-image {
-            max-width: 100px; /* Limit maximum width */
-            height: auto; /* Maintain aspect ratio */
-        }
-    </style>
+
 </head>
 <body>
 <section layout:fragment="content">
+    <h2 class="mb-6 text-3xl font-bold">Khách sạn của bạn</h2>
+    <div
+            class="relative mb-0 flex w-full min-w-0 flex-col break-words rounded-2xl border-0 border-solid border-transparent bg-white bg-clip-border shadow-xl"
+    >
+        <div
+                class="mb-0 rounded-t-2xl bg-white p-6 pb-0 text-lg font-medium"
+        >
+            <h6>Thông tin khách sạn</h6>
+        </div>
+        <div class="flex-auto px-0 pb-2 pt-0">
+            <div class="overflow-x-auto p-0">
+                <table
+                        class="mb-0 w-full items-center border-gray-200 align-top text-slate-500"
+                >
+                    <thead class="align-bottom">
+                    <tr>
+                        <th
+                                class="text-xxs border-b-solid tracking-none whitespace-nowrap border-b border-gray-200 bg-transparent px-6 py-3 text-left align-middle font-bold uppercase text-slate-400 opacity-70 shadow-none"
+                        >
+                            Tên khách sạn
+                        </th>
+                        <th
+                                class="text-xxs border-b-solid tracking-none whitespace-nowrap border-b border-gray-200 bg-transparent px-2 text-left align-middle font-bold uppercase text-slate-400 opacity-70 shadow-none"
+                        >
+                            Địa chỉ
+                        </th>
+                        <th
+                                class="text-xxs border-b-solid tracking-none whitespace-nowrap border-b border-gray-200 bg-transparent px-2 text-left align-middle font-bold uppercase text-slate-400 opacity-70 shadow-none"
+                        >
+                            Số điện thoại
+                        </th>
+                        <th
+                                class="text-xxs border-b-solid tracking-none whitespace-nowrap border-b border-gray-200 bg-transparent px-2 text-left align-middle font-bold uppercase text-slate-400 opacity-70 shadow-none"
+                        >
+                            Trạng thái
+                        </th>
+                        <th
+                                class="text-xxs border-b-solid tracking-none whitespace-nowrap border-b border-gray-200 bg-transparent px-2 text-left align-middle font-bold uppercase text-slate-400 opacity-70 shadow-none"
+                        >
+                            Hình 1
+                        </th>
+                        <th
+                                class="text-xxs border-b-solid tracking-none whitespace-nowrap border-b border-gray-200 bg-transparent px-2 text-left align-middle font-bold uppercase text-slate-400 opacity-70 shadow-none"
+                        >
+                            Hình 2
+                        </th>
+                        <th
+                                class="text-xxs border-b-solid tracking-none whitespace-nowrap border-b border-gray-200 bg-transparent px-2 text-left align-middle font-bold uppercase text-slate-400 opacity-70 shadow-none"
+                        >
+                            Hình 3
+                        </th>
 
-        <div class="container">
-            <h2>Welcome to Hotels Management</h2>
+                        <th
+                                class="text-xxs border-b-solid tracking-none whitespace-nowrap border-b border-gray-200 bg-transparent px-2 text-left align-middle font-bold uppercase text-slate-400 opacity-70 shadow-none"
+                        >
+                            Hành động
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="hotel : ${hotels}">
+                        <td
+                                class="whitespace-nowrap bg-transparent px-6 align-middle shadow-transparent"
+                        >
+                            <div class="flex items-center ">
+                                <div class="flex flex-col justify-center">
+                                    <h6 class="mb-0 text-sm leading-normal" th:text="${hotel.hotelName}">
 
-            <h3>Hotels:</h3>
-            <table class="table table-striped">
-                <thead class="thead-dark">
-                <tr>
-                    <th>Hotel Name</th>
-                    <th>Address</th>
-                    <th>Phone</th>
-                    <th>Status</th>
-                    <th>Image 1</th>
-                    <th>Image 2</th>
-                    <th>Image 3</th>
-                    <th>Actions</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr th:each="hotel : ${hotels}">
-                    <td th:text="${hotel.hotelName}"></td>
-                    <td th:text="${hotel.hotelAddress}"></td>
-                    <td th:text="${hotel.hotelPhone}"></td>
-                    <td th:text="${hotel.hotelStatus ? 'Active' : 'Inactive'}"></td>
-                    <td>
-                        <img th:src="@{${hotel.hotelImage1}}" alt="Hotel Image" class="hotel-image" id="hotelImage1-${hotel.hotelId}" />
-                    </td>
-                    <td>
-                        <img th:src="@{${hotel.hotelImage2}}" alt="Hotel Image" class="hotel-image" id="hotelImage2-${hotel.hotelId}"/>
-                    </td>
-                    <td>
-                        <img th:src="@{${hotel.hotelImage3}}" alt="Hotel Image" class="hotel-image" id="hotelImage3-${hotel.hotelId}"/>
-                    </td>
-                    <script th:inline="javascript">
-                        $(document).ready(function() {
-                            // Cache-busting for images
-                            $('img.hotel-image').each(function() {
-                                var src = $(this).attr('src');
-                                $(this).attr('src', src + '?timestamp=' + new Date().getTime());
-                            });
-                        });
-                    </script>
-                    <td>
-                        <div sec:authorize="hasAuthority('ADMIN')">
-                            <a th:href="@{/hotels/edit/{hotelId}(hotelId=${hotel.hotelId})}" class="btn btn-primary">Edit</a>
-                        </div>
-                        <div sec:authorize="hasAuthority('USER')">
-                            <a th:href="@{/hotels/detail/{hotelId}(hotelId=${hotel.hotelId})}" class="btn btn-info">Detail</a>
-                        </div>
-                    </td>
-                </tr>
-                </tbody>
+                                    </h6>
+                                </div>
+                            </div>
+                        </td>
+                        <td
+                                class="whitespace-nowrap bg-transparent p-2 align-middle shadow-transparent"
+                        >
+                            <p class="mb-0 text-xs font-semibold leading-tight" th:text="${hotel.hotelAddress}">
 
-            </table>
+                            </p>
+                        </td>
+                        <td
+                                class="whitespace-nowrap bg-transparent p-2 align-middle shadow-transparent"
+                        >
+                            <p class="mb-0 text-xs font-semibold leading-tight" th:text="${hotel.hotelPhone}">
 
-            <div sec:authorize="hasAuthority('ADMIN')">
-                <a th:href="@{/hotels/new}" class="btn btn-success">Add New Hotel</a>
+                            </p>
+                        </td>
+                        <td
+                                class="whitespace-nowrap bg-transparent p-2 text-left align-middle text-sm leading-normal shadow-transparent"
+                        >
+                        <span
+                                class="inline-block whitespace-nowrap rounded-full bg-gradient-to-tl  px-6 py-3 text-left align-baseline text-xs font-bold uppercase leading-none text-white"
+                                th:text="${hotel.hotelStatus ? 'Active' : 'IsActive'}" th:classappend="${hotel.hotelStatus} ? 'from-green-600 to-lime-400' : 'from-slate-600 to-slate-400'"></span
+                        >
+
+                        </td>
+                        <td
+                                class="whitespace-nowrap bg-transparent p-2 text-left align-middle shadow-transparent"
+                        >
+                            <img
+                                    th:src="@{${hotel.hotelImage1}}"
+                                    alt=""
+                                    class="h-14 w-14 rounded-md object-cover"
+                                    id="hotelImage1-${hotel.hotelId}"
+                            />
+                        </td>
+                        <td
+                                class="whitespace-nowrap bg-transparent p-2 text-left align-middle shadow-transparent"
+                        >
+                            <img
+                                    th:src="@{${hotel.hotelImage2}}"
+                                    alt=""
+                                    class="h-14 w-14 rounded-md object-cover"
+                                    id="hotelImage2-${hotel.hotelId}"
+                            />
+                        </td>
+                        <td
+                                class="whitespace-nowrap bg-transparent p-2 text-left align-middle shadow-transparent"
+                        >
+                            <img
+                                    th:src="@{${hotel.hotelImage3}}"
+                                    alt=""
+                                    class="h-14 w-14 rounded-md object-cover"
+                                    id="hotelImage3-${hotel.hotelId}"
+                            />
+                        </td>
+                        <script th:inline="javascript">
+                                    $(document).ready(function() {
+                                        // Cache-busting for images
+                                        $('img.hotel-image').each(function() {
+                                            var src = $(this).attr('src');
+                                            $(this).attr('src', src + '?timestamp=' + new Date().getTime());
+                                        });
+                                    });
+                        </script>
+                        <td
+                                class="whitespace-nowrap bg-transparent p-2 align-middle shadow-transparent text"
+                        >
+                            <div class="flex items-center gap-4" sec:authorize="hasAuthority('ADMIN')">
+                                <a th:href="@{/hotels/edit/{hotelId}(hotelId=${hotel.hotelId})}" class="text-xs font-semibold leading-tight text-slate-400">
+                                    <span class="flex h-10 w-10 items-center justify-center rounded-md bg-amber-400">
+                                        <img src="/static/hinhanh/edit.svg" alt="" class="h-4 w-4"/>
+                                    </span>
+                                </a>
+
+                                <span>|</span>
+
+                                <a th:href="@{/hotels/new}" class="text-xs font-semibold leading-tight text-slate-400">
+                                    <span class="flex h-10 w-10 items-center justify-center rounded-md bg-amber-400">
+                                        <img src="/static/hinhanh/add.svg" alt="" class="h-4 w-4"/>
+                                    </span>
+                                </a>
+                            </div>
+
+                            <div class="flex items-center gap-4" sec:authorize="hasAuthority('EMPLOYEE')">
+                                <a th:href="@{/hotels/detail/{hotelId}(hotelId=${hotel.hotelId})}" class="text-xs font-semibold leading-tight text-slate-400">
+                                    <span class="flex h-10 w-10 items-center justify-center rounded-md bg-amber-400">
+                                        <img src="/static/hinhanh/eye.svg" alt="" class="h-4 w-4"/>
+                                    </span>
+                                </a>
+
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
+    </div>
+<!--        <div class="container">-->
+<!--            <h2>Welcome to Hotels Management</h2>-->
+
+<!--            <h3>Hotels:</h3>-->
+<!--            <table class="table table-striped">-->
+<!--                <thead class="thead-dark">-->
+<!--                <tr>-->
+<!--                    <th>Hotel Name</th>-->
+<!--                    <th>Address</th>-->
+<!--                    <th>Phone</th>-->
+<!--                    <th>Status</th>-->
+<!--                    <th>Image 1</th>-->
+<!--                    <th>Image 2</th>-->
+<!--                    <th>Image 3</th>-->
+<!--                    <th>Actions</th>-->
+<!--                </tr>-->
+<!--                </thead>-->
+<!--                <tbody>-->
+<!--                <tr th:each="hotel : ${hotels}">-->
+<!--                    <td th:text="${hotel.hotelName}"></td>-->
+<!--                    <td th:text="${hotel.hotelAddress}"></td>-->
+<!--                    <td th:text="${hotel.hotelPhone}"></td>-->
+<!--                    <td th:text="${hotel.hotelStatus ? 'Active' : 'Inactive'}"></td>-->
+<!--                    <td>-->
+<!--                        <img th:src="@{${hotel.hotelImage1}}" alt="Hotel Image" class="hotel-image" id="hotelImage1-${hotel.hotelId}" />-->
+<!--                    </td>-->
+<!--                    <td>-->
+<!--                        <img th:src="@{${hotel.hotelImage2}}" alt="Hotel Image" class="hotel-image" id="hotelImage2-${hotel.hotelId}"/>-->
+<!--                    </td>-->
+<!--                    <td>-->
+<!--                        <img th:src="@{${hotel.hotelImage3}}" alt="Hotel Image" class="hotel-image" id="hotelImage3-${hotel.hotelId}"/>-->
+<!--                    </td>-->
+<!--                    <script th:inline="javascript">-->
+<!--                        $(document).ready(function() {-->
+<!--                            // Cache-busting for images-->
+<!--                            $('img.hotel-image').each(function() {-->
+<!--                                var src = $(this).attr('src');-->
+<!--                                $(this).attr('src', src + '?timestamp=' + new Date().getTime());-->
+<!--                            });-->
+<!--                        });-->
+<!--                    </script>-->
+<!--                    <td>-->
+<!--                        <div sec:authorize="hasAuthority('ADMIN')">-->
+<!--                            <a th:href="@{/hotels/edit/{hotelId}(hotelId=${hotel.hotelId})}" class="btn btn-primary">Edit</a>-->
+<!--                        </div>-->
+<!--                        <div sec:authorize="hasAuthority('USER')">-->
+<!--                            <a th:href="@{/hotels/detail/{hotelId}(hotelId=${hotel.hotelId})}" class="btn btn-info">Detail</a>-->
+<!--                        </div>-->
+<!--                    </td>-->
+<!--                </tr>-->
+<!--                </tbody>-->
+
+<!--            </table>-->
+
+<!--            <div sec:authorize="hasAuthority('ADMIN')">-->
+<!--                <a th:href="@{/hotels/new}" class="btn btn-success">Add New Hotel</a>-->
+<!--            </div>-->
+<!--        </div>-->
 
 </section>
 
-<!-- Bootstrap JS and dependencies -->
+
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
 
 </body>
 </html>
