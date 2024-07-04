@@ -32,7 +32,7 @@ public class Booking {
     private String pin;
     @OneToOne(mappedBy = "booking")
     private Payment payment;
-
+    // test
     @ManyToOne
     @JoinColumn(name = "roomId")
     private Room room;
