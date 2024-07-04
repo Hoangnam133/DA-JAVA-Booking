@@ -2,13 +2,13 @@ package com.example.booking.controller;
 
 import com.example.booking.entity.Booking;
 import com.example.booking.entity.Room;
+import com.example.booking.entity.RoomType;
 import com.example.booking.entity.User;
-import com.example.booking.service.BookingService;
-import com.example.booking.service.MailService;
-import com.example.booking.service.RoomService;
-import com.example.booking.service.UserService;
+import com.example.booking.service.*;
 import jakarta.mail.MessagingException;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -24,6 +24,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/bookings")
@@ -32,14 +33,18 @@ public class BookingController {
     private final UserService userService;
     private final RoomService roomService;
     private final MailService mailService;
+    private final RoomTypeService roomTypeService;
 
     public double gb_totalPrice = 0;
     @Autowired
-    public BookingController(BookingService bookingService, UserService userService, RoomService roomService, MailService mailService){
+    public BookingController(BookingService bookingService, UserService userService,
+                             RoomService roomService, MailService mailService,
+                             RoomTypeService roomTypeService){
         this.bookingService = bookingService;
         this.userService = userService;
         this.roomService = roomService;
         this.mailService = mailService;
+        this.roomTypeService = roomTypeService;
     }
     //for admin
     @GetMapping("/searchBookingByUserPhone")
@@ -132,41 +137,24 @@ public class BookingController {
                    return "errorPage";
                }
     }
-    // for user
-    @GetMapping("/bookingUpdateIsCanceled/{bookingId}")
-    public String userRequestCancel(@PathVariable("bookingId") int bookingId, Model model){
-        try {
-            Booking existingBooking = bookingService.findBookingById(bookingId);
-            model.addAttribute("booking",existingBooking);
-            return "Bookings/RequestCancel";
-        }catch (Exception e){
-            model.addAttribute("errors",e);
-            return "errorPage";
-        }
-    }
-    // for user
-    @PostMapping("/SaveBookingUpdateIsCanceled/{bookingId}")
-    public String saveUserRequestCancel(@PathVariable("bookingId") int bookingId,
-                                        @RequestParam String reasonCancel,
-                                        Booking booking, BindingResult result,
-                                        @AuthenticationPrincipal UserDetails userDetails){
-        if (result.hasErrors()) {
-            booking.setBookingId(bookingId);
-        }
-        bookingService.cancelBooking(booking,reasonCancel);
-        String username = userDetails.getUsername();
-        User user = userService.findByUsername(username)
-                .orElseThrow(() -> new RuntimeException("User not found"));
-        return "redirect:/bookings/listCancelBookingOfUser";
-    }
     @GetMapping("/AvailableRooms")
     public String searchAvailableRooms(@RequestParam("checkInDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate checkInDate,
                                        @RequestParam("checkOutDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate checkOutDate,
+                                       @RequestParam(value = "roomTypes", required = false) List<Integer> selectedRoomTypes,
                                        Model model) {
         List<Room> rooms = roomService.availableRooms(checkInDate, checkOutDate);
+        if (selectedRoomTypes != null && !selectedRoomTypes.isEmpty()) {
+            rooms = rooms.stream()
+                    .filter(room -> selectedRoomTypes.contains(room.getRoomType().getRoomTypeId()))
+                    .collect(Collectors.toList());
+        }
+
+        List<RoomType> roomTypes = roomTypeService.getAll();
         model.addAttribute("rooms", rooms);
         model.addAttribute("checkInDate", checkInDate);
         model.addAttribute("checkOutDate", checkOutDate);
+        model.addAttribute("roomTypes", roomTypes);
+        model.addAttribute("selectedRoomTypes", selectedRoomTypes);
         return "Bookings/availableRooms";
     }
     @GetMapping("/add/{roomId}")
@@ -240,8 +228,9 @@ public class BookingController {
             return "errorPage";
         }
     }
+
     public void sendBookingToEmail(Booking booking, User user) throws MessagingException {
-        String subject = "Booking Confirmation";
+        String subject = "Booking Confirmation  ";
         String htmlBody = "<div style='border: 3px solid #ccc; border-radius: 10px; overflow: hidden;'>" +
                 "<div style='background-color: #f8f9fa; padding: 20px;'>" +
                 "<h2 style='color: #007bff; margin-bottom: 10px;'>Booking Confirmation</h2>" +
@@ -251,7 +240,8 @@ public class BookingController {
                 "<ul style='list-style-type: none; padding-left: 0;'>" +
                 "<li><strong>Check-in Date:</strong> " + booking.getCheckInDate() + "</li>" +
                 "<li><strong>Check-out Date:</strong> " + booking.getCheckOutDate() + "</li>" +
-                "<li><strong>Total Price:</strong> $" + booking.getTotalPrice() + "</li>" +
+                "<li><strong>Total Price:</strong> " + booking.getTotalPrice() + "</li>" +
+                "<li><strong>Booking ID:</strong> " + booking.getBookingId() + "</li>" +
                 "<li><strong>Pin:</strong> " + booking.getPin() + "</li>" +
                 "</ul>" +
                 "<p>Thank you for booking with us!</p>" +
@@ -259,5 +249,67 @@ public class BookingController {
                 "</div>";
             mailService.sendMail(user.getEmail(), subject, htmlBody);
     }
+    public int GB_roomId;
+    @GetMapping("/cancelBooking/{bookingId}")
+    public String cancelBooking(@PathVariable("bookingId") int bookingId, Model model){
+        try {
+            Booking existingBooking = bookingService.findBookingById(bookingId);
+            GB_roomId = existingBooking.getRoom().getRoomId();
+            model.addAttribute("booking", existingBooking);
+            return "Bookings/cancelBooking";
+        }catch (Exception e){
+            model.addAttribute("Errors",e);
+            return "errorPage";
+        }
+    }
+    @PostMapping("saveCancelBooking/{bookingId}")
+    public String saveCancelBooking(@PathVariable("bookingId") int bookingId, @Valid Booking booking,
+                                    BindingResult result, Model model,
+                                    @AuthenticationPrincipal UserDetails userDetails) throws MessagingException {
+        if (result.hasErrors()) {
+            var errors = result.getAllErrors()
+                    .stream()
+                    .map(DefaultMessageSourceResolvable::getDefaultMessage)
+                    .toArray(String[]::new);
+            model.addAttribute("errors", errors);
+            booking.setBookingId(bookingId);
+            model.addAttribute("booking", booking);
+            return "Bookings/cancelBooking";
+        }
+        String username = userDetails.getUsername();
+        User user = userService.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        booking.setCancelStatus(true);
+        Room room = roomService.searchRoom(GB_roomId);
+        booking.setRoom(room);
+        booking.setUser(user);
+        bookingService.cancelBooking(booking);
+        sendBookingCancelToEmail(booking,user);
+        return "redirect:/bookings/listBookingOfUser";
+    }
+    public void sendBookingCancelToEmail(Booking booking, User user) throws MessagingException {
+        String subject = "Booking Cancel";
+        String htmlBody = "<div style='border: 3px solid #ccc; border-radius: 10px; overflow: hidden;'>" +
+                "<div style='background-color: #f8f9fa; padding: 20px;'>" +
+                "<h2 style='color: #007bff; margin-bottom: 10px;'>Booking Confirmation</h2>" +
+                "<p>Dear " + user.getUsername() + ",</p>" +
+                "<p>Cancel Your booking has been confirmed.</p>" +
+                "<h3>Cancellation booking details:</h3>" +
+                "<ul style='list-style-type: none; padding-left: 0;'>" +
+                "<li><strong>Check-in Date:</strong> " + booking.getCheckInDate() + "</li>" +
+                "<li><strong>Check-out Date:</strong> " + booking.getCheckOutDate() + "</li>" +
+                "<li><strong>Total Price:</strong> " + booking.getTotalPrice() + "</li>" +
+                "<li><strong>Booking ID:</strong> " + booking.getBookingId() + "</li>" +
+                "<li><strong>Pin:</strong> " + booking.getPin() + "</li>" +
+                "<li><strong>Cancel Reason:</strong> " + booking.getCancellationReason() + "</li>" +
+                "</ul>" +
+                "<p style='color: red; font-weight: bold;'>Đã hủy</p>" +
+                "<p>Thank you for booking with us!</p>" +
+                "</div>" +
+                "</div>";
+        mailService.sendMail(user.getEmail(), subject, htmlBody);
+    }
+
 
 }

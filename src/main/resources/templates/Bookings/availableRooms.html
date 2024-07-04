@@ -7,6 +7,24 @@
 <body>
 <div class="container mt-5">
   <h1 class="text-center">Available Rooms</h1>
+  <div class="form-group">
+    <label>Room Types:</label>
+    <div th:each="roomType, iter : ${roomTypes}">
+      <input type="checkbox" id="roomTypeCheckbox[[${iter.index}]]" class="room-type-checkbox" th:value="${roomType.roomTypeId}">
+      <label th:for="'roomTypeCheckbox' + ${iter.index}" th:text="${roomType.roomTypeName}"></label>
+    </div>
+  </div>
+  <div class="form-group">
+    <label>Sort by Price:</label>
+    <div>
+      <input type="checkbox" id="sortPriceAsc" class="sort-price-checkbox" value="asc">
+      <label for="sortPriceAsc">Low to High</label>
+    </div>
+    <div>
+      <input type="checkbox" id="sortPriceDesc" class="sort-price-checkbox" value="desc">
+      <label for="sortPriceDesc">High to Low</label>
+    </div>
+  </div>
   <table class="table table-striped">
     <thead class="thead-dark">
     <tr>
@@ -20,7 +38,7 @@
     </tr>
     </thead>
     <tbody>
-    <tr th:each="room : ${rooms}">
+    <tr th:each="room : ${rooms}" th:data-room-type-id="${room.roomType.roomTypeId}" th:data-room-price="${room.price}" class="room-row">
       <td th:text="${room.roomNumber}">Room Number</td>
       <td th:text="${room.roomType.roomTypeName}">Type</td>
       <td th:text="${room.price}">Price</td>
@@ -31,16 +49,66 @@
         <a th:href="@{'/bookings/add/' + ${room.roomId} + '?checkInDate=' + ${checkInDate} + '&checkOutDate=' + ${checkOutDate}}">
           Book this room
         </a>
-
-      <td>
-
+      </td>
     </tr>
-
     </tbody>
   </table>
 </div>
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script>
+  $(document).ready(function() {
+    $('.room-type-checkbox').change(function() {
+      filterRooms();
+    });
+
+    $('.sort-price-checkbox').change(function() {
+      // Uncheck the other sort checkbox
+      $('.sort-price-checkbox').not(this).prop('checked', false);
+      sortRooms();
+    });
+
+    function filterRooms() {
+      var selectedRoomTypes = [];
+      $('.room-type-checkbox:checked').each(function() {
+        selectedRoomTypes.push($(this).val());
+      });
+
+      $('.room-row').each(function() {
+        var roomTypeId = $(this).data('room-type-id');
+        if (selectedRoomTypes.length === 0 || selectedRoomTypes.includes(roomTypeId.toString())) {
+          $(this).show();
+        } else {
+          $(this).hide();
+        }
+      });
+
+      // Apply sorting after filtering
+      sortRooms();
+    }
+
+    function sortRooms() {
+      var sortOrder = $('.sort-price-checkbox:checked').val();
+      var $rows = $('.room-row:visible').detach(); // Only sort visible rows
+
+      if (sortOrder === 'asc') {
+        $rows.sort(function(a, b) {
+          return $(a).data('room-price') - $(b).data('room-price');
+        });
+      } else if (sortOrder === 'desc') {
+        $rows.sort(function(a, b) {
+          return $(b).data('room-price') - $(a).data('room-price');
+        });
+      }
+
+      $('tbody').append($rows);
+    }
+
+    // Initial sort if any sorting checkbox is checked
+    sortRooms();
+  });
+</script>
+
 </body>
 </html>

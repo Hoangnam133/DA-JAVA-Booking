@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Cancel Booking</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container mt-5">
+    <h1 class="text-center">Cancel Booking</h1>
+    <div th:if="${errors != null}">
+        <div class="alert alert-danger">
+            <ul>
+                <li th:each="error : ${errors}" th:text="${error}"></li>
+            </ul>
+        </div>
+    </div>
+    <form th:action="@{'/bookings/saveCancelBooking/' + ${booking.bookingId}}" th:object="${booking}" method="post">
+        <div class="form-group">
+            <label for="bookingId">Booking ID</label>
+            <input type="text" id="bookingId" th:field="*{bookingId}" class="form-control" readonly>
+        </div>
+        <div class="form-group">
+            <label for="pin">Booking PIN</label>
+            <input type="text" id="pin" th:field="*{pin}" class="form-control" readonly>
+        </div>
+        <div class="form-group">
+            <label for="checkInDate">Check-in Date</label>
+            <input type="text" id="checkInDate" th:field="*{checkInDate}" class="form-control" readonly>
+        </div>
+        <div class="form-group">
+            <label for="checkOutDate">Check-out Date</label>
+            <input type="text" id="checkOutDate" th:field="*{checkOutDate}" class="form-control" readonly>
+        </div>
+        <div class="form-group">
+            <label for="totalPrice">Total Price</label>
+            <input type="text" id="totalPrice" th:field="*{totalPrice}" class="form-control" readonly>
+        </div>
+        <div class="form-group">
+            <label for="roomId">Room ID</label>
+            <input type="text" id="roomId" th:value="${booking.room.roomId}" class="form-control" readonly>
+        </div>
+        <div class="form-group">
+            <label for="cancellationReason">Cancellation Reason</label>
+            <textarea id="cancellationReason" th:field="*{cancellationReason}" class="form-control"></textarea>
+        </div>
+        <button type="submit" class="btn btn-danger" onclick="return confirm('you sure ?')">Cancel Booking</button>
+    </form>
+</div>
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

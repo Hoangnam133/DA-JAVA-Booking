@@ -1,12 +1,12 @@
 package com.example.booking.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.Date;
 
 @Entity
 @Getter
@@ -18,8 +18,12 @@ public class Blog {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int blogId;
-    private String blogName;
-    private Boolean blogStatus;
+    @NotBlank(message = "Title is required")
+    private String title;
+    @NotBlank(message = "Content is required")
     private String content;
-    private Date postDate;
+    private String mainImage;
+    private String secondaryImage;
+    private boolean blogStatus;
+    private String postDate;
 }
