@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-<html lang="en"  xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{Fragments/Layout-Admin}">
 <head>
     <meta charset="UTF-8">
@@ -8,12 +7,33 @@
     <title>Edit Room</title>
     <!-- Bootstrap CSS -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <script>
+        function previewImage(event, previewId, currentImageId) {
+            const reader = new FileReader();
+            const output = document.getElementById(previewId);
+            const currentImage = document.getElementById(currentImageId);
+            reader.onload = function() {
+                output.src = reader.result;
+                output.style.display = "block";
+                if (currentImage) {
+                    currentImage.style.display = "none";
+                }
+            };
+            reader.readAsDataURL(event.target.files[0]);
+        }
+    </script>
+    <style>
+        .room-image {
+            max-width: 100px;
+            margin-top: 10px;
+        }
+    </style>
 </head>
 <body>
 <section layout:fragment="content">
     <div class="container">
         <h1>Edit Room</h1>
-        <form th:action="@{'/rooms/saveEdit/' + ${room.roomId}}" th:object="${room}" method="post" class="needs-validation" novalidate>
+        <form th:action="@{'/rooms/saveEdit/' + ${room.roomId}}" th:object="${room}" method="post" class="needs-validation" enctype="multipart/form-data" novalidate>
             <div class="form-group">
                 <label for="roomNumber">Room Number:</label>
                 <input type="text" class="form-control" id="roomNumber" th:field="*{roomNumber}" required>
@@ -35,14 +55,45 @@
                     <option th:each="type : ${roomType}" th:value="${type.roomTypeId}" th:text="${type.roomTypeName + ' (Capacity: ' + type.capacity + ')'}"></option>
                 </select>
             </div>
+
+            <!-- Current Image -->
             <div class="form-group">
-                <label for="roomImage1">Room Image 1:</label>
-                <input type="text" class="form-control" id="roomImage1" th:field="*{roomImage1}">
+                <label for="roomImage1">Current Image 1:</label>
+                <div>
+                    <img th:if="${room.roomImage1}" th:src="@{${room.roomImage1}}" id="currentImage1" alt="Current Image" class="room-image" />
+                </div>
             </div>
+
+            <!-- Choose New Image -->
             <div class="form-group">
-                <label for="roomImage2">Room Image 2:</label>
-                <input type="text" class="form-control" id="roomImage2" th:field="*{roomImage2}">
+                <label for="roomImage1File">Choose New Image 1:</label>
+                <input type="file" class="form-control-file" id="roomImage1File" name="roomImage1File" onchange="previewImage(event, 'newImagePreview1', 'currentImage1')" />
+                <div>
+                    <img id="newImagePreview1" src="#" alt="New Image Preview" class="room-image" style="display: none;" />
+                </div>
             </div>
+
+            <!-- Current Image 2 -->
+            <div class="form-group">
+                <label for="roomImage2">Current Image 2:</label>
+                <div>
+                    <img th:if="${room.roomImage2}" th:src="@{${room.roomImage2}}" id="currentImage2" alt="Current Image" class="room-image" />
+                </div>
+            </div>
+
+            <!-- Choose New Image -->
+            <div class="form-group">
+                <label for="roomImage2File">Choose New Image 2:</label>
+                <input type="file" class="form-control-file" id="roomImage2File" name="roomImage2File" onchange="previewImage(event, 'newImagePreview2', 'currentImage2')" />
+                <div>
+                    <img id="newImagePreview2" src="#" alt="New Image Preview" class="room-image" style="display: none;" />
+                </div>
+            </div>
+
+            <!-- Ensure hidden inputs are present -->
+            <input type="hidden" name="roomImage1File" value="" th:if="${room.roomImage1 == null}" />
+            <input type="hidden" name="roomImage2File" value="" th:if="${room.roomImage2 == null}" />
+
             <div class="form-group">
                 <div class="form-check">
                     <input class="form-check-input" type="checkbox" id="roomStatus" th:field="*{roomStatus}">
