@@ -21,6 +21,11 @@
             border-color: #004085;
             color: white;
         }
+
+        .room-image {
+            width: 100px;
+            height: auto;
+        }
     </style>
 </head>
 <body>
@@ -37,7 +42,6 @@
         </form>
 
         <!-- Add Room button -->
-
         <div class="mb-3">
             <div sec:authorize="hasAuthority('ADMIN')">
                 <a th:href="@{/rooms/add}" class="btn btn-custom">Add Room</a>
@@ -62,6 +66,8 @@
                 <th>Room Type</th>
                 <th>Capacity</th>
                 <th>Active</th>
+                <th>Image 1</th>
+                <th>Image 2</th>
                 <th>Edit</th>
             </tr>
             </thead>
@@ -75,10 +81,20 @@
                 <td th:text="${room.roomType.capacity}"></td>
                 <td th:text="${room.roomStatus ? 'Active' : 'Inactive'}"></td>
                 <td>
+<<<<<<< HEAD
+=======
+                    <img th:src="@{${room.roomImage1}}" alt="Room Image 1" class="room-image"
+                         th:if="${room.roomImage1}">
+                </td>
+                <td>
+                    <img th:src="@{${room.roomImage2}}" alt="Room Image 2" class="room-image"
+                         th:if="${room.roomImage2}">
+                </td>
+                <td>
+>>>>>>> addImg_Listroom
                     <div sec:authorize="hasAuthority('ADMIN')">
                         <a th:href="@{'/rooms/edit/' + ${room.roomId}}" class="btn btn-warning btn-sm">Edit</a>
                     </div>
-
                 </td>
             </tr>
             </tbody>

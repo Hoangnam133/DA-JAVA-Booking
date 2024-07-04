@@ -1,18 +1,28 @@
-
 <!DOCTYPE html>
-<html lang="en"  xmlns:th="http://www.thymeleaf.org"
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{Fragments/Layout-Admin}">
 <head>
     <meta charset="UTF-8">
     <title>Add Room</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script>
+        function previewImage(event, previewId) {
+            const reader = new FileReader();
+            const output = document.getElementById(previewId);
+            reader.onload = function() {
+                output.src = reader.result;
+                output.style.display = "block";
+            };
+            reader.readAsDataURL(event.target.files[0]);
+        }
+    </script>
 </head>
 <body>
 <section layout:fragment="content">
     <div class="container">
         <h2>Add Room</h2>
-        <form th:action="@{/rooms/save}" th:object="${room}" method="post" class="needs-validation" novalidate>
+        <form th:action="@{/rooms/save}" th:object="${room}" method="post" class="needs-validation" enctype="multipart/form-data" novalidate>
             <input type="hidden" th:field="*{hotel.hotelId}">
             <div class="form-group">
                 <label for="roomNumber">Room Number:</label>
@@ -32,16 +42,18 @@
             <div class="form-group">
                 <label for="roomType">Room Type:</label>
                 <select class="form-control" id="roomType" th:field="*{roomType.roomTypeId}" required>
-                    <option th:each="type : ${roomType}" th:value="${type.roomTypeId}" th:text="${type.roomTypeName} +', sức chứa :'+ ${type.capacity}" ></option>
+                    <option th:each="type : ${roomType}" th:value="${type.roomTypeId}" th:text="${type.roomTypeName} +', sức chứa :'+ ${type.capacity}"></option>
                 </select>
             </div>
             <div class="form-group">
                 <label for="roomImage1">Room Image 1:</label>
-                <input type="text" class="form-control" id="roomImage1" th:field="*{roomImage1}">
+                <input type="file" class="form-control-file mt-2" id="roomImage1File" name="roomImage1File" accept="image/*" onchange="previewImage(event, 'roomImage1Preview')">
+                <img id="roomImage1Preview" src="#" alt="Room Image 1 Preview" style="display:none; max-width:100px; margin-top:10px;">
             </div>
             <div class="form-group">
                 <label for="roomImage2">Room Image 2:</label>
-                <input type="text" class="form-control" id="roomImage2" th:field="*{roomImage2}">
+                <input type="file" class="form-control-file mt-2" id="roomImage2File" name="roomImage2File" accept="image/*" onchange="previewImage(event, 'roomImage2Preview')">
+                <img id="roomImage2Preview" src="#" alt="Room Image 2 Preview" style="display:none; max-width:100px; margin-top:10px;">
             </div>
             <div class="form-group form-check">
                 <input type="checkbox" class="form-check-input" id="roomStatus" th:field="*{roomStatus}">
