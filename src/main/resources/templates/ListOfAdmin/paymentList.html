@@ -1,78 +1,311 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layout}">
+      layout:decorate="~{Fragments/Layout-Admin}">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Booking List</title>
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-<header class="bg-primary text-white text-center py-3">
-    <h1>All Bookings</h1>
-</header>
 
+
+<!--<section layout:fragment="content">-->
+<!--    <main class="container mt-4">-->
+<!--        <h3>Payment list of admin</h3>-->
+<!--        <div class="table-responsive">-->
+<!--            <table class="table table-bordered table-striped">-->
+<!--                <thead class="thead-dark">-->
+<!--                <tr>-->
+<!--                    <th>Payment ID</th>-->
+<!--                    <th>UserName</th>-->
+<!--                    <th>Phone</th>-->
+<!--                    <th>Payment type</th>-->
+<!--                    <th>Total price</th>-->
+<!--                    <th>Payment time</th>-->
+<!--                    <th>Booking Id</th>-->
+<!--                    <th>Room number</th>-->
+<!--                    <th>Action</th>-->
+<!--                </tr>-->
+<!--                </thead>-->
+<!--                <tbody>-->
+<!--                <tr th:each="payment : ${payments}">-->
+<!--                    <td th:text="${payment.paymentId}"></td>-->
+<!--                    <td th:text="${payment.booking.user.username}"></td>-->
+<!--                    <td th:text="${payment.booking.user.phone}"></td>-->
+<!--                    <td th:text="${payment.paymentType.paymentTypeName}"></td>-->
+<!--                    <td th:text="${payment.totalPayment}"></td>-->
+<!--                    <td th:text="${payment.paymentTime}"></td>-->
+<!--                    <td th:text="${payment.booking.bookingId}"></td>-->
+<!--                    <td th:text="${payment.booking.room.roomNumber}"></td>-->
+<!--                    <td>-->
+<!--                        <a th:href="@{'/extraCharges/add/' + ${payment.paymentId}}" class="btn btn-warning btn-sm">Extra</a>-->
+<!--                    </td>-->
+<!--                </tr>-->
+<!--                </tbody>-->
+<!--            </table>-->
+<!--        </div>-->
+<!--        <nav aria-label="Page navigation" th:if="${totalPages > 1}">-->
+<!--            <ul class="pagination">-->
+<!--                <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">-->
+<!--                    <a class="page-link" th:href="@{'/payments/showAdminPaymentList?page=' + ${currentPage - 1}}" aria-label="Previous">-->
+<!--                        <span aria-hidden="true">&laquo;</span>-->
+<!--                    </a>-->
+<!--                </li>-->
+<!--                <li class="page-item" th:each="i : ${#numbers.sequence(0, totalPages - 1)}" th:classappend="${currentPage == i} ? 'active'">-->
+<!--                    <a class="page-link" th:href="@{'/payments/showAdminPaymentList?page=' + ${i}}" th:text="${i + 1}">1</a>-->
+<!--                </li>-->
+<!--                <li class="page-item" th:classappend="${currentPage == totalPages - 1} ? 'disabled'">-->
+<!--                    <a class="page-link" th:href="@{'/payments/showAdminPaymentList?page=' + ${currentPage + 1}}" aria-label="Next">-->
+<!--                        <span aria-hidden="true">&raquo;</span>-->
+<!--                    </a>-->
+<!--                </li>-->
+<!--            </ul>-->
+<!--        </nav>-->
+<!--    </main>-->
+<!--</section>-->
 <section layout:fragment="content">
-    <main class="container mt-4">
-        <h3>Payment list of admin</h3>
-        <div class="table-responsive">
-            <table class="table table-bordered table-striped">
-                <thead class="thead-dark">
-                <tr>
-                    <th>Payment ID</th>
-                    <th>UserName</th>
-                    <th>Phone</th>
-                    <th>Payment type</th>
-                    <th>Total price</th>
-                    <th>Payment time</th>
-                    <th>Booking Id</th>
-                    <th>Room number</th>
-                    <th>Action</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr th:each="payment : ${payments}">
-                    <td th:text="${payment.paymentId}"></td>
-                    <td th:text="${payment.booking.user.username}"></td>
-                    <td th:text="${payment.booking.user.phone}"></td>
-                    <td th:text="${payment.paymentType.paymentTypeName}"></td>
-                    <td th:text="${payment.totalPayment}"></td>
-                    <td th:text="${payment.paymentTime}"></td>
-                    <td th:text="${payment.booking.bookingId}"></td>
-                    <td th:text="${payment.booking.room.roomNumber}"></td>
-                    <td>
-                        <a th:href="@{'/extraCharges/add/' + ${payment.paymentId}}" class="btn btn-warning btn-sm">Extra</a>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
+    <h2 class="mb-6 text-3xl font-bold">Danh sách hóa đơn</h2>
+    <div
+            class="mb-0 flex w-full min-w-0 flex-col break-words rounded-2xl border-0 border-solid border-transparent bg-white bg-clip-border shadow-xl"
+    >
+        <div
+                class="mb-4 flex items-center justify-between rounded-t-2xl bg-white p-6 pb-0 text-lg font-medium"
+        >
+            <h6>Hóa đơn</h6>
+
         </div>
-        <nav aria-label="Page navigation" th:if="${totalPages > 1}">
-            <ul class="pagination">
-                <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
-                    <a class="page-link" th:href="@{'/payments/showAdminPaymentList?page=' + ${currentPage - 1}}" aria-label="Previous">
-                        <span aria-hidden="true">&laquo;</span>
-                    </a>
-                </li>
-                <li class="page-item" th:each="i : ${#numbers.sequence(0, totalPages - 1)}" th:classappend="${currentPage == i} ? 'active'">
-                    <a class="page-link" th:href="@{'/payments/showAdminPaymentList?page=' + ${i}}" th:text="${i + 1}">1</a>
-                </li>
-                <li class="page-item" th:classappend="${currentPage == totalPages - 1} ? 'disabled'">
-                    <a class="page-link" th:href="@{'/payments/showAdminPaymentList?page=' + ${currentPage + 1}}" aria-label="Next">
-                        <span aria-hidden="true">&raquo;</span>
-                    </a>
-                </li>
-            </ul>
-        </nav>
-    </main>
+        <div th:if="${errorMessage}" class="alert alert-danger" role="alert">
+            <span th:text="${errorMessage}"></span>
+        </div>
+        <div>
+            <div class="overflow-x-auto p-0">
+                <table
+                        class="mb-0 w-full items-center border-gray-200 align-top text-slate-500"
+                >
+                    <thead class="align-bottom">
+                    <tr>
+                        <th
+                                class="border-b-solid tracking-none whitespace-nowrap border-b border-gray-200 bg-transparent px-6 py-3 text-left align-middle text-sm font-bold uppercase text-slate-400 opacity-70 shadow-none"
+                        >
+                            Mã TT
+                        </th>
+                        <th
+                                class="border-b-solid tracking-none whitespace-nowrap border-b border-gray-200 bg-transparent px-2 text-left align-middle text-sm font-bold uppercase text-slate-400 opacity-70 shadow-none"
+                        >
+                            Khách hàng
+                        </th>
+                        <th
+                                class="border-b-solid tracking-none whitespace-nowrap border-b border-gray-200 bg-transparent px-2 text-left align-middle text-sm font-bold uppercase text-slate-400 opacity-70 shadow-none"
+                        >
+                            SĐT
+                        </th>
+                        <th
+                                class="border-b-solid tracking-none whitespace-nowrap border-b border-gray-200 bg-transparent px-2 text-left align-middle text-sm font-bold uppercase text-slate-400 opacity-70 shadow-none"
+                        >
+                            HTTT
+                        </th>
+                        <th
+                                class="border-b-solid tracking-none whitespace-nowrap border-b border-gray-200 bg-transparent px-2 text-left align-middle text-sm font-bold uppercase text-slate-400 opacity-70 shadow-none"
+                        >
+                            TT
+                        </th>
+                        <th
+                                class="border-b-solid tracking-none whitespace-nowrap border-b border-gray-200 bg-transparent px-2 text-left align-middle text-sm font-bold uppercase text-slate-400 opacity-70 shadow-none"
+                        >
+                            Trạng thái TT
+                        </th>
+                        <th
+                                class="border-b-solid tracking-none whitespace-nowrap border-b border-gray-200 bg-transparent px-2 text-left align-middle text-sm font-bold uppercase text-slate-400 opacity-70 shadow-none"
+                        >
+                            Thời gian TT
+                        </th>
+                        <th
+                                class="border-b-solid tracking-none whitespace-nowrap border-b border-gray-200 bg-transparent px-2 text-left align-middle text-sm font-bold uppercase text-slate-400 opacity-70 shadow-none"
+                        >
+                            Mã ĐP
+                        </th>
+
+                        <th
+                                class="border-b-solid tracking-none whitespace-nowrap border-b border-gray-200 bg-transparent px-2 text-left align-middle text-sm font-bold uppercase text-slate-400 opacity-70 shadow-none"
+                        >
+                            Phòng
+                        </th>
+                        <th
+                                class="border-b-solid tracking-none whitespace-nowrap border-b border-gray-200 bg-transparent px-2 text-left align-middle text-sm font-bold uppercase text-slate-400 opacity-70 shadow-none"
+                        >
+                            Hành động
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="payment : ${payments}">
+                        <td
+                                class="whitespace-nowrap border-b bg-transparent p-2 align-middle shadow-transparent"
+                        >
+                            <div class="flex items-center px-6 py-1">
+                                <div class="flex flex-col justify-center">
+                                    <h6 class="mb-0 text-sm font-bold leading-normal" th:text="${payment.paymentId}">
+
+                                    </h6>
+                                </div>
+                            </div>
+                        </td>
+                        <td
+                                class="whitespace-nowrap border-b bg-transparent p-2 align-middle shadow-transparent"
+                        >
+                            <p class="mb-0 text-xs font-semibold leading-tight" th:text="${payment.booking.user.username}">
+
+                            </p>
+                        </td>
+                        <td
+                                class="whitespace-nowrap border-b bg-transparent p-2 align-middle shadow-transparent"
+                        >
+                            <p class="mb-0 text-xs font-semibold leading-tight" th:text="${payment.booking.user.phone}">
+
+                            </p>
+                        </td>
+                        <td
+                                class="whitespace-nowrap border-b bg-transparent p-2 align-middle shadow-transparent"
+                        >
+                            <p class="mb-0 text-xs font-semibold leading-tight" th:text="${payment.paymentType.paymentTypeName}">
+
+                            </p>
+                        </td>
+                        <td
+                                class="whitespace-nowrap border-b bg-transparent p-2 align-middle shadow-transparent"
+                        >
+                            <p class="mb-0 text-xs font-semibold leading-tight" th:text="${payment.booking.totalPrice}">
+
+                            </p>
+                        </td>
+                        <td
+                                class="whitespace-nowrap border-b bg-transparent p-2 text-left align-middle text-sm leading-normal shadow-transparent"
+                        >
+                        <span
+                                th:classappend="${payment.booking.paymentStatus} ? 'from-green-600 to-lime-400' : 'from-amber-500 to-yellow-500'" th:text="${payment.booking.paymentStatus ? 'Hoàn tất' : 'Chờ xử lý'}" class="inline-block whitespace-nowrap rounded-full bg-gradient-to-tl  px-4 py-3 text-left align-baseline text-xs font-bold uppercase leading-none text-white"
+                        ></span
+                        >
+                        </td>
+                        <td
+                                class="whitespace-nowrap border-b bg-transparent p-2 align-middle shadow-transparent"
+                        >
+                            <p class="mb-0 text-xs font-semibold leading-tight" th:text="${payment.paymentTime}">
+
+                            </p>
+                        </td>
+
+                        <td
+                                class="whitespace-nowrap border-b bg-transparent p-2 align-middle shadow-transparent"
+                        >
+                            <p class="mb-0 text-xs font-semibold leading-tight" th:text="${payment.booking.bookingId}">
+                            </p>
+                        </td>
+                        <td
+                                class="whitespace-nowrap border-b bg-transparent p-2 align-middle shadow-transparent"
+                        >
+                            <p class="mb-0 text-xs font-semibold leading-tight"  th:text="${payment.booking.room != null ? payment.booking.room.roomNumber : 'Không có'}">
+
+                            </p>
+                        </td>
+
+                        <td class="whitespace-nowrap border-b pr-4 align-middle">
+                            <a  th:href="@{'/extraCharges/add/' + ${payment.paymentId}}">
+                                <span class="flex items-center justify-center gap-2 rounded-md py-2 font-medium text-white bg-amber-400">
+
+                                    Phụ phí
+                                </span>
+                            </a>
+                        </td>
+                    </tr>
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <nav class="mt-4 flex justify-end " th:if="${totalPages > 1}">
+        <ul class="flex h-10 items-center -space-x-px text-base">
+            <li th:classappend="${currentPage == 0} ? 'disabled'">
+                <a
+                        th:href="@{'/payments/showAdminPaymentList?page=' + ${currentPage - 1}}"
+                        class="ms-0 flex h-10 items-center justify-center rounded-s-lg border border-e-0 border-gray-300 bg-white px-4 leading-tight text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                >
+
+                    <svg
+                            class="h-3 w-3 rtl:rotate-180"
+                            aria-hidden="true"
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 6 10"
+                    >
+                        <path
+                                stroke="currentColor"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M5 1 1 5l4 4"
+                        />
+                    </svg>
+                </a>
+            </li>
+            <li th:each="i : ${#numbers.sequence(0, totalPages - 1)}" >
+                <a
+                        th:href="@{'/payments/showAdminPaymentList?page=' + ${i}}" th:text="${i + 1}"
+                        th:classappend="${currentPage == i} ? 'active' : 'bg-white'"
+                        class="flex h-10 items-center justify-center border border-gray-300  px-4 leading-tight text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                >1</a
+                >
+            </li>
+
+            <li th:classappend="${currentPage == totalPages - 1} ? 'disabled'">
+                <a
+                        th:href="@{'/payments/showAdminPaymentList?page=' + ${currentPage + 1}}"
+                        class="flex h-10 items-center justify-center rounded-e-lg border border-gray-300 bg-white px-4 leading-tight text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                >
+
+                    <svg
+                            class="h-3 w-3 rtl:rotate-180"
+                            aria-hidden="true"
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 6 10"
+                    >
+                        <path
+                                stroke="currentColor"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                                d="m1 9 4-4-4-4"
+                        />
+                    </svg>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <div class="mt-4 w-72 rounded-2xl bg-white p-4 shadow-xl">
+            <span class="flex items-center gap-1 text-sm"
+            ><strong class="font-bold">Trạng Thái TT: </strong> Trạng thái
+              thanh toán</span
+            >
+        <span class="mt-2 flex items-center gap-1 text-sm"
+        ><strong class="font-bold">Mã TT:</strong> Mã thanh toán</span
+        >
+        <span class="mt-2 flex items-center gap-1 text-sm"
+        ><strong class="font-bold">STĐ: </strong> Số điện thoại</span
+        >
+        <span class="mt-2 flex items-center gap-1 text-sm"
+        ><strong class="font-bold">TT: </strong> Tổng tiền</span
+        >
+        <span class="mt-2 flex items-center gap-1 text-sm"
+        ><strong class="font-bold">HTTT: </strong> Hình thức thanh toán</span
+        >
+        <span class="mt-2 flex items-center gap-1 text-sm"
+        ><strong class="font-bold">Mã ĐP: </strong> Mã đặt phòng</span
+        >
+    </div>
 </section>
 
-<footer class="bg-light text-center py-3">
-    <p>&copy; 2024 Booking Management System</p>
-</footer>
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
 </body>
 </html>

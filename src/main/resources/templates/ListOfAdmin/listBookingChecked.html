@@ -1,95 +1,346 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layout}">
+      layout:decorate="~{Fragments/Layout-Admin}">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Checked Bookings - Admin View</title>
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
 </head>
 <body>
-<header class="bg-primary text-white text-center py-3">
-    <h1>Checked Bookings - Admin View</h1>
-</header>
 <section layout:fragment="content">
-    <main class="container mt-4">
-        <div class="row mb-4">
-            <div class="col-md-8 offset-md-2">
-                <form th:action="@{/bookings/searchBookingConfirmByUserPhone}" method="get" class="form-inline">
-                    <div class="form-group">
-                        <label for="phone">Phone Number:</label>
-                        <input type="text" id="phone" name="phone" class="form-control mr-2" placeholder="Enter phone number" required>
-                    </div>
-                    <button type="submit" class="btn btn-primary">Search</button>
+    <h2 class="mb-6 text-3xl font-bold">Danh sách khách hành đã nhận phòng</h2>
+    <div
+            class="mb-0 flex w-full min-w-0 flex-col break-words rounded-2xl border-0 border-solid border-transparent bg-white bg-clip-border shadow-xl"
+    >
+        <div
+                class="mb-14 flex items-center justify-between rounded-t-2xl bg-white p-6 pb-0 text-lg font-medium"
+        >
+            <h6>Nhận phòng</h6>
+            <div class="flex items-center gap-4">
+                <form th:action="@{/bookings/searchBookingConfirmByUserPhone}" method="get" class="flex gap-2">
+                    <input
+                            type="text"
+                            class="h-12 rounded-lg border-2 p-4 text-black"
+                            placeholder="Tìm theo số điện thoại"
+                            id="phone" name="phone"
+                    />
+                    <button
+                            type="submit"
+                            class="rounded-lg bg-gradient-to-tl from-purple-700 to-pink-500 px-3 py-2 font-bold text-white hover:opacity-90"
+                    >
+                        Tìm kiếm
+                    </button>
                 </form>
-
+                <span class="text-2xl">|</span>
+                <a
+                        th:href="@{/bookings/listBookingCheckedOfAdmin}"
+                        class="flex items-center rounded-lg bg-gradient-to-tl from-purple-700 to-pink-500 px-3 py-2 font-bold text-white hover:opacity-90"
+                >Hiển thị tất cả</a
+                >
             </div>
         </div>
-        <div class="mb-3">
-            <a th:href="@{/bookings/listBookingCheckedOfAdmin}" class="btn btn-primary">All booking</a>
-        </div>
-        <!-- Error message -->
-        <div th:if="${errorMessage}" class="alert alert-danger" role="alert">
-            <span th:text="${errorMessage}"></span>
-        </div>
-        <div class="table-responsive">
-            <table class="table table-bordered table-striped">
-                <thead class="thead-dark">
-                <tr>
-                    <th>Booking ID</th>
-                    <th>Check-In Date</th>
-                    <th>Check-Out Date</th>
-                    <th>Total Price</th>
-                    <th>Payment Status</th>
-                    <th>Check-In Status</th>
-                    <th>Room</th>
-                    <th>User</th>
-                    <th>Actions</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr th:each="booking : ${bookings}">
-                    <td th:text="${booking.bookingId}"></td>
-                    <td th:text="${booking.checkInDate}"></td>
-                    <td th:text="${booking.checkOutDate}"></td>
-                    <td th:text="${booking.totalPrice}"></td>
-                    <td th:text="${booking.paymentStatus ? 'Paid' : 'Pending'}"></td>
-                    <td th:text="${booking.checkInStatus ? 'Checked In' : 'Not Checked In'}"></td>
-                    <td th:text="${booking.room != null ? booking.room.roomNumber : 'No Room Assigned'}"></td>
-                    <td th:text="${booking.user.username}"></td>
-                    <td>
-                        <a th:href="@{'/payments/add/' + ${booking.bookingId}}" class="btn btn-sm btn-success mb-1">Pay</a>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
-        <nav aria-label="Page navigation" th:if="${totalPages > 1}">
-            <ul class="pagination">
-                <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
-                    <a class="page-link" th:href="@{'/bookings/listBookingCheckedOfAdmin?page=' + ${currentPage - 1}}" aria-label="Previous">
-                        <span aria-hidden="true">&laquo;</span>
-                    </a>
-                </li>
-                <li class="page-item" th:each="i : ${#numbers.sequence(0, totalPages - 1)}" th:classappend="${currentPage == i} ? 'active'">
-                    <a class="page-link" th:href="@{'/bookings/listBookingCheckedOfAdmin?page=' + ${i}}" th:text="${i + 1}">1</a>
-                </li>
-                <li class="page-item" th:classappend="${currentPage == totalPages - 1} ? 'disabled'">
-                    <a class="page-link" th:href="@{'/bookings/listBookingCheckedOfAdmin?page=' + ${currentPage + 1}}" aria-label="Next">
-                        <span aria-hidden="true">&raquo;</span>
-                    </a>
-                </li>
-            </ul>
-        </nav>
-    </main>
-</section>
+                <div th:if="${errorMessage}" class="alert alert-danger" role="alert">
+                    <span th:text="${errorMessage}"></span>
+                </div>
+        <div>
+            <div class="overflow-x-auto p-0">
+                <table
+                        class="mb-0 w-full items-center border-gray-200 align-top text-slate-500"
+                >
+                    <thead class="align-bottom">
+                    <tr>
+                        <th
+                                class="border-b-solid tracking-none whitespace-nowrap border-b border-gray-200 bg-transparent px-6 py-3 text-left align-middle text-sm font-bold uppercase text-slate-400 opacity-70 shadow-none"
+                        >
+                            Mã đặt phòng
+                        </th>
+                        <th
+                                class="border-b-solid tracking-none whitespace-nowrap border-b border-gray-200 bg-transparent px-2 text-left align-middle text-sm font-bold uppercase text-slate-400 opacity-70 shadow-none"
+                        >
+                            Nhận phòng
+                        </th>
+                        <th
+                                class="border-b-solid tracking-none whitespace-nowrap border-b border-gray-200 bg-transparent px-2 text-left align-middle text-sm font-bold uppercase text-slate-400 opacity-70 shadow-none"
+                        >
+                            Trả phòng
+                        </th>
+                        <th
+                                class="border-b-solid tracking-none whitespace-nowrap border-b border-gray-200 bg-transparent px-2 text-left align-middle text-sm font-bold uppercase text-slate-400 opacity-70 shadow-none"
+                        >
+                            Tổng tiền
+                        </th>
+                        <th
+                                class="border-b-solid tracking-none whitespace-nowrap border-b border-gray-200 bg-transparent px-2 text-left align-middle text-sm font-bold uppercase text-slate-400 opacity-70 shadow-none"
+                        >
+                            Trạng thái TT
+                        </th>
+                        <th
+                                class="border-b-solid tracking-none whitespace-nowrap border-b border-gray-200 bg-transparent px-2 text-left align-middle text-sm font-bold uppercase text-slate-400 opacity-70 shadow-none"
+                        >
+                            Trạng thái NP
+                        </th>
+                        <th
+                                class="border-b-solid tracking-none whitespace-nowrap border-b border-gray-200 bg-transparent px-2 text-left align-middle text-sm font-bold uppercase text-slate-400 opacity-70 shadow-none"
+                        >
+                            Số phòng
+                        </th>
 
-<footer class="bg-light text-center py-3">
-    <p>&copy; 2024 Booking Management System</p>
-</footer>
+                        <th
+                                class="border-b-solid tracking-none whitespace-nowrap border-b border-gray-200 bg-transparent px-2 text-left align-middle text-sm font-bold uppercase text-slate-400 opacity-70 shadow-none"
+                        >
+                            Sử dụng
+                        </th>
+                        <th
+                                class="border-b-solid tracking-none whitespace-nowrap border-b border-gray-200 bg-transparent px-2 text-left align-middle text-sm font-bold uppercase text-slate-400 opacity-70 shadow-none"
+                        >
+                            SĐT
+                        </th>
+                        <th
+                                class="border-b-solid tracking-none whitespace-nowrap border-b border-gray-200 bg-transparent px-2 text-left align-middle text-sm font-bold uppercase text-slate-400 opacity-70 shadow-none"
+                        >
+                            Hành động
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="booking : ${bookings}">
+                        <td
+                                class="whitespace-nowrap border-b bg-transparent p-2 align-middle shadow-transparent"
+                        >
+                            <div class="flex items-center px-6 py-1">
+                                <div class="flex flex-col justify-center">
+                                    <h6 class="mb-0 text-sm font-bold leading-normal" th:text="${booking.bookingId}">
+
+                                    </h6>
+                                </div>
+                            </div>
+                        </td>
+                        <td
+                                class="whitespace-nowrap border-b bg-transparent p-2 align-middle shadow-transparent"
+                        >
+                            <p class="mb-0 text-xs font-semibold leading-tight" th:text="${booking.checkInDate}">
+
+                            </p>
+                        </td>
+                        <td
+                                class="whitespace-nowrap border-b bg-transparent p-2 align-middle shadow-transparent"
+                        >
+                            <p class="mb-0 text-xs font-semibold leading-tight" th:text="${booking.checkOutDate}">
+
+                            </p>
+                        </td>
+                        <td
+                                class="whitespace-nowrap border-b bg-transparent p-2 align-middle shadow-transparent"
+                        >
+                            <p class="mb-0 text-xs font-semibold leading-tight" th:text="${booking.totalPrice}">
+
+                            </p>
+                        </td>
+                        <td
+                                class="whitespace-nowrap border-b bg-transparent p-2 text-left align-middle text-sm leading-normal shadow-transparent"
+                        >
+                        <span
+                                th:classappend="${booking.paymentStatus} ? 'from-green-600 to-lime-400' : 'from-amber-500 to-yellow-500'" th:text="${booking.paymentStatus ? 'Hoàn tất' : 'Chờ xử lý'}" class="inline-block whitespace-nowrap rounded-full bg-gradient-to-tl  px-4 py-3 text-left align-baseline text-xs font-bold uppercase leading-none text-white"
+                        ></span
+                        >
+                        </td>
+                        <td
+                                class="whitespace-nowrap border-b bg-transparent p-2 text-left align-middle text-sm leading-normal shadow-transparent"
+                        >
+                        <span
+                                th:classappend="${booking.checkInStatus} ? 'from-green-600 to-lime-400' : 'from-amber-500 to-yellow-500'"   th:text="${booking.checkInStatus ? 'Đã Nhận' : 'Chưa nhận'}"    class="inline-block whitespace-nowrap rounded-full bg-gradient-to-tl  px-4 py-3 text-left align-baseline text-xs font-bold uppercase leading-none text-white"
+                        ></span
+                        >
+                        </td>
+                        <td
+                                class="whitespace-nowrap border-b bg-transparent p-2 align-middle shadow-transparent"
+                        >
+                            <p class="mb-0 text-xs font-semibold leading-tight"  th:text="${booking.room != null ? booking.room.roomNumber : 'Không có'}">
+
+                            </p>
+                        </td>
+                        <td
+                                class="whitespace-nowrap border-b bg-transparent p-2 align-middle shadow-transparent"
+                        >
+                            <p class="mb-0 text-xs font-semibold leading-tight" th:text="${booking.user.username}">
+                            </p>
+                        </td>
+                        <td
+                                class="whitespace-nowrap border-b bg-transparent p-2 align-middle shadow-transparent"
+                        >
+                            <p class="mb-0 text-xs font-semibold leading-tight" th:text="${booking.user.phone}">
+                            </p>
+                        </td>
+
+                        <td class="whitespace-nowrap border-b pr-4 align-middle">
+                            <a  th:href="@{'/payments/add/' + ${booking.bookingId}}">
+                                <span class="flex items-center justify-center gap-2 rounded-md bg-green-500 py-2 font-medium text-white">
+                                    <img
+                                      src="/static/hinhanh/payment.svg"
+                                      alt=""
+                                      class="icon-white h-4 w-4"
+                                     />
+                                    Thanh toán
+                                </span>
+                            </a>
+                        </td>
+                    </tr>
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <nav class="mt-4 flex justify-end " th:if="${totalPages > 1}">
+        <ul class="flex h-10 items-center -space-x-px text-base">
+            <li th:classappend="${currentPage == 0} ? 'disabled'">
+                <a
+                        th:href="@{'/bookings/listBookingCheckedOfAdmin?page=' + ${currentPage - 1}}"
+                        class="ms-0 flex h-10 items-center justify-center rounded-s-lg border border-e-0 border-gray-300 bg-white px-4 leading-tight text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                >
+
+                    <svg
+                            class="h-3 w-3 rtl:rotate-180"
+                            aria-hidden="true"
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 6 10"
+                    >
+                        <path
+                                stroke="currentColor"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M5 1 1 5l4 4"
+                        />
+                    </svg>
+                </a>
+            </li>
+            <li th:each="i : ${#numbers.sequence(0, totalPages - 1)}" >
+                <a
+                        th:href="@{'/bookings/listBookingCheckedOfAdmin?page=' + ${i}}" th:text="${i + 1}"
+                        th:classappend="${currentPage == i} ? 'active' : 'bg-white'"
+                        class="flex h-10 items-center justify-center border border-gray-300  px-4 leading-tight text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                >1</a
+                >
+            </li>
+
+            <li th:classappend="${currentPage == totalPages - 1} ? 'disabled'">
+                <a
+                        th:href="@{'/bookings/listBookingCheckedOfAdmin?page=' + ${currentPage + 1}}"
+                        class="flex h-10 items-center justify-center rounded-e-lg border border-gray-300 bg-white px-4 leading-tight text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                >
+
+                    <svg
+                            class="h-3 w-3 rtl:rotate-180"
+                            aria-hidden="true"
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 6 10"
+                    >
+                        <path
+                                stroke="currentColor"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                                d="m1 9 4-4-4-4"
+                        />
+                    </svg>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <div class="mt-4 w-72 rounded-2xl bg-white p-4 shadow-xl">
+            <span class="flex items-center gap-1 text-sm"
+            ><strong class="font-bold">Trạng Thái TT: </strong> Trạng thái
+              thanh toán</span
+            >
+        <span class="mt-2 flex items-center gap-1 text-sm"
+        ><strong class="font-bold">Trạng Thái NP: </strong> Trạng thái
+              nhận phòng</span
+        >
+        <span class="mt-2 flex items-center gap-1 text-sm"
+        ><strong class="font-bold">STĐ: </strong> Số điện thoại</span
+        >
+    </div>
+</section>
+<!--<section layout:fragment="content">-->
+<!--    <main class="container mt-4">-->
+<!--        <div class="row mb-4">-->
+<!--            <div class="col-md-8 offset-md-2">-->
+<!--                <form th:action="@{/bookings/searchBookingConfirmByUserPhone}" method="get" class="form-inline">-->
+<!--                    <div class="form-group">-->
+<!--                        <label for="phone">Phone Number:</label>-->
+<!--                        <input type="text" id="phone" name="phone" class="form-control mr-2" placeholder="Enter phone number" required>-->
+<!--                    </div>-->
+<!--                    <button type="submit" class="btn btn-primary">Search</button>-->
+<!--                </form>-->
+
+<!--            </div>-->
+<!--        </div>-->
+<!--        <div class="mb-3">-->
+<!--            <a th:href="@{/bookings/listBookingCheckedOfAdmin}" class="btn btn-primary">All booking</a>-->
+<!--        </div>-->
+<!--        &lt;!&ndash; Error message &ndash;&gt;-->
+<!--        <div th:if="${errorMessage}" class="alert alert-danger" role="alert">-->
+<!--            <span th:text="${errorMessage}"></span>-->
+<!--        </div>-->
+<!--        <div class="table-responsive">-->
+<!--            <table class="table table-bordered table-striped">-->
+<!--                <thead class="thead-dark">-->
+<!--                <tr>-->
+<!--                    <th>Booking ID</th>-->
+<!--                    <th>Check-In Date</th>-->
+<!--                    <th>Check-Out Date</th>-->
+<!--                    <th>Total Price</th>-->
+<!--                    <th>Payment Status</th>-->
+<!--                    <th>Check-In Status</th>-->
+<!--                    <th>Room</th>-->
+<!--                    <th>User</th>-->
+<!--                    <th>Actions</th>-->
+<!--                </tr>-->
+<!--                </thead>-->
+<!--                <tbody>-->
+<!--                <tr th:each="booking : ${bookings}">-->
+<!--                    <td th:text="${booking.bookingId}"></td>-->
+<!--                    <td th:text="${booking.checkInDate}"></td>-->
+<!--                    <td th:text="${booking.checkOutDate}"></td>-->
+<!--                    <td th:text="${booking.totalPrice}"></td>-->
+<!--                    <td th:text="${booking.paymentStatus ? 'Paid' : 'Pending'}"></td>-->
+<!--                    <td th:text="${booking.checkInStatus ? 'Checked In' : 'Not Checked In'}"></td>-->
+<!--                    <td th:text="${booking.room != null ? booking.room.roomNumber : 'No Room Assigned'}"></td>-->
+<!--                    <td th:text="${booking.user.username}"></td>-->
+<!--                    <td>-->
+<!--                        <a th:href="@{'/payments/add/' + ${booking.bookingId}}" class="btn btn-sm btn-success mb-1">Pay</a>-->
+<!--                    </td>-->
+<!--                </tr>-->
+<!--                </tbody>-->
+<!--            </table>-->
+<!--        </div>-->
+<!--        <nav aria-label="Page navigation" th:if="${totalPages > 1}">-->
+<!--            <ul class="pagination">-->
+<!--                <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">-->
+<!--                    <a class="page-link" th:href="@{'/bookings/listBookingCheckedOfAdmin?page=' + ${currentPage - 1}}" aria-label="Previous">-->
+<!--                        <span aria-hidden="true">&laquo;</span>-->
+<!--                    </a>-->
+<!--                </li>-->
+<!--                <li class="page-item" th:each="i : ${#numbers.sequence(0, totalPages - 1)}" th:classappend="${currentPage == i} ? 'active'">-->
+<!--                    <a class="page-link" th:href="@{'/bookings/listBookingCheckedOfAdmin?page=' + ${i}}" th:text="${i + 1}">1</a>-->
+<!--                </li>-->
+<!--                <li class="page-item" th:classappend="${currentPage == totalPages - 1} ? 'disabled'">-->
+<!--                    <a class="page-link" th:href="@{'/bookings/listBookingCheckedOfAdmin?page=' + ${currentPage + 1}}" aria-label="Next">-->
+<!--                        <span aria-hidden="true">&raquo;</span>-->
+<!--                    </a>-->
+<!--                </li>-->
+<!--            </ul>-->
+<!--        </nav>-->
+<!--    </main>-->
+<!--</section>-->
+
+
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
 </body>
 </html>

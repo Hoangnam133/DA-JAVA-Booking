@@ -9,6 +9,7 @@
     <link rel="stylesheet"  th:href="@{/static/output.css}" />
     <link rel="stylesheet" th:href="@{/static/styles.css}" />
     <title>Layout</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 
 </head>
@@ -213,19 +214,15 @@
 
     // Data for bar chart
     var barChartData = {
-        labels: ['Total Payments', 'Total Extra Charges'],
+        labels: ['Doanh thu thanh toán', 'Doanh thu trả phí'],
         datasets: [{
-            label: 'Revenue',
+            label: 'Doanh thu',
             data: [totalPayments, totalExtraCharges],
             backgroundColor: [
-                'rgba(255, 99, 132, 0.5)', // Red for Payments
-                'rgba(54, 162, 235, 0.5)' // Blue for Extra Charges
+                '#3a416f',
+                '#cb0c9f' // Blue for Extra Charges
             ],
-            borderColor: [
-                'rgba(255, 99, 132, 1)',
-                'rgba(54, 162, 235, 1)'
-            ],
-            borderWidth: 1
+
         }]
     };
 
@@ -235,19 +232,13 @@
     var extraChargePercentage = (totalExtraCharges / total) * 100;
 
     var pieChartData = {
-        labels: ['Total Payments', 'Total Extra Charges'],
+        labels: ['Doanh thu thanh toán', 'Doanh thu trả phí'],
         datasets: [{
-            label: 'Revenue Distribution',
             data: [paymentPercentage, extraChargePercentage],
             backgroundColor: [
-                'rgba(255, 99, 132, 0.5)', // Red for Payments
-                'rgba(54, 162, 235, 0.5)' // Blue for Extra Charges
+                '#3a416f',
+                '#cb0c9f' // Blue for Extra Charges
             ],
-            borderColor: [
-                'rgba(255, 99, 132, 1)',
-                'rgba(54, 162, 235, 1)'
-            ],
-            borderWidth: 1
         }]
     };
 
@@ -263,7 +254,25 @@
                 y: {
                     beginAtZero: true
                 }
-            }
+            },
+            plugins: {
+                legend: {
+                    position: 'right',
+                    labels: {
+                        font: {
+                            size: 12
+                        }
+                    }
+                },
+                title: {
+                    display: true,
+                    text: 'Phân phối doanh thu theo biểu đồ cột',
+                    font: {
+                        size: 16,
+                        weight: 'bolder',
+                    }
+                }
+            },
         }
     });
 
@@ -278,12 +287,22 @@
             plugins: {
                 legend: {
                     position: 'top',
+                    labels: {
+                        font: {
+                            size: 12
+                        }
+                    }
                 },
                 title: {
                     display: true,
-                    text: 'Revenue Distribution'
+                    text: 'Phân phối doanh thu theo biểu đồ tròn',
+                    font: {
+                        size: 16,
+                        weight: 'bolder',
+                    }
                 }
-            }
+            },
+
         }
     });
     /*]]>*/

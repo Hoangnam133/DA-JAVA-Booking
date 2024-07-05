@@ -60,8 +60,8 @@ public class PaymentController {
             model.addAttribute("currentPage", page);
             return "ListOfAdmin/paymentList";
         } catch (Exception e) {
-            model.addAttribute("Errors", e);
-            return "errors";
+            model.addAttribute("errors", e);
+            return "errorPage";
         }
     }
     // Payment method is cash
@@ -76,8 +76,8 @@ public class PaymentController {
             model.addAttribute("payment", payment);
             return "Payments/add";
         } catch (Exception e) {
-            model.addAttribute("Errors", e);
-            return "errors";
+            model.addAttribute("errors", e);
+            return "errorPage";
         }
     }
     @PostMapping("/save/{bookingId}")
@@ -97,8 +97,8 @@ public class PaymentController {
             bookingService.updatePaymentStatus(booking.getBookingId());
             return "redirect:/payments/showAdminPaymentList";
         } catch (Exception e) {
-            model.addAttribute("Errors", e);
-            return "errors";
+            model.addAttribute("errors", e);
+            return "errorPage";
         }
     }
     private Logger log = LoggerFactory.getLogger(getClass());
@@ -113,8 +113,8 @@ public class PaymentController {
             model.addAttribute("booking", booking);
             return "Paypal/bookingDetail";
         } catch (Exception e) {
-            model.addAttribute("Errors", e);
-            return "errors";
+            model.addAttribute("errors", e);
+            return "errorPage";
         }
     }
     @PostMapping("/pay")
@@ -148,7 +148,8 @@ public class PaymentController {
             }
         } catch (PayPalRESTException e) {
             log.error("Error while processing PayPal payment: " + e.getMessage());
-            model.addAttribute("Errors", e.getMessage());
+            model.addAttribute("errors", e.getMessage());
+            return "errorPage";
         }
         return "redirect:/";
     }
@@ -186,9 +187,11 @@ public class PaymentController {
             }
         } catch (PayPalRESTException e) {
             log.error("Error while processing PayPal payment: " + e.getMessage());
-            model.addAttribute("Errors", e.getMessage());
+            model.addAttribute("errors", e.getMessage());
+            return "errorPage";
         } catch (MessagingException e) {
             throw new RuntimeException(e);
+
         }
         return "redirect:/";
     }
@@ -202,8 +205,8 @@ public class PaymentController {
             model.addAttribute("payments",paymentService.listOfUser(user.getId()));
             return "Payments/listOfUser";
         }catch (Exception e){
-            model.addAttribute("Errors",e);
-            return "errors";
+            model.addAttribute("errors",e);
+            return "errorPage";
         }
     }
     public void sendPaymentToEmail(Payment payment, User user) throws MessagingException {
