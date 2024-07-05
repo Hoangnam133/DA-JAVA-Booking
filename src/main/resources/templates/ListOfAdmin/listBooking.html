@@ -188,6 +188,65 @@
             </div>
         </div>
     </div>
+    <nav class="mt-4 flex justify-end " th:if="${totalPages > 1}">
+        <ul class="flex h-10 items-center -space-x-px text-base">
+            <li th:classappend="${currentPage == 0} ? 'disabled'">
+                <a
+                        th:href="@{'/rooms/list?page=' + ${currentPage - 1}}"
+                        class="ms-0 flex h-10 items-center justify-center rounded-s-lg border border-e-0 border-gray-300 bg-white px-4 leading-tight text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                >
+
+                    <svg
+                            class="h-3 w-3 rtl:rotate-180"
+                            aria-hidden="true"
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 6 10"
+                    >
+                        <path
+                                stroke="currentColor"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M5 1 1 5l4 4"
+                        />
+                    </svg>
+                </a>
+            </li>
+            <li th:each="i : ${#numbers.sequence(0, totalPages - 1)}" >
+                <a
+                        th:href="@{'/rooms/list?page=' + ${i}}" th:text="${i + 1}"
+                        th:classappend="${currentPage == i} ? 'active' : 'bg-white'"
+                        class="flex h-10 items-center justify-center border border-gray-300  px-4 leading-tight text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                >1</a
+                >
+            </li>
+
+            <li th:classappend="${currentPage == totalPages - 1} ? 'disabled'">
+                <a
+                        th:href="@{'/rooms/list?page=' + ${currentPage + 1}}"
+                        class="flex h-10 items-center justify-center rounded-e-lg border border-gray-300 bg-white px-4 leading-tight text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                >
+
+                    <svg
+                            class="h-3 w-3 rtl:rotate-180"
+                            aria-hidden="true"
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 6 10"
+                    >
+                        <path
+                                stroke="currentColor"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                                d="m1 9 4-4-4-4"
+                        />
+                    </svg>
+                </a>
+            </li>
+        </ul>
+    </nav>
     <div class="mt-4 w-72 rounded-2xl bg-white p-4 shadow-xl">
             <span class="flex items-center gap-1 text-sm"
             ><strong class="font-bold">Trạng Thái TT: </strong> Trạng thái
@@ -195,7 +254,7 @@
             >
         <span class="mt-2 flex items-center gap-1 text-sm"
         ><strong class="font-bold">Trạng Thái NP: </strong> Trạng thái
-              thanh toán</span
+              nhận phòng</span
         >
         <span class="mt-2 flex items-center gap-1 text-sm"
         ><strong class="font-bold">STĐ: </strong> Số điện thoại</span

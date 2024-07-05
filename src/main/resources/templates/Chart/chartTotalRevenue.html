@@ -1,110 +1,73 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layout}">
+      layout:decorate="~{Fragments/Layout-Admin}">
 <head>
   <meta charset="UTF-8">
   <title>Revenue Statistics</title>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 </head>
 <body>
-  <section layout:fragment="content">
-    <h1>Revenue Statistics</h1>
-    <div style="display: flex;">
-      <div style="width: 250px; height: 250px;">
-        <canvas id="barChart"></canvas>
+<section class="mt-4 flex flex-col gap-8 p-10" layout:fragment="content">
+  <div class="grid grid-cols-[380px_1fr_1fr] gap-8">
+    <h2 class="text-3xl font-bold">Thống kê số liệu</h2>
+    <div
+            class="flex w-full justify-between rounded-lg bg-white p-4 shadow-2xl"
+    >
+      <div>
+                <span class="text-lg font-semibold"
+                >Tổng doanh thu thanh toán</span
+                >
+        <span class="block text-xl font-bold text-black" th:text="${totalPayments} + ' VND'"
+        ></span
+        >
       </div>
-      <div style="width: 250px; height: 250px;">
-        <canvas id="pieChart"></canvas>
+      <div class="h-3 w-3 rounded-full bg-green-400"></div>
+    </div>
+    <div
+            class="flex w-full  justify-between rounded-lg bg-white p-4 shadow-2xl"
+    >
+      <div>
+                <span class="text-lg font-semibold"
+                >Tổng doanh thu trả phí</span
+                >
+        <span class="block text-xl font-bold text-black" th:text="${totalExtraCharges} + ' VND'"
+        ></span
+        >
       </div>
+      <div class="h-3 w-3 rounded-full bg-green-400"></div>
     </div>
-
-    <div>
-      <p>Total Payments: <span th:text="${totalPayments}"></span></p>
-      <p>Total Extra Charges: <span th:text="${totalExtraCharges}"></span></p>
+  </div>
+  <div class="grid grid-cols-[380px_1fr] items-center gap-8">
+    <div
+            class="flex w-full h-full justify-between rounded-xl bg-white p-4 shadow-2xl"
+    >
+      <canvas id="pieChart"></canvas>
     </div>
-  </section>
-<script th:inline="javascript">
-  /*<![CDATA[*/
-  var totalPayments = /*[[${totalPayments}]]*/ 0;
-  var totalExtraCharges = /*[[${totalExtraCharges}]]*/ 0;
+    <div
+            class="flex w-full h-full justify-between rounded-xl bg-white p-4 shadow-2xl"
+    >
 
-  // Data for bar chart
-  var barChartData = {
-    labels: ['Total Payments', 'Total Extra Charges'],
-    datasets: [{
-      label: 'Revenue',
-      data: [totalPayments, totalExtraCharges],
-      backgroundColor: [
-        'rgba(255, 99, 132, 0.5)', // Red for Payments
-        'rgba(54, 162, 235, 0.5)' // Blue for Extra Charges
-      ],
-      borderColor: [
-        'rgba(255, 99, 132, 1)',
-        'rgba(54, 162, 235, 1)'
-      ],
-      borderWidth: 1
-    }]
-  };
+      <canvas id="barChart"></canvas>
+    </div>
+  </div>
+</section>
+<!--  <section layout:fragment="content">-->
+<!--    <h1>Revenue Statistics</h1>-->
+<!--    <div style="display: flex;">-->
+<!--      <div style="width: 250px; height: 250px;">-->
+<!--        <canvas id="barChart"></canvas>-->
+<!--      </div>-->
+<!--      <div style="width: 250px; height: 250px;">-->
+<!--        <canvas id="pieChart"></canvas>-->
+<!--      </div>-->
+<!--    </div>-->
 
-  // Data for pie chart (calculated percentages)
-  var total = totalPayments + totalExtraCharges;
-  var paymentPercentage = (totalPayments / total) * 100;
-  var extraChargePercentage = (totalExtraCharges / total) * 100;
+<!--    <div>-->
+<!--      <p>Total Payments: <span th:text="${totalPayments}"></span></p>-->
+<!--      <p>Total Extra Charges: <span th:text="${totalExtraCharges}"></span></p>-->
+<!--    </div>-->
+<!--  </section>-->
 
-  var pieChartData = {
-    labels: ['Total Payments', 'Total Extra Charges'],
-    datasets: [{
-      label: 'Revenue Distribution',
-      data: [paymentPercentage, extraChargePercentage],
-      backgroundColor: [
-        'rgba(255, 99, 132, 0.5)', // Red for Payments
-        'rgba(54, 162, 235, 0.5)' // Blue for Extra Charges
-      ],
-      borderColor: [
-        'rgba(255, 99, 132, 1)',
-        'rgba(54, 162, 235, 1)'
-      ],
-      borderWidth: 1
-    }]
-  };
-
-  // Create bar chart
-  var barChartCtx = document.getElementById('barChart').getContext('2d');
-  var barChart = new Chart(barChartCtx, {
-    type: 'bar',
-    data: barChartData,
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      scales: {
-        y: {
-          beginAtZero: true
-        }
-      }
-    }
-  });
-
-  // Create pie chart
-  var pieChartCtx = document.getElementById('pieChart').getContext('2d');
-  var pieChart = new Chart(pieChartCtx, {
-    type: 'pie',
-    data: pieChartData,
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      plugins: {
-        legend: {
-          position: 'top',
-        },
-        title: {
-          display: true,
-          text: 'Revenue Distribution'
-        }
-      }
-    }
-  });
-  /*]]>*/
-</script>
 </body>
 </html>

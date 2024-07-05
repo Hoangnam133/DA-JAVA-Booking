@@ -1,91 +1,198 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{Fragments/Layout-Admin}">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Check-In Confirmation</title>
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
 </head>
 <body>
-<header class="bg-primary text-white text-center py-3">
-    <h1>Check-In Confirmation</h1>
-</header>
-<main class="container mt-4">
-    <div class="card">
-        <div class="card-header">
-            <h5 class="card-title">Booking Details</h5>
-        </div>
-             <div class="card-body">
-            <div th:if="${successMessage}" class="alert alert-success" role="alert">
-                <span th:text="${successMessage}"></span>
+<section class="flex justify-center" layout:fragment="content">
+    <!-- Booking Detail -->
+    <section class="w-4/5 rounded-xl bg-white p-6 shadow-2xl">
+        <div class="flex">
+            <div class="flex flex-col gap-2">
+                <p class="text-2xl font-bold">Xác nhận đặt phòng</p>
+                <p class="text-lg">
+                    Mã đặt phòng: <strong class="text-[#FF5B26]" th:text="${booking.bookingId}"></strong>
+                </p>
+                <p class="text-lg">
+                    Mã pin: <strong class="text-[#FF5B26]" th:text="${booking.pin}"></strong>
+                </p>
             </div>
-            <form th:action="@{'/bookings/saveBookingUpdateCheckIn/' + ${booking.bookingId}}" method="post">
-                <dl class="row">
-                    <dt class="col-sm-4">Booking ID:</dt>
-                    <dd class="col-sm-8">
-                        <input type="hidden" name="bookingId" th:value="${booking.bookingId}"/>
-                        <span th:text="${booking.bookingId}"></span>
-                    </dd>
-
-                    <dt class="col-sm-4">Pin:</dt>
-                    <dd class="col-sm-8">
-                        <input type="hidden" name="pin" th:value="${booking.pin}"/>
-                        <span th:text="${booking.pin}"></span>
-                    </dd>
-
-                    <dt class="col-sm-4">Check-In Date:</dt>
-                    <dd class="col-sm-8">
-                        <input type="hidden" name="checkInDate" th:value="${booking.checkInDate}"/>
-                        <span th:text="${booking.checkInDate}"></span>
-                    </dd>
-
-                    <dt class="col-sm-4">Check-Out Date:</dt>
-                    <dd class="col-sm-8">
-                        <input type="hidden" name="checkOutDate" th:value="${booking.checkOutDate}"/>
-                        <span th:text="${booking.checkOutDate}"></span>
-                    </dd>
-
-                    <dt class="col-sm-4">Total Price:</dt>
-                    <dd class="col-sm-8">
-                        <input type="hidden" name="totalPrice" th:value="${booking.totalPrice}"/>
-                        <span th:text="${booking.totalPrice}"></span>
-                    </dd>
-
-                    <dt class="col-sm-4">Payment Status:</dt>
-                    <dd class="col-sm-8">
-                        <input type="hidden" name="paymentStatus" th:value="${booking.paymentStatus}"/>
-                        <span th:text="${booking.paymentStatus ? 'Paid' : 'Pending'}"></span>
-                    </dd>
-
-                    <dt class="col-sm-4">Room Number:</dt>
-                    <dd class="col-sm-8">
-                        <input type="hidden" name="roomNumber" th:value="${booking.room != null ? booking.room.roomNumber : 'No Room Assigned'}"/>
-                        <span th:text="${booking.room != null ? booking.room.roomNumber : 'No Room Assigned'}"></span>
-                    </dd>
-
-                    <dt class="col-sm-4">Room Type:</dt>
-                    <dd class="col-sm-8">
-                        <input type="hidden" name="roomType" th:value="${booking.room != null ? booking.room.roomType.roomTypeName : 'No Room Assigned'}"/>
-                        <span th:text="${booking.room != null ? booking.room.roomType.roomTypeName : 'No Room Assigned'}"></span>
-                    </dd>
-
-                    <dt class="col-sm-4">User:</dt>
-                    <dd class="col-sm-8">
-                        <input type="hidden" name="username" th:value="${booking.user}"/>
-                        <span th:text="${booking.user.username}"></span>
-                    </dd>
-                </dl>
-                <button type="submit" class="btn btn-primary">Confirm Check-In</button>
-            </form>
-
         </div>
-    </div>
-</main>
-<footer class="bg-light text-center py-3">
-    <p>&copy; 2024 Booking Management System</p>
-</footer>
+        <div class="mt-6 rounded-sm border-2 border-slate-950 p-4">
+            <div class="grid grid-cols-[1fr_repeat(3,150px)] border-b-2 pb-4">
+                <div class="flex gap-2 border-r-2">
+                    <img
+                            th:src="${booking.room.hotel.hotelImage1}"
+                            alt=""
+                            class="h-20 w-20 rounded-md object-cover"
+                    />
+                    <div>
+                        <p class="font-semibold" th:text="${booking.room.hotel.hotelName}"></p>
+                        <div class="flex items-center gap-1">
+                            <span class="font-semibold">Địa chỉ:</span>
+                            <p th:text="${booking.room.hotel.hotelAddress}">
+                            </p>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="flex flex-col items-center border-r-2">
+                    <p class="text-sm">Nhận phòng</p>
+                    <p class="mt-1 text-xl font-bold" th:text="${booking.checkInDate}"></p>
+                    <div class="mt-2 flex items-center gap-1">
+                        <img th:src="@{/static/hinhanh/oclock.svg}" alt="" class="mt-1 h-3 w-3" />
+                        <span>14:00 - 23:00</span>
+                    </div>
+                </div>
+                <div class="flex flex-col items-center border-r-2">
+                    <p class="text-sm">Trả phòng</p>
+                    <p class="mt-1 text-xl font-bold" th:text="${booking.checkOutDate}"></p>
+                    <div class="mt-2 flex items-center gap-1">
+                        <img th:src="@{/static/hinhanh/oclock.svg}" alt="" class="mt-1 h-3 w-3" />
+                        <span>7:00 - 12:00</span>
+                    </div>
+                </div>
+                <div class="flex justify-center gap-2">
+                    <div>
+                        <span class="text-sm">Căn</span>
+                        <p class="text-2xl font-bold">1</p>
+                    </div>
+                    <span class="mt-5 text-3xl text-gray-400">/</span>
+                    <div class="ml-1">
+                        <span class="text-sm">Đêm</span>
+                        <p class="text-2xl font-bold" th:text="${T(java.time.temporal.ChronoUnit).DAYS.between(booking.checkInDate, booking.checkOutDate)}"></p>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-4">
+                <h2 class="text-2xl font-bold">Thông tin phòng</h2>
+                <div class="mt-4 flex justify-between px-10">
+                    <div>
+                        <p class="text-xl font-semibold" th:text="${booking.room.roomType.roomTypeName}"></p>
+                        <div class="flex items-center gap-1">
+                            <span class="font-semibold">Tên khách hàng:</span>
+                            <p th:text="${booking.user.username}">
+
+                            </p>
+                        </div>
+                        <div class="flex items-center gap-1">
+                            <span class="font-semibold">Số điện thoại:</span>
+                            <p th:text="${booking.user.phone}">
+
+                            </p>
+                        </div>
+                        <div class="flex items-center gap-1">
+                            <span class="font-semibold">Mô tả:</span>
+                            <p th:text="${booking.room.description}"> </p>
+                        </div>
+                        <div class="flex items-center gap-1">
+                            <span class="font-semibold">Sức chứa:</span>
+                            <p th:text="${booking.room.roomType.capacity}"></p>
+                        </div>
+                    </div>
+                    <div>
+                        <span class="text-xl font-semibold">Giá:</span>
+                        <span class="text-xl font-medium" th:text="${booking.totalPrice} + ' VND'"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <form th:action="@{'/bookings/saveBookingUpdateCheckIn/' + ${booking.bookingId}}" method="post" class="mt-6 flex justify-center">
+            <input type="hidden" name="bookingId" th:value="${booking.bookingId}"/>
+            <input type="hidden" name="pin" th:value="${booking.pin}"/>
+            <input type="hidden" name="checkInDate" th:value="${booking.checkInDate}"/>
+            <input type="hidden" name="checkOutDate" th:value="${booking.checkOutDate}"/>
+            <input type="hidden" name="totalPrice" th:value="${booking.totalPrice}"/>
+            <input type="hidden" name="paymentStatus" th:value="${booking.paymentStatus}"/>
+            <input type="hidden" name="roomNumber" th:value="${booking.room != null ? booking.room.roomNumber : 'No Room Assigned'}"/>
+            <input type="hidden" name="roomType" th:value="${booking.room != null ? booking.room.roomType.roomTypeName : 'No Room Assigned'}"/>
+            <input type="hidden" name="username" th:value="${booking.user}"/>
+            <button
+                    type="submit"
+                    class="rounded-full bg-[#012169] px-[2.19rem] py-[0.94rem] text-[1.125rem] font-semibold text-white hover:opacity-90"
+            >
+                Xác nhận nhận phòng
+            </button>
+        </form>
+    </section>
+</section>
+<!--<main class="container mt-4" layout:fragment="content">-->
+<!--    <div class="card">-->
+<!--        <div class="card-header">-->
+<!--            <h5 class="card-title">Booking Details</h5>-->
+<!--        </div>-->
+<!--             <div class="card-body">-->
+<!--            <div th:if="${successMessage}" class="alert alert-success" role="alert">-->
+<!--                <span th:text="${successMessage}"></span>-->
+<!--            </div>-->
+<!--            <form th:action="@{'/bookings/saveBookingUpdateCheckIn/' + ${booking.bookingId}}" method="post">-->
+<!--                <dl class="row">-->
+<!--                    <dt class="col-sm-4">Booking ID:</dt>-->
+<!--                    <dd class="col-sm-8">-->
+<!--                        <input type="hidden" name="bookingId" th:value="${booking.bookingId}"/>-->
+<!--                        <span th:text="${booking.bookingId}"></span>-->
+<!--                    </dd>-->
+
+<!--                    <dt class="col-sm-4">Pin:</dt>-->
+<!--                    <dd class="col-sm-8">-->
+<!--                        <input type="hidden" name="pin" th:value="${booking.pin}"/>-->
+<!--                        <span th:text="${booking.pin}"></span>-->
+<!--                    </dd>-->
+
+<!--                    <dt class="col-sm-4">Check-In Date:</dt>-->
+<!--                    <dd class="col-sm-8">-->
+<!--                        <input type="hidden" name="checkInDate" th:value="${booking.checkInDate}"/>-->
+<!--                        <span th:text="${booking.checkInDate}"></span>-->
+<!--                    </dd>-->
+
+<!--                    <dt class="col-sm-4">Check-Out Date:</dt>-->
+<!--                    <dd class="col-sm-8">-->
+<!--                        <input type="hidden" name="checkOutDate" th:value="${booking.checkOutDate}"/>-->
+<!--                        <span th:text="${booking.checkOutDate}"></span>-->
+<!--                    </dd>-->
+
+<!--                    <dt class="col-sm-4">Total Price:</dt>-->
+<!--                    <dd class="col-sm-8">-->
+<!--                        <input type="hidden" name="totalPrice" th:value="${booking.totalPrice}"/>-->
+<!--                        <span th:text="${booking.totalPrice}"></span>-->
+<!--                    </dd>-->
+
+<!--                    <dt class="col-sm-4">Payment Status:</dt>-->
+<!--                    <dd class="col-sm-8">-->
+<!--                        <input type="hidden" name="paymentStatus" th:value="${booking.paymentStatus}"/>-->
+<!--                        <span th:text="${booking.paymentStatus ? 'Paid' : 'Pending'}"></span>-->
+<!--                    </dd>-->
+
+<!--                    <dt class="col-sm-4">Room Number:</dt>-->
+<!--                    <dd class="col-sm-8">-->
+<!--                        <input type="hidden" name="roomNumber" th:value="${booking.room != null ? booking.room.roomNumber : 'No Room Assigned'}"/>-->
+<!--                        <span th:text="${booking.room != null ? booking.room.roomNumber : 'No Room Assigned'}"></span>-->
+<!--                    </dd>-->
+
+<!--                    <dt class="col-sm-4">Room Type:</dt>-->
+<!--                    <dd class="col-sm-8">-->
+<!--                        <input type="hidden" name="roomType" th:value="${booking.room != null ? booking.room.roomType.roomTypeName : 'No Room Assigned'}"/>-->
+<!--                        <span th:text="${booking.room != null ? booking.room.roomType.roomTypeName : 'No Room Assigned'}"></span>-->
+<!--                    </dd>-->
+
+<!--                    <dt class="col-sm-4">User:</dt>-->
+<!--                    <dd class="col-sm-8">-->
+<!--                        <input type="hidden" name="username" th:value="${booking.user}"/>-->
+<!--                        <span th:text="${booking.user.username}"></span>-->
+<!--                    </dd>-->
+<!--                </dl>-->
+<!--                <button type="submit" class="btn btn-primary">Confirm Check-In</button>-->
+<!--            </form>-->
+
+<!--        </div>-->
+<!--    </div>-->
+<!--</main>-->
+
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
 </body>
 </html>
