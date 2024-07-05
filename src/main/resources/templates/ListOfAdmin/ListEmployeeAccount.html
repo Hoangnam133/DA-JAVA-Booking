@@ -1,48 +1,204 @@
 <!DOCTYPE html>
 <html lang="en"  xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layout}">
+      layout:decorate="~{Fragments/Layout-Admin}">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Employee Accounts</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
 </head>
 <body>
 <section layout:fragment="content">
-    <main>
-        <div class="container mt-5">
-            <div>
-                <a th:href="@{/createEmployeeAccount}" class="btn btn-primary">Create Account</a>
-            </div>
-            <h1 class="mb-4">Employee Accounts</h1>
-            <table class="table table-striped">
-                <thead>
-                <tr>
-                    <th>Username</th>
-                    <th>Email</th>
-                    <th>Phone</th>
-                    <th>Status</th>
-                    <th>Action</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr th:each="employee : ${employees}">
-                    <td th:text="${employee.username}"></td>
-                    <td th:text="${employee.email}"></td>
-                    <td th:text="${employee.phone}"></td>
-                    <td th:text="${employee.accountStatus} ? 'Active' : 'Inactive'"></td>
-                    <td> <a th:href="@{/getDetailEmployee/{userId}(userId=${employee.id})}" class="btn btn-primary">Edit</a></td>
+    <h2 class="mb-6 text-3xl font-bold">Danh sách tài khoản nhân viên </h2>
+    <div
+            class="mb-0 flex w-full min-w-0 flex-col break-words rounded-2xl border-0 border-solid border-transparent bg-white bg-clip-border shadow-xl"
+    >
+        <div >
+            <div class="overflow-x-auto p-0">
+                <table
+                        class="mb-0 w-full items-center border-gray-200 align-top text-slate-500"
+                >
+                    <thead class="align-bottom">
+                    <tr>
+                        <th
+                                class="border-b-solid tracking-none whitespace-nowrap border-b border-gray-200 bg-transparent px-6 py-3 text-left align-middle text-sm font-bold uppercase text-slate-400 opacity-70 shadow-none"
+                        >
+                           Tên nhân viên
+                        </th>
+                        <th
+                                class="border-b-solid tracking-none whitespace-nowrap border-b border-gray-200 bg-transparent px-2 text-left align-middle text-sm font-bold uppercase text-slate-400 opacity-70 shadow-none"
+                        >
+                            Email
+                        </th>
+                        <th
+                                class="border-b-solid tracking-none whitespace-nowrap border-b border-gray-200 bg-transparent px-2 text-left align-middle text-sm font-bold uppercase text-slate-400 opacity-70 shadow-none"
+                        >
+                            Số điện thoại
+                        </th>
+                        <th
+                                class="border-b-solid tracking-none whitespace-nowrap border-b border-gray-200 bg-transparent px-2 text-left align-middle text-sm font-bold uppercase text-slate-400 opacity-70 shadow-none"
+                        >
+                            Trạng thái tài khoản
+                        </th>
+                        <th class="border-b-solid tracking-none whitespace-nowrap border-b border-gray-200 bg-transparent px-2 text-left align-middle text-sm font-bold uppercase text-slate-400 opacity-70 shadow-none"
+                        >
+                            Hành động
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="employee : ${employees}">
+                        <td
+                                class="whitespace-nowrap border-b bg-transparent p-2 align-middle shadow-transparent"
+                        >
+                            <div class="flex items-center px-6 py-1">
+                                <div class="flex flex-col justify-center">
+                                    <p class="mb-0 text-sm font-bold leading-normal" th:text="${employee.username}">
 
-                </tr>
-                </tbody>
-            </table>
+                                    </p>
+                                </div>
+                            </div>
+                        </td>
+
+                        <td
+                                class="whitespace-nowrap border-b bg-transparent p-2 align-middle shadow-transparent"
+                        >
+                            <p class="mb-0 text-xs font-semibold leading-tight" th:text="${employee.email}">
+
+                            </p>
+                        </td>
+                        <td
+                                class="whitespace-nowrap border-b bg-transparent p-2 align-middle shadow-transparent"
+                        >
+                            <p class="mb-0 text-xs font-semibold leading-tight"  th:text="${employee.phone}">
+
+                            </p>
+                        </td>
+
+                        <td
+                                class="whitespace-nowrap border-b bg-transparent p-2 text-left align-middle text-sm leading-normal shadow-transparent"
+                        >
+                        <span
+                                th:classappend="${employee.accountStatus} ? 'from-green-600 to-lime-400' : 'from-slate-600 to-slate-400'"     th:text="${employee.accountStatus ? 'Đang hoạt động' : 'Ngưng hoạt động'}"  class="inline-block whitespace-nowrap rounded-full bg-gradient-to-tl from-green-600 to-lime-400 px-6 py-3 text-left align-baseline text-xs font-bold uppercase leading-none text-white"
+                        >
+                        </span>
+                        </td>
+
+                        <td class="whitespace-nowrap border-b pr-4 align-middle">
+                            <div class="flex items-center gap-4">
+                                <a  th:href="@{/getDetailEmployee/{userId}(userId=${employee.id})}" class="text-xs font-semibold leading-tight text-slate-400">
+                                    <span class="flex h-10 w-10 items-center justify-center rounded-md bg-amber-400">
+                                        <img src="/static/hinhanh/eye.svg" alt="" class="h-4 w-4"/>
+                                    </span>
+                                </a>
+                                <span>|</span>
+                                <a th:href="@{/createEmployeeAccount}"  class="text-xs font-semibold leading-tight text-slate-400">
+                                    <span class="flex h-10 w-10 items-center justify-center rounded-md bg-amber-400">
+                                        <img src="/static/hinhanh/add.svg" alt="" class="h-4 w-4"/>
+                                    </span>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
-    </main>
+    </div>
+    <nav class="mt-4 flex justify-end " th:if="${totalPages > 1}">
+        <ul class="flex h-10 items-center -space-x-px text-base">
+            <li th:classappend="${currentPage == 0} ? 'disabled'">
+                <a
+                        th:href="@{'/rooms/list?page=' + ${currentPage - 1}}"
+                        class="ms-0 flex h-10 items-center justify-center rounded-s-lg border border-e-0 border-gray-300 bg-white px-4 leading-tight text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                >
+
+                    <svg
+                            class="h-3 w-3 rtl:rotate-180"
+                            aria-hidden="true"
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 6 10"
+                    >
+                        <path
+                                stroke="currentColor"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M5 1 1 5l4 4"
+                        />
+                    </svg>
+                </a>
+            </li>
+            <li th:each="i : ${#numbers.sequence(0, totalPages - 1)}" >
+                <a
+                        th:href="@{'/rooms/list?page=' + ${i}}" th:text="${i + 1}"
+                        th:classappend="${currentPage == i} ? 'active' : 'bg-white'"
+                        class="flex h-10 items-center justify-center border border-gray-300  px-4 leading-tight text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                >1</a
+                >
+            </li>
+
+            <li th:classappend="${currentPage == totalPages - 1} ? 'disabled'">
+                <a
+                        th:href="@{'/rooms/list?page=' + ${currentPage + 1}}"
+                        class="flex h-10 items-center justify-center rounded-e-lg border border-gray-300 bg-white px-4 leading-tight text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                >
+
+                    <svg
+                            class="h-3 w-3 rtl:rotate-180"
+                            aria-hidden="true"
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 6 10"
+                    >
+                        <path
+                                stroke="currentColor"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                                d="m1 9 4-4-4-4"
+                        />
+                    </svg>
+                </a>
+            </li>
+        </ul>
+    </nav>
 </section>
+<!--<section layout:fragment="content">-->
+<!--    <main>-->
+<!--        <div class="container mt-5">-->
+<!--            <div>-->
+<!--                <a th:href="@{/createEmployeeAccount}" class="btn btn-primary">Create Account</a>-->
+<!--            </div>-->
+<!--            <h1 class="mb-4">Employee Accounts</h1>-->
+<!--            <table class="table table-striped">-->
+<!--                <thead>-->
+<!--                <tr>-->
+<!--                    <th>Username</th>-->
+<!--                    <th>Email</th>-->
+<!--                    <th>Phone</th>-->
+<!--                    <th>Status</th>-->
+<!--                    <th>Action</th>-->
+<!--                </tr>-->
+<!--                </thead>-->
+<!--                <tbody>-->
+<!--                <tr th:each="employee : ${employees}">-->
+<!--                    <td th:text="${employee.username}"></td>-->
+<!--                    <td th:text="${employee.email}"></td>-->
+<!--                    <td th:text="${employee.phone}"></td>-->
+<!--                    <td th:text="${employee.accountStatus} ? 'Active' : 'Inactive'"></td>-->
+<!--                    <td> <a th:href="@{/getDetailEmployee/{userId}(userId=${employee.id})}" class="btn btn-primary">Edit</a></td>-->
+
+<!--                </tr>-->
+<!--                </tbody>-->
+<!--            </table>-->
+<!--        </div>-->
+<!--    </main>-->
+<!--</section>-->
 
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
 </body>
 </html>
