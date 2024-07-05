@@ -22,7 +22,7 @@
             <p class="mt-1 text-3xl font-black text-[#219aa7]">DTN ADMIN</p>
         </a>
         <ul class="mt-6">
-            <li class="group rounded px-4 py-2 hover:bg-gray-100">
+            <li class="group rounded px-4 py-2 hover:bg-gray-100 item">
                 <a href="/bookings/listBookingOfAdmin" class="flex w-full items-center gap-4 py-2">
               <span
                       class="group-hover:bg-amber-400  flex h-10 w-10 items-center justify-center rounded-md bg-white shadow-xl"
@@ -32,7 +32,7 @@
                     <span class="font-semibold">Danh sách đặt phòng</span>
                 </a>
             </li>
-            <li class="group rounded px-4 py-2 hover:bg-gray-100">
+            <li class="group rounded px-4 py-2 hover:bg-gray-100 item">
                 <a href="/rooms/list" class="flex w-full items-center gap-4 py-2">
               <span
                       class="group-hover:bg-amber-400  flex h-10 w-10 items-center justify-center rounded-md bg-white shadow-xl"
@@ -42,7 +42,7 @@
                     <span class="font-semibold">Danh sách phòng</span>
                 </a>
             </li>
-            <li class="group rounded px-4 py-2 hover:bg-gray-100">
+            <li class="group rounded px-4 py-2 hover:bg-gray-100 item">
                 <a href="/bookings/listBookingCheckedOfAdmin" class="flex w-full items-center gap-4 py-2">
               <span
                       class="group-hover:bg-amber-400  flex h-10 w-10 items-center justify-center rounded-md bg-white shadow-xl"
@@ -52,7 +52,7 @@
                     <span class="font-semibold">Check In</span>
                 </a>
             </li>
-            <li class="group rounded px-4 py-2 hover:bg-gray-100">
+            <li class="group rounded px-4 py-2 hover:bg-gray-100 item">
                 <a href="/payments/showAdminPaymentList" class="flex w-full items-center gap-4 py-2">
               <span
                       class="group-hover:bg-amber-400  flex h-10 w-10 items-center justify-center rounded-md bg-white shadow-xl"
@@ -62,7 +62,7 @@
                     <span class="font-semibold">Danh sách hóa đơn</span>
                 </a>
             </li>
-            <li class="group rounded px-4 py-2 hover:bg-gray-100">
+            <li class="group rounded px-4 py-2 hover:bg-gray-100 item">
                 <a href="/extraCharges/showAdminExtraChargesList" class="flex w-full items-center gap-4 py-2">
               <span
                       class="group-hover:bg-amber-400  flex h-10 w-10 items-center justify-center rounded-md bg-white shadow-xl"
@@ -72,7 +72,7 @@
                     <span class="font-semibold">Danh sách phụ phí</span>
                 </a>
             </li>
-            <li class="group rounded px-4 py-2 hover:bg-gray-100">
+            <li class="group rounded px-4 py-2 hover:bg-gray-100 item">
                 <a href="/revenue-statistics" class="flex w-full items-center gap-4 py-2">
               <span
                       class="group-hover:bg-amber-400  flex h-10 w-10 items-center justify-center rounded-md bg-white shadow-xl"
@@ -82,7 +82,7 @@
                     <span class="font-semibold">Thống kê </span>
                 </a>
             </li>
-            <li class="group rounded px-4 py-2 hover:bg-gray-100">
+            <li class="group rounded px-4 py-2 hover:bg-gray-100 item" sec:authorize="hasAuthority('ADMIN')">
                 <a href="/employeeAccount" class="flex w-full items-center gap-4 py-2">
               <span
                       class="group-hover:bg-amber-400  flex h-10 w-10 items-center justify-center rounded-md bg-white shadow-xl"
@@ -206,8 +206,10 @@
 <!--        </main>-->
 <!--    </div>-->
 <!--</div>-->
-
 <script th:inline="javascript">
+
+
+
     /*<![CDATA[*/
     var totalPayments = /*[[${totalPayments}]]*/ 0;
     var totalExtraCharges = /*[[${totalExtraCharges}]]*/ 0;
