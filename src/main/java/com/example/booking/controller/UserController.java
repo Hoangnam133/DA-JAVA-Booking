@@ -1,6 +1,8 @@
 package com.example.booking.controller;
 
+import com.example.booking.entity.Hotel;
 import com.example.booking.entity.User;
+import com.example.booking.service.HotelService;
 import com.example.booking.service.UserService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
@@ -23,15 +25,18 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class  UserController {
     private final UserService userService;
-
+    private  final HotelService hotelService;
     @GetMapping("/login")
     public String login() {
         return "Users/login";
     }
     @GetMapping("/homeUser")
-    public String getLayoutUser(){
-            return "Users/home";
+    public String getLayoutUser(Model model) {
+        List<Hotel> hotels = hotelService.getAllHotels(); // Lấy danh sách khách sạn từ service
+        model.addAttribute("hotels", hotels); // Thêm danh sách khách sạn vào model
+        return "Users/home"; // Trả về template Thymeleaf
     }
+
 
     @GetMapping("/about")
     public String getAbout() {

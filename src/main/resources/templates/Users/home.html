@@ -7,6 +7,9 @@
     <title>Title</title>
 
 </head>
+
+
+
 <!--<section >-->
 <!--    <main>-->
 <!--        <h1>-->
@@ -455,6 +458,8 @@
                 </div>
             </div>
         </div>
+
+
     </section>
     <!-- Banner -->
     <section class="relative mt-16 bg-[#1EB482]">
@@ -472,6 +477,7 @@
                     <h2 class="text-[3.25rem] font-bold leading-[3.75rem] text-white">
                         Travel matter
                     </h2>
+
                     <p class="mt-[1.12rem] text-lg text-white">
                         We believe sustainable tourism matters. MAKE TRAVEL MATTER® is
                         our commitment to preserving the planet.
@@ -480,12 +486,34 @@
                 <button
                         class="min-w-[13rem] rounded-full bg-[#FFC200] px-[2.19rem] py-[0.94rem] text-lg font-semibold text-[#191B1D] hover:opacity-90"
                 >
+
                     Find Destination
                 </button>
+
+
+
             </section>
         </div>
+        <div th:each="hotel : ${hotels}" class="whitespace-nowrap bg-red-700 w-96 p-2 align-middle shadow-transparent">
+            <p class="mb-0 text-3xl font-semibold leading-tight">
+                 <!-- Hiển thị địa chỉ của khách sạn -->
+                <a th:href="@{'https://www.google.com/maps/search/?api=1&query=' + ${hotel.hotelAddress}}"
+                   target="_blank" rel="noopener noreferrer"
+                   class="mb-0 text-3xl font-semibold leading-tight text-white">
+                    <svg class="-ml-0.5 mr-1.5 h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd"
+                              d="M17.707 8.293a1 1 0 0 0-1.414 0L10 14.586V17a1 1 0 1 0 2 0v-3h3a1 1 0 1 0 0-2h-2.414l6.707-6.707a1 1 0 0 0 0-1.414zM10 13.414l5.707-5.707L15.707 6.5 10 12.207 4.293 6.5l-.707.707L9 13.414V15a1 1 0 1 0 2 0v-1.586z"/>
+                    </svg>
+                    View on Google Maps
+                </a>
+            </p>
+        </div>
+
     </section>
+
+
 </section>
+
 <body>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
