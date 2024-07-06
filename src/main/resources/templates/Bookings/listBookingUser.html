@@ -222,32 +222,35 @@
                                 VND</strong
                             >
                             <div>
-                    <span
-                            class="rounded-lg bg-green-600 px-[2.19rem] py-1 text-[1.125rem] font-semibold text-white"
-                            th:if="${booking.checkInStatus}"
-                    >
-                      Đã xác nhận
-                    </span>
-                                <span
-                                        class="rounded-lg bg-green-600 px-[2.19rem] py-1 text-[1.125rem] font-semibold text-white"
-                                        th:if="${booking.paymentStatus}"
-                                >
-                      Thanh toán thành công
-                    </span>
+                   <div class="flex gap-2 items-center"  th:if="${booking.checkInStatus}">
+                       <a    th:if="${!booking.paymentStatus}" class="mr-4 block"
+                             th:href="@{'/payments/bookingDetail/' + ${booking.bookingId}}"
+                       >
+                           <img
+                                   th:src="@{/static/hinhanh/pay-pal.png}"
+                                   class="w-18 h-6 object-cover"
+                                   alt=""
+                           />
+                       </a>
+                       <span
+                               class="rounded-lg bg-green-600 px-2 py-1 text-[1.125rem] font-semibold text-white"
+                               th:if="${booking.paymentStatus}">
+                                Thanh toán thành công
+                        </span>
+                       <span
+                                class="rounded-lg bg-green-600 px-2 py-1 text-[1.125rem] font-semibold text-white">
+                                Đã xác nhận
+                       </span>
+
+
+                   </div>
                             </div>
                             <div th:if="${!booking.checkInStatus}">
                                 <div
                                         th:if="${!booking.cancelStatus}"
                                         class="flex items-center gap-6"
                                 >
-                                    <a
-                                            th:href="@{'/payments/bookingDetail/' + ${booking.bookingId}}"
-                                    ><img
-                                            th:src="@{/static/hinhanh/pay-pal.png}"
-                                            class="w-18 h-6 object-cover"
-                                            alt=""
-                                    />
-                                    </a>
+
                                     <a
                                             th:href="@{'/bookings/cancelBooking/' + ${booking.bookingId}}"
                                             class="rounded-lg bg-red-500 px-[2.19rem] py-1 text-[1.125rem] font-semibold text-white"

@@ -95,6 +95,7 @@ public class ReviewController {
         LocalDate timeNow = LocalDate.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
         String conv = timeNow.format(formatter);
+        review.setCommentStatus(true);
         review.setReviewTime(conv);
         reviewService.createReview(review);
         return "redirect:/reviews/list";
