@@ -2,10 +2,12 @@ package com.example.booking.controller;
 
 import com.example.booking.entity.Payment;
 import com.example.booking.entity.Review;
+import com.example.booking.service.HandleImageService;
 import com.example.booking.service.PaymentService;
 import com.example.booking.service.ReviewService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -14,7 +16,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
@@ -23,6 +27,8 @@ import java.time.format.DateTimeFormatter;
 public class ReviewController {
     private final ReviewService reviewService;
     private final PaymentService paymentService;
+    @Autowired
+    private HandleImageService handleImageService;
     public ReviewController(ReviewService reviewService, PaymentService paymentService) {
         this.reviewService = reviewService;
         this.paymentService = paymentService;
@@ -82,7 +88,11 @@ public class ReviewController {
     }
 
     @PostMapping("/save")
-    public String saveAddFrom(@Valid @ModelAttribute("review")  Review review, @NotNull BindingResult bindingResult, Model model){
+    public String saveAddForm(@Valid @ModelAttribute("review") Review review,
+                              @RequestParam("reviewImage1File") MultipartFile reviewImage1File,
+                              @RequestParam("reviewImage2File") MultipartFile reviewImage2File,
+                              @NotNull BindingResult bindingResult,
+                              Model model) {
         if (bindingResult.hasErrors()) {
             var errors = bindingResult.getAllErrors()
                     .stream()
@@ -91,13 +101,32 @@ public class ReviewController {
             model.addAttribute("error", errors);
             return "Reviews/add";
         }
-        review.setPayment(paymentService.checkPayment(checkPaymentId));
-        LocalDate timeNow = LocalDate.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-        String conv = timeNow.format(formatter);
-        review.setCommentStatus(true);
-        review.setReviewTime(conv);
-        reviewService.createReview(review);
-        return "redirect:/reviews/list";
+
+        try {
+            review.setPayment(paymentService.checkPayment(checkPaymentId));
+            LocalDate timeNow = LocalDate.now();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+            String conv = timeNow.format(formatter);
+            review.setCommentStatus(true);
+            review.setReviewTime(conv);
+
+            if (!reviewImage1File.isEmpty()) {
+                String image1Path = handleImageService.saveImage(reviewImage1File);
+                review.setImageReview1(image1Path);
+            }
+
+            if (!reviewImage2File.isEmpty()) {
+                String image2Path = handleImageService.saveImage(reviewImage2File);
+                review.setImageReview2(image2Path);
+            }
+
+            reviewService.createReview(review);
+            return "redirect:/reviews/list";
+        } catch (IOException ex) {
+            model.addAttribute("errors", new String[]{"Lỗi lưu ảnh đánh giá: " + ex.getMessage()});
+            return "Reviews/add";
+        }
+
+
     }
 }
