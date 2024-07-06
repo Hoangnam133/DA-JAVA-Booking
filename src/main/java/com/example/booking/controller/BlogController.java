@@ -35,11 +35,17 @@ public class BlogController {
 
     @GetMapping("/listBlogOfAdmin")
     public String getAllBlogsOfAdmin(@RequestParam(defaultValue = "0") int page, Model model) {
-        Pageable pageable = PageRequest.of(page, 6);
-        Page<Blog> blogPage = blogService.showListAdmin(pageable);
-        model.addAttribute("blogs", blogPage.getContent());
-        model.addAttribute("totalPages", blogPage.getTotalPages());
-        model.addAttribute("currentPage", page);
+
+        try {
+            Pageable pageable = PageRequest.of(page, 6);
+            Page<Blog> blogPage = blogService.showListAdmin(pageable);
+            model.addAttribute("blogs", blogPage.getContent());
+            model.addAttribute("totalPages", blogPage.getTotalPages());
+            model.addAttribute("currentPage", page);
+            return "ListOfAdmin/listBlog";
+        }catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
         return "ListOfAdmin/listBlog";
     }
 
@@ -67,7 +73,7 @@ public class BlogController {
         }
         blog.setBlogStatus(false);
         blogService.createBlog(blog);
-        return "redirect:/blogs/listOfAdmin";
+        return "redirect:/blogs/listBlogOfAdmin";
     }
     @GetMapping("/edit/{blogId}")
     public String showEditFrom(@PathVariable int blogId, Model model){

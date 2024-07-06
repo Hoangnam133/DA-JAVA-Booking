@@ -10,14 +10,9 @@
 <body class="font-sans">
 <main>
     <section class="flex h-screen flex-col items-center justify-center">
-        <img src="/static/hinhanh/404.png" alt="" class="h-[22rem] w-[26rem]" />
-        <h2 class="mt-8 text-2xl font-bold">Page Not Found</h2>
+        <img src="/static/hinhanh/403.jpg" alt="" class="h-[36rem] w-[36rem] object-cover" />
+        <h2 class="mt-8 text-2xl font-bold">Forbidden</h2>
 
-        <div th:if="${errors}" class="mt-4 w-[30rem] text-center text-lg text-[#4E5358]" role="alert">
-            <ul>
-                <li th:each="error : ${errors}" th:text="${error}"></li>
-            </ul>
-        </div>
 
  
     </section>

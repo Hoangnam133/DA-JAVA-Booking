@@ -34,7 +34,7 @@
     <h1>Add Payment</h1>
 </header>
 <main class="container mt-4">
-    <form th:action="@{/reviews/save}" th:object="${review}" method="post">
+    <form th:action="@{/reviews/save}" th:object="${review}" method="post" enctype="multipart/form-data">
         <div class="form-group">
             <label for="comment">comment :</label>
             <input type="text" id="comment" name="comment" th:field="*{comment}" class="form-control" >
@@ -46,13 +46,13 @@
                             src="#"
                             alt=""
                             class="h-24 w-32 rounded-md object-cover hidden"
-                            id="roomImage1Preview"
+                            id="reviewImage1Preview"
                     />
                 </div>
                 <div class="flex flex-col gap-2">
                     <div class="flex w-full items-center justify-center">
                         <label
-                                for="roomImage1File"
+                                for="reviewImage1File"
                                 class="flex h-28 w-full cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 hover:bg-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:hover:border-gray-500 dark:hover:bg-gray-600 dark:hover:bg-gray-800"
                         >
                             <div
@@ -84,7 +84,7 @@
                                 </p>
                             </div>
                             <input
-                                    id="roomImage1File" name="roomImage1File" accept="image/*" onchange="previewImage(event, 'roomImage1Preview')"
+                                    id="reviewImage1File" name="reviewImage1File" accept="image/*" onchange="previewImage(event, 'reviewImage1Preview')"
                                     type="file"
                                     class="hidden"
                             />
@@ -98,13 +98,13 @@
                             src="#"
                             alt=""
                             class="h-24 w-32 rounded-md object-cover hidden"
-                            id="roomImage2Preview"
+                            id="reviewImage2Preview"
                     />
                 </div>
                 <div class="flex flex-col gap-2">
                     <div class="flex w-full items-center justify-center">
                         <label
-                                for="roomImage2File"
+                                for="reviewImage2File"
                                 class="flex h-28 w-full cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 hover:bg-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:hover:border-gray-500 dark:hover:bg-gray-600 dark:hover:bg-gray-800"
                         >
                             <div
@@ -136,7 +136,7 @@
                                 </p>
                             </div>
                             <input
-                                    id="roomImage2File" name="roomImage2File" accept="image/*" onchange="previewImage(event, 'roomImage2Preview')"
+                                    id="reviewImage2File" name="reviewImage2File" accept="image/*" onchange="previewImage(event, 'reviewImage2Preview')"
                                     type="file"
                                     class="hidden"
                             />
