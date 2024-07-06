@@ -61,17 +61,19 @@ public class  UserController {
             model.addAttribute("errors", errors);
             return "Users/register"; // Trả về lại view "register" nếu có lỗi
         }
-        User existingUser = userService.findByUsername(user.getUsername())
-                .orElseThrow(() -> new UsernameNotFoundException(user.getUsername()));
-        try {
-            if(existingUser.getEmail().equals(user.getEmail())
-            || existingUser.getUsername().equals(user.getUsername())){
-                throw  new RuntimeException("Email of Username already exists ");
-            }
-        }catch (Exception e){
-            model.addAttribute("errors", e.getMessage());
-            return "Users/register";
-        }
+        user.setAccountStatus(true);
+
+//        User existingUser = userService.findByUsername(user.getUsername())
+//                .orElseThrow(() -> new UsernameNotFoundException(user.getUsername()));
+//        try {
+//            if(existingUser.getEmail().equals(user.getEmail())
+//            || existingUser.getUsername().equals(user.getUsername())){
+//                throw new RuntimeException("Email of Username already exists ");
+//            }
+//        }catch (Exception e){
+//            model.addAttribute("errors", e.getMessage());
+//            return "Users/register";
+//        }
         userService.save(user); // Lưu người dùng vào cơ sở dữ liệu
         userService.setDefaultRole(user.getUsername()); // Gán vai trò mặc định cho người dùng
         return "redirect:/login"; // Chuyển hướng người dùng tới trang "login"
