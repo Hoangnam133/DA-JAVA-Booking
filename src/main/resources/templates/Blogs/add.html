@@ -3,10 +3,21 @@
 <head>
   <meta charset="UTF-8">
   <title>Add New Blog</title>
+  <script>
+    function previewImage(event, previewId) {
+      const reader = new FileReader();
+      const output = document.getElementById(previewId);
+      reader.onload = function() {
+        output.src = reader.result;
+        output.style.display = "block";
+      };
+      reader.readAsDataURL(event.target.files[0]);
+    }
+  </script>
 </head>
 <body>
 <h2>Add New Blog</h2>
-<form th:action="@{/blogs/save}" method="post" th:object="${blog}">
+<form th:action="@{/blogs/save}" method="post" th:object="${blog}" enctype="multipart/form-data">
   <div>
     <label for="title">Title:</label>
     <input type="text" id="title" name="title" th:field="*{title}">
@@ -17,13 +28,109 @@
     <textarea id="content" name="content" th:field="*{content}"></textarea>
     <span th:if="${#fields.hasErrors('content')}" th:errors="*{content}"></span>
   </div>
-  <div>
-    <label for="mainImage">Main Image:</label>
-    <input type="text" id="mainImage" name="mainImage" th:field="*{mainImage}">
+  <div class="flex flex-col gap-2">
+    <div class="flex justify-center">
+      <img
+              src="#"
+              alt=""
+              class="h-24 w-32 rounded-md object-cover hidden"
+              id="reviewImage1Preview"
+      />
+    </div>
+    <div class="flex flex-col gap-2">
+      <div class="flex w-full items-center justify-center">
+        <label
+                for="mainImageFile"
+                class="flex h-28 w-full cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 hover:bg-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:hover:border-gray-500 dark:hover:bg-gray-600 dark:hover:bg-gray-800"
+        >
+          <div
+                  class="flex flex-col items-center justify-center pb-6 pt-5"
+          >
+            <svg
+                    class="mb-4 h-8 w-8 text-gray-500 dark:text-gray-400"
+                    aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 20 16"
+            >
+              <path
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"
+              />
+            </svg>
+            <p
+                    class="mb-2 text-sm text-gray-500 dark:text-gray-400"
+            >
+              <span class="font-semibold">Click to upload</span>
+              or drag and drop
+            </p>
+            <p class="text-xs text-gray-500 dark:text-gray-400">
+              SVG, PNG, JPG or GIF (MAX. 800x400px)
+            </p>
+          </div>
+          <input
+                  id="mainImageFile" name="mainImageFile" accept="image/*" onchange="previewImage(event, 'reviewImage1Preview')"
+                  type="file"
+                  class="hidden"
+          />
+        </label>
+      </div>
+    </div>
   </div>
-  <div>
-    <label for="secondaryImage">Secondary Image:</label>
-    <input type="text" id="secondaryImage" name="secondaryImage" th:field="*{secondaryImage}">
+  <div class="flex flex-col gap-2">
+    <div class="flex justify-center">
+      <img
+              src="#"
+              alt=""
+              class="h-24 w-32 rounded-md object-cover hidden"
+              id="reviewImage2Preview"
+      />
+    </div>
+    <div class="flex flex-col gap-2">
+      <div class="flex w-full items-center justify-center">
+        <label
+                for="secondaryImageFile"
+                class="flex h-28 w-full cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 hover:bg-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:hover:border-gray-500 dark:hover:bg-gray-600 dark:hover:bg-gray-800"
+        >
+          <div
+                  class="flex flex-col items-center justify-center pb-6 pt-5"
+          >
+            <svg
+                    class="mb-4 h-8 w-8 text-gray-500 dark:text-gray-400"
+                    aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 20 16"
+            >
+              <path
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"
+              />
+            </svg>
+            <p
+                    class="mb-2 text-sm text-gray-500 dark:text-gray-400"
+            >
+              <span class="font-semibold">Click to upload</span>
+              or drag and drop
+            </p>
+            <p class="text-xs text-gray-500 dark:text-gray-400">
+              SVG, PNG, JPG or GIF (MAX. 800x400px)
+            </p>
+          </div>
+          <input
+                  id="secondaryImageFile" name="secondaryImageFile" accept="image/*" onchange="previewImage(event, 'reviewImage2Preview')"
+                  type="file"
+                  class="hidden"
+          />
+        </label>
+      </div>
+    </div>
   </div>
   <div>
     <label for="formattedPostDate">Post Date:</label>

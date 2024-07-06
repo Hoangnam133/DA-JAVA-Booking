@@ -2,9 +2,11 @@ package com.example.booking.controller;
 
 import com.example.booking.entity.Blog;
 import com.example.booking.service.BlogService;
+import com.example.booking.service.HandleImageService;
 import com.example.booking.service.UserService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -13,10 +15,15 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 @Controller
 @RequestMapping("/blogs")
 public class BlogController {
+    @Autowired
+    private HandleImageService handleImageService;
     private final BlogService blogService;
     private final UserService userService;
     public BlogController(BlogService blogService, UserService userService) {
@@ -61,7 +68,8 @@ public class BlogController {
         }
     }
     @PostMapping("/save")
-    public String saveAddFrom(@Valid @ModelAttribute("blog") Blog blog, @NotNull BindingResult bindingResult,
+    public String saveAddFrom(@Valid @ModelAttribute("blog") Blog blog, @RequestParam(value = "mainImageFile",required = false) MultipartFile mainImageFile,
+                              @RequestParam(value = "secondaryImageFile",required = false) MultipartFile secondaryImageFile,@NotNull BindingResult bindingResult,
                               Model model){
         if (bindingResult.hasErrors()) {
             var errors = bindingResult.getAllErrors()
@@ -70,6 +78,21 @@ public class BlogController {
                     .toArray(String[]::new);
             model.addAttribute("errors", errors);
             return "Blogs/add";
+        }
+        try {
+            blog.setBlogStatus(false);
+            if (!mainImageFile.isEmpty()) {
+                String image1Path = handleImageService.saveImage(mainImageFile);
+                blog.setMainImage(image1Path);
+            }
+
+            if (!secondaryImageFile.isEmpty()) {
+                String image2Path = handleImageService.saveImage(secondaryImageFile);
+                blog.setSecondaryImage(image2Path);
+            }
+        }catch (IOException ex) {
+            model.addAttribute("errors", new String[]{"Lỗi lưu ảnh đánh giá: " + ex.getMessage()});
+            return "Reviews/add";
         }
         blog.setBlogStatus(false);
         blogService.createBlog(blog);
@@ -87,7 +110,10 @@ public class BlogController {
         }
     }
     @PostMapping("/saveEdit/{blogId}")
-    public String saveEditForm(@PathVariable int blogId, @Valid Blog blog, BindingResult result, Model model) {
+    public String saveEditForm(@PathVariable int blogId, @Valid Blog blog,
+                               @RequestParam(value = "mainImageFile", required = false) MultipartFile mainImageFile,
+                               @RequestParam(value = "secondaryImageFile", required = false) MultipartFile secondaryImageFile,
+                               BindingResult result, Model model) {
         if (result.hasErrors()) {
             var errors = result.getAllErrors()
                     .stream()
@@ -97,8 +123,40 @@ public class BlogController {
             blog.setBlogId(blogId);
             return "Blogs/edit";
         }
-        blogService.updateBlog(blog);
-        return "redirect:/blogs/listBlogOfAdmin";
+
+        try {
+            // Retrieve the current blog data
+            Blog currentBlog = blogService.checkBlog(blogId);
+            if (currentBlog == null) {
+                model.addAttribute("errors", new String[]{"Blog không tồn tại"});
+                return "Blogs/edit";
+            }
+
+
+
+            // If a new main image file is uploaded, save it. Otherwise, keep the current image.
+            if (mainImageFile != null && !mainImageFile.isEmpty()) {
+                String image1Path = handleImageService.saveImage(mainImageFile);
+                blog.setMainImage(image1Path);
+            } else {
+                blog.setMainImage(currentBlog.getMainImage());
+            }
+
+            // If a new secondary image file is uploaded, save it. Otherwise, keep the current image.
+            if (secondaryImageFile != null && !secondaryImageFile.isEmpty()) {
+                String image2Path = handleImageService.saveImage(secondaryImageFile);
+                blog.setSecondaryImage(image2Path);
+            } else {
+                blog.setSecondaryImage(currentBlog.getSecondaryImage());
+            }
+            blog.setBlogStatus(false);
+            blogService.updateBlog(blog);
+            return "redirect:/blogs/listBlogOfAdmin";
+        } catch (IOException ex) {
+            model.addAttribute("errors", new String[]{"Lỗi lưu ảnh: " + ex.getMessage()});
+            return "Blogs/edit";
+        }
     }
+
 
 }
