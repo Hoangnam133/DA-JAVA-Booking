@@ -17,6 +17,17 @@
             document.getElementById('paymentTime').value = hiddenFormattedDate;
         });
     </script>
+    <script>
+        function previewImage(event, previewId) {
+            const reader = new FileReader();
+            const output = document.getElementById(previewId);
+            reader.onload = function() {
+                output.src = reader.result;
+                output.style.display = "block";
+            };
+            reader.readAsDataURL(event.target.files[0]);
+        }
+    </script>
 </head>
 <body>
 <header class="bg-primary text-white text-center py-3">
@@ -28,13 +39,119 @@
             <label for="comment">comment :</label>
             <input type="text" id="comment" name="comment" th:field="*{comment}" class="form-control" >
         </div>
-        <div class="form-group">
-            <label for="imageReview1">imageReview1 :</label>
-            <input type="text" id="imageReview1" name="imageReview1" th:field="*{imageReview1}" class="form-control" >
-        </div>
-        <div class="form-group">
-            <label for="imageReview2">imageReview2 :</label>
-            <input type="text" id="imageReview2" name="imageReview2" th:field="*{imageReview2}" class="form-control" >
+        <div class="mt-2 grid grid-cols-3 gap-6">
+            <div class="flex flex-col gap-2">
+                <div class="flex justify-center">
+                    <img
+                            src="#"
+                            alt=""
+                            class="h-24 w-32 rounded-md object-cover hidden"
+                            id="roomImage1Preview"
+                    />
+                </div>
+                <div class="flex flex-col gap-2">
+                    <div class="flex w-full items-center justify-center">
+                        <label
+                                for="roomImage1File"
+                                class="flex h-28 w-full cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 hover:bg-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:hover:border-gray-500 dark:hover:bg-gray-600 dark:hover:bg-gray-800"
+                        >
+                            <div
+                                    class="flex flex-col items-center justify-center pb-6 pt-5"
+                            >
+                                <svg
+                                        class="mb-4 h-8 w-8 text-gray-500 dark:text-gray-400"
+                                        aria-hidden="true"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        fill="none"
+                                        viewBox="0 0 20 16"
+                                >
+                                    <path
+                                            stroke="currentColor"
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            stroke-width="2"
+                                            d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"
+                                    />
+                                </svg>
+                                <p
+                                        class="mb-2 text-sm text-gray-500 dark:text-gray-400"
+                                >
+                                    <span class="font-semibold">Click to upload</span>
+                                    or drag and drop
+                                </p>
+                                <p class="text-xs text-gray-500 dark:text-gray-400">
+                                    SVG, PNG, JPG or GIF (MAX. 800x400px)
+                                </p>
+                            </div>
+                            <input
+                                    id="roomImage1File" name="roomImage1File" accept="image/*" onchange="previewImage(event, 'roomImage1Preview')"
+                                    type="file"
+                                    class="hidden"
+                            />
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="flex flex-col gap-2">
+                <div class="flex justify-center">
+                    <img
+                            src="#"
+                            alt=""
+                            class="h-24 w-32 rounded-md object-cover hidden"
+                            id="roomImage2Preview"
+                    />
+                </div>
+                <div class="flex flex-col gap-2">
+                    <div class="flex w-full items-center justify-center">
+                        <label
+                                for="roomImage2File"
+                                class="flex h-28 w-full cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 hover:bg-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:hover:border-gray-500 dark:hover:bg-gray-600 dark:hover:bg-gray-800"
+                        >
+                            <div
+                                    class="flex flex-col items-center justify-center pb-6 pt-5"
+                            >
+                                <svg
+                                        class="mb-4 h-8 w-8 text-gray-500 dark:text-gray-400"
+                                        aria-hidden="true"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        fill="none"
+                                        viewBox="0 0 20 16"
+                                >
+                                    <path
+                                            stroke="currentColor"
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            stroke-width="2"
+                                            d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"
+                                    />
+                                </svg>
+                                <p
+                                        class="mb-2 text-sm text-gray-500 dark:text-gray-400"
+                                >
+                                    <span class="font-semibold">Click to upload</span>
+                                    or drag and drop
+                                </p>
+                                <p class="text-xs text-gray-500 dark:text-gray-400">
+                                    SVG, PNG, JPG or GIF (MAX. 800x400px)
+                                </p>
+                            </div>
+                            <input
+                                    id="roomImage2File" name="roomImage2File" accept="image/*" onchange="previewImage(event, 'roomImage2Preview')"
+                                    type="file"
+                                    class="hidden"
+                            />
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="flex items-center justify-center">
+                <button
+                        type="submit"
+                        class="h-14 w-40 rounded-full bg-[#FF5B26] px-6 py-2 text-lg font-bold text-white hover:opacity-90"
+                >
+                    Thêm phòng
+                </button>
+            </div>
         </div>
 
         <button type="submit" class="btn btn-primary">Save review</button>
