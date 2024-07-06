@@ -105,7 +105,7 @@ public class SecurityConfig {
                         .userDetailsService(userDetailsService())
                 ).
                 exceptionHandling(exceptionHandling -> exceptionHandling
-                        .accessDeniedPage("/403") // Trang báo lỗi khi truy cập không được phép.
+                        .accessDeniedPage("/403.html") // Trang báo lỗi khi truy cập không được phép.
                 ).
                 sessionManagement(sessionManagement -> sessionManagement
                         .maximumSessions(1) // Giới hạn số phiên đăng nhập.
