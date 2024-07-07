@@ -328,6 +328,60 @@
         </div>
     </div>
 </footer>
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 
+<script>
+    $(document).ready(function() {
+        $('.room-type-checkbox').change(function() {
+            filterRooms();
+        });
+
+        $('.sort-price-checkbox').change(function() {
+            sortRooms();
+        });
+
+        function filterRooms() {
+            var selectedRoomTypes = [];
+            $('.room-type-checkbox:checked').each(function() {
+                selectedRoomTypes.push($(this).val());
+            });
+
+            console.log('Selected room types:', selectedRoomTypes); // Log selected room types
+
+            $('#items article').each(function() {
+                var roomTypeId = $(this).data('room-type-id');
+                console.log('Room Type ID:', roomTypeId); // Log room type ID
+                if (selectedRoomTypes.length === 0 || selectedRoomTypes.includes(roomTypeId.toString())) {
+                    $(this).show();
+                } else {
+                    $(this).hide();
+                }
+            });
+
+            sortRooms();
+        }
+
+        function sortRooms() {
+            var sortOrder = $('.sort-price-checkbox:checked').val();
+            var $rows = $('#items article:visible').detach();
+
+            console.log('Sort Order:', sortOrder); // Log sort order
+
+            if (sortOrder === 'asc') {
+                $rows.sort(function(a, b) {
+                    return $(a).data('room-price') - $(b).data('room-price');
+                });
+            } else if (sortOrder === 'desc') {
+                $rows.sort(function(a, b) {
+                    return $(b).data('room-price') - $(a).data('room-price');
+                });
+            }
+
+            $('#items').append($rows);
+        }
+
+        filterRooms(); // Initial filter and sort
+    });
+</script>
 </body>
 </html>
