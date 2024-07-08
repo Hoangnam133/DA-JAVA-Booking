@@ -13,6 +13,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -22,8 +23,10 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
+import java.util.Locale;
 import java.util.stream.Collectors;
 
 @Controller
@@ -37,6 +40,7 @@ public class BookingController {
 
     public double gb_totalPrice = 0;
     @Autowired
+
     public BookingController(BookingService bookingService, UserService userService,
                              RoomService roomService, MailService mailService,
                              RoomTypeService roomTypeService){
@@ -81,6 +85,7 @@ public class BookingController {
             return "errorPage";
         }
     }
+
     @GetMapping("/listBookingOfAdmin")
     public String getAllBookingOfAdmin(@RequestParam(defaultValue = "0") int page, Model model) {
         try {
@@ -208,6 +213,7 @@ public class BookingController {
                 .orElseThrow(() -> new RuntimeException("User not found"));
         booking.setUser(user);
         booking.setTotalPrice(gb_totalPrice);
+        booking.setBookingTime(LocalDateTime.now().toLocalDate());
         String pin = bookingService.generateRandomString();
         booking.setPin(pin);
         bookingService.createBooking(booking);

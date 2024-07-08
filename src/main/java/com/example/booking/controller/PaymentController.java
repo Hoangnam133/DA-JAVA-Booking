@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.*;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Controller
 @RequestMapping("/payments")
@@ -93,7 +94,7 @@ public class PaymentController {
             payment.setPaymentPin(bookingService.generateRandomString());
             paymentService.createPayment(payment);
             sendPaymentToEmail(payment,user);
-
+            payment.setPaymentTime(LocalDateTime.now().toLocalDate());
             bookingService.updatePaymentStatus(booking.getBookingId());
             return "redirect:/payments/showAdminPaymentList";
         } catch (Exception e) {
@@ -175,7 +176,7 @@ public class PaymentController {
                 newPayment.setBooking(booking);
                 newPayment.setPaymentType(paymentTypeService.getPaymentTypeById(1));
                 newPayment.setTotalPayment(booking.getTotalPrice());
-                newPayment.setPaymentTime(LocalDate.now().toString());
+                newPayment.setPaymentTime(LocalDateTime.now().toLocalDate());
                 newPayment.setPaymentPin(bookingService.generateRandomString());
 
                 paymentService.createPayment(newPayment);
