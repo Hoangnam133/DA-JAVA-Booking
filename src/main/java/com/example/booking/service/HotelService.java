@@ -56,5 +56,9 @@ public class HotelService {
             throw  new RuntimeException(e.getMessage());
         }
     }
+    public Hotel getHotelById(int id) {
+        return hotelRepository.findById(id)
+                .orElseThrow(()-> new IllegalArgumentException("Hotel not found"));
+    }
 
 }

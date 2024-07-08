@@ -26,4 +26,7 @@ public class Blog {
     private String secondaryImage;
     private boolean blogStatus;
     private String postDate;
+    @ManyToOne
+    @JoinColumn(name = "id")
+    private User user;
 }

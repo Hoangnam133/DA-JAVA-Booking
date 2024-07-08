@@ -9,66 +9,254 @@
 </head>
 <body>
 <section layout:fragment="content">
-    <h2>List of Blogs</h2>
-    <table>
-        <thead>
-        <tr>
-            <th>Title</th>
-            <th>Content</th>
-            <th>Main Image</th>
-            <th>Secondary Image</th>
-            <th>Post Date</th>
-            <th>Status</th>
-            <th>Action</th>
-            <!-- Add more columns as needed -->
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="blog : ${blogs}">
-            <td th:text="${blog.title}"></td>
-            <td th:text="${blog.content}"></td>
-            <td>
-                <div th:if="${blog.mainImage}" class="mb-2">
-                    <img th:src="@{${blog.mainImage}}" alt="Main Image" class="img-fluid">
-                </div>
-            </td>
-            <td>
-                <div th:if="${blog.secondaryImage}" class="mb-2">
-                    <img th:src="@{${blog.secondaryImage}}" alt="Secondary Image" class="img-fluid">
-                </div>
-            </td>
-            <td th:text="${blog.postDate}"></td>
-            <td th:text="${blog.blogStatus ? 'Active' : 'Inactive'}"></td>
-            <td>
-                <div sec:authorize="hasAuthority('ADMIN')">
-                    <a th:href="@{'/blogs/edit/' + ${blog.blogId}}" class="btn btn-warning btn-sm">Edit</a>
-                </div>
+    <h2 class="mb-6 text-3xl font-bold">Danh sách blog </h2>
+    <div
+            class="mb-0 flex w-full min-w-0 flex-col break-words rounded-2xl border-0 border-solid border-transparent bg-white bg-clip-border shadow-xl"
+    >
+        <div
+                class="mb-4 flex items-center justify-between rounded-t-2xl bg-white p-6 pb-0 text-lg font-medium"
+        >
+            <h6>Thông tin</h6>
 
-            </td>
-            <!-- Add more columns as needed -->
-        </tr>
-        </tbody>
-    </table>
-    <!-- Pagination -->
-    <div>
-        <nav aria-label="Page navigation" th:if="${totalPages > 1}">
-            <ul class="pagination">
-                <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
-                    <a class="page-link" th:href="@{'/blogs/listBlogOfAdmin?page=' + ${currentPage - 1}}" aria-label="Previous">
-                        <span aria-hidden="true">&laquo;</span>
-                    </a>
-                </li>
-                <li class="page-item" th:each="i : ${#numbers.sequence(0, totalPages - 1)}" th:classappend="${currentPage == i} ? 'active'">
-                    <a class="page-link" th:href="@{'/blogs/listBlogOfAdmin?page=' + ${i}}" th:text="${i + 1}">1</a>
-                </li>
-                <li class="page-item" th:classappend="${currentPage == totalPages - 1} ? 'disabled'">
-                    <a class="page-link" th:href="@{'/blogs/listBlogOfAdmin?page=' + ${currentPage + 1}}" aria-label="Next">
-                        <span aria-hidden="true">&raquo;</span>
-                    </a>
-                </li>
-            </ul>
-        </nav>
+        </div>
+
+        <div>
+            <div class="overflow-x-auto p-0">
+                <table
+                        class="mb-0 w-full items-center border-gray-200 align-top text-slate-500"
+                >
+                    <thead class="align-bottom">
+                    <tr>
+                        <th
+                                class="border-b-solid tracking-none whitespace-nowrap border-b border-gray-200 bg-transparent px-6 py-3 text-left align-middle text-sm font-bold uppercase text-slate-400 opacity-70 shadow-none"
+                        >
+                            Tiêu đề
+                        </th>
+                        <th
+                                class="border-b-solid tracking-none whitespace-nowrap border-b border-gray-200 bg-transparent px-2 text-left align-middle text-sm font-bold uppercase text-slate-400 opacity-70 shadow-none"
+                        >
+                            Nội dung
+                        </th>
+                        <th
+                                class="border-b-solid tracking-none whitespace-nowrap border-b border-gray-200 bg-transparent px-2 text-left align-middle text-sm font-bold uppercase text-slate-400 opacity-70 shadow-none"
+                        >
+                            Hình ảnh 1
+                        </th>
+                        <th
+                                class="border-b-solid tracking-none whitespace-nowrap border-b border-gray-200 bg-transparent px-2 text-left align-middle text-sm font-bold uppercase text-slate-400 opacity-70 shadow-none"
+                        >
+                            Hình ảnh 2
+                        </th>
+                        <th
+                                class="border-b-solid tracking-none whitespace-nowrap border-b border-gray-200 bg-transparent px-2 text-left align-middle text-sm font-bold uppercase text-slate-400 opacity-70 shadow-none"
+                        >
+                            Ngày đăng bài
+                        </th>
+                        <th
+                                class="border-b-solid tracking-none whitespace-nowrap border-b border-gray-200 bg-transparent px-2 text-left align-middle text-sm font-bold uppercase text-slate-400 opacity-70 shadow-none"
+                        >
+                            Trạng thái
+                        </th>
+
+                        <th
+                                class="border-b-solid tracking-none whitespace-nowrap border-b border-gray-200 bg-transparent px-2 text-left align-middle text-sm font-bold uppercase text-slate-400 opacity-70 shadow-none"
+                        >
+                            Hành động
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="blog : ${blogs}">
+                        <td
+                                class="whitespace-nowrap border-b bg-transparent p-2 align-middle shadow-transparent"
+                        >
+                            <div class="flex items-center px-6 py-1">
+                                <div class="flex flex-col justify-center">
+                                    <h6 class="mb-0 text-sm font-bold leading-normal" th:text="${blog.title}">
+
+                                    </h6>
+                                </div>
+                            </div>
+                        </td>
+                        <td
+                                class="whitespace-nowrap border-b bg-transparent p-2 align-middle shadow-transparent max-w-40"
+                        >
+                            <p class="mb-0 text-xs font-semibold leading-tight line-clamp-3"  th:text="${blog.content}">
+
+                            </p>
+                        </td>
+                        <td
+                                class="whitespace-nowrap border-b bg-transparent p-2 align-middle shadow-transparent"
+                        >
+                            <img
+                                    th:src="@{${blog.mainImage}}"
+                                    alt=""
+                                    class="h-14 w-14 rounded-md object-cover"
+                                    th:if="${blog.mainImage}"
+                            />
+                        </td>
+                        <td
+                                class="whitespace-nowrap border-b bg-transparent p-2 align-middle shadow-transparent"
+                        >
+                            <img
+                                    th:if="${blog.secondaryImage}"
+                                    alt=""
+                                    class="h-14 w-14 rounded-md object-cover"
+                                    th:src="@{${blog.secondaryImage}}"
+                            />
+                        </td>
+                        <td
+                                class="whitespace-nowrap border-b bg-transparent p-2 align-middle shadow-transparent"
+                        >
+                            <p class="mb-0 text-xs font-semibold leading-tight" th:text="${blog.postDate}">
+
+                            </p>
+                        </td>
+                        <td
+                                class="whitespace-nowrap border-b bg-transparent p-2 text-left align-middle text-sm leading-normal shadow-transparent"
+                        >
+                        <span
+                                th:classappend="${blog.blogStatus} ? 'from-green-600 to-lime-400' : 'from-amber-500 to-yellow-500'" th:text="${blog.blogStatus ? 'Hoạt động' : 'Ngừng hoạt động'}" class="inline-block whitespace-nowrap rounded-full bg-gradient-to-tl  px-4 py-3 text-left align-baseline text-xs font-bold uppercase leading-none text-white"
+                        ></span
+                        >
+                        </td>
+
+                        <td class="whitespace-nowrap border-b pr-4 align-middle">
+                            <a th:href="@{'/blogs/edit/' + ${blog.blogId}}" class="text-xs font-semibold leading-tight text-slate-400">
+                                    <span class="flex h-10 w-10 items-center justify-center rounded-md bg-amber-400">
+                                        <img src="/static/hinhanh/edit.svg" alt="" class="h-4 w-4"/>
+                                    </span>
+                            </a>
+                        </td>
+                    </tr>
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
+    <nav class="mt-4 flex justify-end " th:if="${totalPages > 1}">
+        <ul class="flex h-10 items-center -space-x-px text-base">
+            <li th:classappend="${currentPage == 0} ? 'disabled'">
+                <a
+                        th:href="@{'/blogs/listBlogOfAdmin?page=' + ${currentPage - 1}}"
+                        class="ms-0 flex h-10 items-center justify-center rounded-s-lg border border-e-0 border-gray-300 bg-white px-4 leading-tight text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                >
+
+                    <svg
+                            class="h-3 w-3 rtl:rotate-180"
+                            aria-hidden="true"
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 6 10"
+                    >
+                        <path
+                                stroke="currentColor"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M5 1 1 5l4 4"
+                        />
+                    </svg>
+                </a>
+            </li>
+            <li th:each="i : ${#numbers.sequence(0, totalPages - 1)}" >
+                <a
+                        th:href="@{'/blogs/listBlogOfAdmin?page=' + ${i}}" th:text="${i + 1}"
+                        th:classappend="${currentPage == i} ? 'active' : 'bg-white'"
+                        class="flex h-10 items-center justify-center border border-gray-300  px-4 leading-tight text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                >1</a
+                >
+            </li>
+
+            <li th:classappend="${currentPage == totalPages - 1} ? 'disabled'">
+                <a
+                        th:href="@{'/blogs/listBlogOfAdmin?page=' + ${currentPage + 1}}"
+                        class="flex h-10 items-center justify-center rounded-e-lg border border-gray-300 bg-white px-4 leading-tight text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                >
+
+                    <svg
+                            class="h-3 w-3 rtl:rotate-180"
+                            aria-hidden="true"
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 6 10"
+                    >
+                        <path
+                                stroke="currentColor"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                                d="m1 9 4-4-4-4"
+                        />
+                    </svg>
+                </a>
+            </li>
+        </ul>
+    </nav>
+
 </section>
+<!--<section layout:fragment="content">-->
+<!--    <h2>List of Blogs</h2>-->
+<!--    <table>-->
+<!--        <thead>-->
+<!--        <tr>-->
+<!--            <th>Title</th>-->
+<!--            <th>Content</th>-->
+<!--            <th>Main Image</th>-->
+<!--            <th>Secondary Image</th>-->
+<!--            <th>Post Date</th>-->
+<!--            <th>Status</th>-->
+<!--            <th>Action</th>-->
+<!--            &lt;!&ndash; Add more columns as needed &ndash;&gt;-->
+<!--        </tr>-->
+<!--        </thead>-->
+<!--        <tbody>-->
+<!--        <tr th:each="blog : ${blogs}">-->
+<!--            <td th:text="${blog.title}"></td>-->
+<!--            <td th:text="${blog.content}"></td>-->
+<!--            <td>-->
+<!--                <div th:if="${blog.mainImage}" class="mb-2">-->
+<!--                    <img th:src="@{${blog.mainImage}}" alt="Main Image" class="img-fluid">-->
+<!--                </div>-->
+<!--            </td>-->
+<!--            <td>-->
+<!--                <div th:if="${blog.secondaryImage}" class="mb-2">-->
+<!--                    <img th:src="@{${blog.secondaryImage}}" alt="Secondary Image" class="img-fluid">-->
+<!--                </div>-->
+<!--            </td>-->
+<!--            <td th:text="${blog.postDate}"></td>-->
+<!--            <td th:text="${blog.blogStatus ? 'Active' : 'Inactive'}"></td>-->
+<!--            <td>-->
+<!--                <div sec:authorize="hasAuthority('ADMIN')">-->
+<!--                    <a th:href="@{'/blogs/edit/' + ${blog.blogId}}" class="btn btn-warning btn-sm">Edit</a>-->
+<!--                </div>-->
+
+<!--            </td>-->
+<!--            &lt;!&ndash; Add more columns as needed &ndash;&gt;-->
+<!--        </tr>-->
+<!--        </tbody>-->
+<!--    </table>-->
+<!--    &lt;!&ndash; Pagination &ndash;&gt;-->
+<!--    <div>-->
+<!--        <nav aria-label="Page navigation" th:if="${totalPages > 1}">-->
+<!--            <ul class="pagination">-->
+<!--                <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">-->
+<!--                    <a class="page-link" th:href="@{'/blogs/listBlogOfAdmin?page=' + ${currentPage - 1}}" aria-label="Previous">-->
+<!--                        <span aria-hidden="true">&laquo;</span>-->
+<!--                    </a>-->
+<!--                </li>-->
+<!--                <li class="page-item" th:each="i : ${#numbers.sequence(0, totalPages - 1)}" th:classappend="${currentPage == i} ? 'active'">-->
+<!--                    <a class="page-link" th:href="@{'/blogs/listBlogOfAdmin?page=' + ${i}}" th:text="${i + 1}">1</a>-->
+<!--                </li>-->
+<!--                <li class="page-item" th:classappend="${currentPage == totalPages - 1} ? 'disabled'">-->
+<!--                    <a class="page-link" th:href="@{'/blogs/listBlogOfAdmin?page=' + ${currentPage + 1}}" aria-label="Next">-->
+<!--                        <span aria-hidden="true">&raquo;</span>-->
+<!--                    </a>-->
+<!--                </li>-->
+<!--            </ul>-->
+<!--        </nav>-->
+<!--    </div>-->
+<!--</section>-->
 </body>
 </html>

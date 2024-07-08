@@ -1,52 +1,75 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{Fragments/Layout-User}">
 <head>
     <meta charset="UTF-8">
     <title>List of Blogs</title>
 </head>
 <body>
-<h2>List of Blogs</h2>
-<table>
-    <thead>
-    <tr>
-        <th>Title</th>
-        <th>Content</th>
-        <th>Main Image</th>
-        <th>Post Date</th>
-        <!-- Add more columns as needed -->
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="blog : ${blogs}">
-        <td th:text="${blog.title}"></td>
-        <td th:text="${blog.content}"></td>
-        <td th:text="${blog.mainImage}"></td>
-        <td th:text="${blog.postDate}"></td>
-        <!-- Add more columns as needed -->
-    </tr>
-    </tbody>
-</table>
+<section class="py-12" layout:fragment="content">
+    <div class="container px-72">
+        <h2 class="text-3xl font-bold">
+            Bài viết nổi bật
+        </h2>
+        <p class="mt-2">Tổng hợp các bài viết chia sẻ về cách thức chỗ nghĩ nó sẽ như nào.</p>
+        <div th:if="${error}" class="alert alert-danger" role="alert">
+            <span th:text="${error}"></span>
+        </div>
+        <div class=" flex flex-col gap-6 mt-8">
+            <article
+                    class="flex justify-between  rounded-xl border-2 p-6"  th:each="blog : ${blogs}"
+            >
+                <div>
+                    <div class="flex gap-2">
+                        <img
+                                src="/static/hinhanh/user-profile.png"
+                                class="h-12 w-12 rounded-full bg-sky-500 object-cover shadow-xl"
+                                alt=""
+                        />
+                        <div>
+                            <p class="font-medium" th:text="${blog.user.username}"></p>
+                            <span class="text-sm font-medium text-gray-500" th:text="${blog.postDate}"
+                            ></span
+                            >
+                        </div>
+                    </div>
+                    <div class="mt-4  w-[500px]" >
+                        <h3 class="text-xl font-bold" th:text="${blog.title}"></h3>
+                        <p class="text-gray-500 line-clamp-5 mt-1" th:text="${blog.content}"></p>
+                    </div>
+                </div>
+                <div class="flex gap-4  pl-20">
+                    <img
+                            th:src="${blog.mainImage}"
+                            alt=""
+                            class="h-32 w-72 rounded-md bg-gray-100 object-cover shadow-md"
+                    />
+
+                </div>
+            </article >
+        </div>
+    </div>
+</section>
+<!--<table layout:fragment="content">-->
+<!--    <thead>-->
+<!--    <tr>-->
+<!--        <th>Title</th>-->
+<!--        <th>Content</th>-->
+<!--        <th>Main Image</th>-->
+<!--        <th>Post Date</th>-->
+<!--        &lt;!&ndash; Add more columns as needed &ndash;&gt;-->
+<!--    </tr>-->
+<!--    </thead>-->
+<!--    <tbody>-->
+<!--    <tr th:each="blog : ${blogs}">-->
+<!--        <td th:text="${blog.title}"></td>-->
+<!--        <td th:text="${blog.content}"></td>-->
+<!--        <td th:text="${blog.mainImage}"></td>-->
+<!--        <td th:text="${blog.postDate}"></td>-->
+<!--        &lt;!&ndash; Add more columns as needed &ndash;&gt;-->
+<!--    </tr>-->
+<!--    </tbody>-->
+<!--</table>-->
 <!-- Pagination -->
-<div>
-    <ul>
-        <nav aria-label="Page navigation" th:if="${totalPages > 1}">
-            <ul class="pagination">
-                <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
-                    <a class="page-link" th:href="@{'/blogs/list?page=' + ${currentPage - 1}}" aria-label="Previous">
-                        <span aria-hidden="true">&laquo;</span>
-                    </a>
-                </li>
-                <li class="page-item" th:each="i : ${#numbers.sequence(0, totalPages - 1)}" th:classappend="${currentPage == i} ? 'active'">
-                    <a class="page-link" th:href="@{'/blogs/list?page=' + ${i}}" th:text="${i + 1}">1</a>
-                </li>
-                <li class="page-item" th:classappend="${currentPage == totalPages - 1} ? 'disabled'">
-                    <a class="page-link" th:href="@{'/blogs/list?page=' + ${currentPage + 1}}" aria-label="Next">
-                        <span aria-hidden="true">&raquo;</span>
-                    </a>
-                </li>
-            </ul>
-        </nav>
-    </ul>
-</div>
+
 </body>
 </html>

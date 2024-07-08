@@ -72,6 +72,16 @@
                     <span class="font-semibold">Danh sách phụ phí</span>
                 </a>
             </li>
+            <li class="group rounded px-4 py-2 hover:bg-gray-100 item" sec:authorize="hasAuthority('ADMIN')">
+                <a href="/blogs/listBlogOfAdmin" class="flex w-full items-center gap-4 py-2">
+              <span
+                      class="group-hover:bg-amber-400  flex h-10 w-10 items-center justify-center rounded-md bg-white shadow-xl"
+              >
+                <img src="/static/hinhanh/blog.svg" alt="" class="h-4 w-4" />
+              </span>
+                    <span class="font-semibold">Danh sách blog</span>
+                </a>
+            </li>
             <li class="group rounded px-4 py-2 hover:bg-gray-100 item">
                 <a href="/revenue-statistics" class="flex w-full items-center gap-4 py-2">
               <span

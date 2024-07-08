@@ -55,7 +55,8 @@ public class User implements UserDetails {
     private boolean accountStatus;
     @OneToMany(mappedBy = "user")
     private List<Booking> bookings;
-
+    @OneToMany(mappedBy = "user")
+    private List<Blog> blogs;
 
     @ManyToMany(fetch=FetchType.EAGER)
     @JoinTable(name = "user_role",
