@@ -1,47 +1,100 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{Fragments/Layout-User}">
 <head>
     <meta charset="UTF-8">
     <title>Review list</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>
-<div class="container">
-    <h2 class="mt-4">Review list</h2>
-    <div th:if="${error}" class="alert alert-danger" role="alert">
-        <span th:text="${error}"></span>
-    </div>
+<section class="py-12" layout:fragment="content">
+    <div class="container px-72">
+        <div class="flex items-center justify-between mb-8">
+            <h2 class="text-3xl font-bold">
+                Danh sách đánh giá của khách hàng
+            </h2>
+            <a
+                    href="/reviews/check"
+                    class="rounded-full bg-[#FF5B26] px-6 py-4 text-[1.125rem] font-semibold text-white hover:opacity-90"
+            >Viết đánh giá</a
+            >
+        </div>
+            <div th:if="${error}" class="alert alert-danger" role="alert">
+                <span th:text="${error}"></span>
+            </div>
+        <div class=" flex flex-col gap-6">
+            <article
+                    class="flex justify-between  rounded-xl border-2 p-6"  th:each="review : ${reviews}"
+            >
+                <div>
+                    <div class="flex gap-2">
+                        <img
+                                src="/static/hinhanh/user-profile.png"
+                                class="h-12 w-12 rounded-full bg-sky-500 object-cover shadow-xl"
+                                alt=""
+                        />
+                        <div>
+                            <p class="font-medium" th:text="${review.payment.booking.user.username}"></p>
+                            <span class="text-sm font-medium text-gray-500" th:text="${review.reviewTime}"
+                            ></span
+                            >
+                        </div>
+                    </div>
+                    <div class="mt-4 line-clamp-5 w-[500px]" th:text="${review.comment}">
 
-    <div th:each="review : ${reviews}" class="card mt-4">
-        <div class="card-body">
-            <h5 class="card-title" th:text="${review.reviewTime}">Review Time</h5>
-            <p class="card-text" th:text="${review.comment}">Comment</p>
-            <div th:if="${review.imageReview1}" class="mb-2">
-                <img th:src="@{${review.imageReview1}}" alt="Image 1" class="img-fluid" >
-            </div>
-            <div th:if="${review.imageReview2}" class="mb-2">
-                <img th:src="@{${review.imageReview2}}" alt="Image 2" class="img-fluid">
-            </div>
+                    </div>
+                </div>
+                <div class="flex gap-4 border-l-2 pl-20">
+                    <img
+                            th:src="${review.imageReview1}"
+                            alt=""
+                            class="h-28 w-28 rounded-md bg-gray-100 object-cover shadow-md"
+                    />
+                    <img
+                            th:src="${review.imageReview2}"
+                            alt=""
+                            class="h-28 w-28 bg-gray-100 object-cover shadow-md"
+                    />
+                </div>
+            </article >
         </div>
     </div>
+</section>
+<!--<div class="container">-->
+<!--    <h2 class="mt-4">Review list</h2>-->
+<!--    <div th:if="${error}" class="alert alert-danger" role="alert">-->
+<!--        <span th:text="${error}"></span>-->
+<!--    </div>-->
 
-    <nav aria-label="Page navigation" th:if="${totalPages > 1}" class="mt-4">
-        <ul class="pagination">
-            <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
-                <a class="page-link" th:href="@{'/reviews/list?page=' + ${currentPage - 1}}" aria-label="Previous">
-                    <span aria-hidden="true">&laquo;</span>
-                </a>
-            </li>
-            <li class="page-item" th:each="i : ${#numbers.sequence(0, totalPages - 1)}" th:classappend="${currentPage == i} ? 'active'">
-                <a class="page-link" th:href="@{'/reviews/list?page=' + ${i}}" th:text="${i + 1}">1</a>
-            </li>
-            <li class="page-item" th:classappend="${currentPage == totalPages - 1} ? 'disabled'">
-                <a class="page-link" th:href="@{'/reviews/list?page=' + ${currentPage + 1}}" aria-label="Next">
-                    <span aria-hidden="true">&raquo;</span>
-                </a>
-            </li>
-        </ul>
-    </nav>
-</div>
+<!--    <div th:each="review : ${reviews}" class="card mt-4">-->
+<!--        <div class="card-body">-->
+<!--            <h5 class="card-title" th:text="${review.reviewTime}">Review Time</h5>-->
+<!--            <p class="card-text" th:text="${review.comment}">Comment</p>-->
+<!--            <div th:if="${review.imageReview1}" class="mb-2">-->
+<!--                <img th:src="@{${review.imageReview1}}" alt="Image 1" class="img-fluid" >-->
+<!--            </div>-->
+<!--            <div th:if="${review.imageReview2}" class="mb-2">-->
+<!--                <img th:src="@{${review.imageReview2}}" alt="Image 2" class="img-fluid">-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+
+<!--    <nav aria-label="Page navigation" th:if="${totalPages > 1}" class="mt-4">-->
+<!--        <ul class="pagination">-->
+<!--            <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">-->
+<!--                <a class="page-link" th:href="@{'/reviews/list?page=' + ${currentPage - 1}}" aria-label="Previous">-->
+<!--                    <span aria-hidden="true">&laquo;</span>-->
+<!--                </a>-->
+<!--            </li>-->
+<!--            <li class="page-item" th:each="i : ${#numbers.sequence(0, totalPages - 1)}" th:classappend="${currentPage == i} ? 'active'">-->
+<!--                <a class="page-link" th:href="@{'/reviews/list?page=' + ${i}}" th:text="${i + 1}">1</a>-->
+<!--            </li>-->
+<!--            <li class="page-item" th:classappend="${currentPage == totalPages - 1} ? 'disabled'">-->
+<!--                <a class="page-link" th:href="@{'/reviews/list?page=' + ${currentPage + 1}}" aria-label="Next">-->
+<!--                    <span aria-hidden="true">&raquo;</span>-->
+<!--                </a>-->
+<!--            </li>-->
+<!--        </ul>-->
+<!--    </nav>-->
+<!--</div>-->
 </body>
 </html>

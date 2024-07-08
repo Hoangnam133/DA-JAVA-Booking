@@ -212,7 +212,7 @@ public class BookingController {
         booking.setPin(pin);
         bookingService.createBooking(booking);
         sendBookingToEmail(booking,user);
-        return "redirect:/homeUser" ;
+        return "redirect:/bookings/listBookingOfUser";
     }
     // for user
     @GetMapping("/listBookingOfUser")
@@ -230,7 +230,7 @@ public class BookingController {
     }
 
     public void sendBookingToEmail(Booking booking, User user) throws MessagingException {
-        String subject = "Booking Confirmation  ";
+        String subject = "Cảm ơn! Đặt phòng của bạn ở " + booking.getRoom().getHotel().getHotelName() + " đã được xác nhận.";
         String htmlBody = "<div style='border: 3px solid #ccc; border-radius: 10px; overflow: hidden;'>" +
                 "<div style='background-color: #f8f9fa; padding: 20px;'>" +
                 "<h2 style='color: #007bff; margin-bottom: 10px;'>Booking Confirmation</h2>" +
@@ -247,6 +247,8 @@ public class BookingController {
                 "<p>Thank you for booking with us!</p>" +
                 "</div>" +
                 "</div>";
+
+
             mailService.sendMail(user.getEmail(), subject, htmlBody);
     }
     public int GB_roomId;

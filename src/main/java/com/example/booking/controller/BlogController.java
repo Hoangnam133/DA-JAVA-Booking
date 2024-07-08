@@ -44,7 +44,7 @@ public class BlogController {
     public String getAllBlogsOfAdmin(@RequestParam(defaultValue = "0") int page, Model model) {
 
         try {
-            Pageable pageable = PageRequest.of(page, 6);
+            Pageable pageable = PageRequest.of(page, 4);
             Page<Blog> blogPage = blogService.showListAdmin(pageable);
             model.addAttribute("blogs", blogPage.getContent());
             model.addAttribute("totalPages", blogPage.getTotalPages());
@@ -132,8 +132,6 @@ public class BlogController {
                 return "Blogs/edit";
             }
 
-
-
             // If a new main image file is uploaded, save it. Otherwise, keep the current image.
             if (mainImageFile != null && !mainImageFile.isEmpty()) {
                 String image1Path = handleImageService.saveImage(mainImageFile);
@@ -149,7 +147,7 @@ public class BlogController {
             } else {
                 blog.setSecondaryImage(currentBlog.getSecondaryImage());
             }
-            blog.setBlogStatus(false);
+
             blogService.updateBlog(blog);
             return "redirect:/blogs/listBlogOfAdmin";
         } catch (IOException ex) {

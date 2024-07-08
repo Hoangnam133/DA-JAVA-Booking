@@ -3,9 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit Room</title>
-    <!-- Bootstrap CSS -->
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <title>Edit Blog</title>
+
     <script>
         function previewImage(event, previewId, currentImageId) {
             const reader = new FileReader();
@@ -23,95 +22,275 @@
     </script>
 </head>
 <body>
-<section layout:fragment="content">
-    <div class="container">
-        <h1>Edit Room</h1>
-        <form th:action="@{'/blogs/saveEdit/' + ${blog.blogId}}" th:object="${blog}" method="post" class="needs-validation" enctype="multipart/form-data" novalidate>
-            <div class="form-group">
-                <label for="title">Room Number:</label>
-                <input type="text" class="form-control" id="title" th:field="*{title}" required>
-                <div class="invalid-feedback" th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></div>
-            </div>
+<section class="flex w-full justify-center" layout:fragment="content">
+    <div class="w-4/6 rounded-xl bg-white p-5 shadow-2xl">
+        <h2 class="inline border-b-4 pb-2 text-2xl font-bold">Chỉnh sửa</h2>
+        <form th:action="@{'/blogs/saveEdit/' + ${blog.blogId}}" th:object="${blog}" method="post"  enctype="multipart/form-data" novalidate class="mt-6">
+            <input type="text" id="postDate" name="postDate" th:value="${blog.postDate}" hidden="hidden" >
 
-            <div class="form-group">
-                <label for="content">Content:</label>
-                <textarea class="form-control" id="content" th:field="*{content}" required></textarea>
-                <div class="invalid-feedback" th:if="${#fields.hasErrors('content')}" th:errors="*{content}"></div>
+            <div class="flex flex-col gap-3 border-b-2 pb-3">
+                <div class="flex justify-between gap-4">
+                    <div class="flex w-full flex-col gap-2">
+                        <label for="title" class="text-xs font-medium">Tiêu đề</label>
+                        <input
+                                type="text"
+                                class="h-10 rounded-md border-2 p-4 text-lg text-black"
+                                id="title" th:field="*{title}" required
+                        />
+                        <p class="ml-2 text-sm font-semibold text-red-500" th:if="${#fields.hasErrors('title')}" th:errors="*{title}">
+
+                        </p>
+                    </div>
+                    <div class="flex w-full flex-col gap-2">
+                        <label for="content" class="text-xs font-medium">Nội dung</label>
+                        <input
+                                id="content" th:field="*{content}" required
+                                type="text"
+                                class="h-10 rounded-md border-2 p-4 text-lg text-black"
+                        />
+                        <p class="ml-2 text-sm font-semibold text-red-500" th:if="${#fields.hasErrors('content')}" th:errors="*{content}">
+
+                        </p>
+                    </div>
+
+                </div>
+
+                <div class="flex items-center">
+                    <input
+                            id="blogStatus" th:field="*{blogStatus}"
+
+                            type="checkbox"
+                            value=""
+                            class="h-4 w-4 rounded border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600"
+                    />
+                    <label
+                            for="blogStatus"
+                            class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                    >Trạng thái hoạt động
+                    </label>
+                </div>
             </div>
             <div class="mt-2">
-                <h3 class="text-xl font-semibold">Select Images</h3>
+                <h3 class="text-xl font-semibold">Chọn hình ảnh</h3>
                 <div class="mt-2 grid grid-cols-3 gap-6">
                     <div class="flex flex-col gap-2">
                         <div class="flex justify-center">
-                            <img th:if="${blog.mainImage}" th:src="@{${blog.mainImage}}" id="currentImage1" alt="" class="h-24 w-32 rounded-md object-cover" />
+                            <img
+                                    th:if="${blog.mainImage}" th:src="@{${blog.mainImage}}" id="currentImage1"
+                                    alt=""
+                                    class="h-24 w-32 rounded-md object-cover"
+                            />
                         </div>
                         <div class="flex flex-col gap-2">
                             <div class="flex justify-center">
-                                <img id="newImagePreview1" src="#" alt="New Image Preview" class="hidden h-24 w-32 rounded-md object-cover" />
+                                <img
+                                        id="newImagePreview1"
+                                        src="#"
+                                        alt="New Image Preview"
+                                        class="hidden h-24 w-32 rounded-md object-cover"
+                                />
                             </div>
                             <div class="flex w-full items-center justify-center">
-                                <label for="mainImageFile" class="flex h-28 w-full cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 hover:bg-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:hover:border-gray-500 dark:hover:bg-gray-600 dark:hover:bg-gray-800">
-                                    <div class="flex flex-col items-center justify-center pb-6 pt-5">
-                                        <svg class="mb-4 h-8 w-8 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
-                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2" />
+                                <label
+                                        for="mainImageFile"
+                                        class="flex h-28 w-full cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 hover:bg-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:hover:border-gray-500 dark:hover:bg-gray-600 dark:hover:bg-gray-800"
+                                >
+                                    <div
+                                            class="flex flex-col items-center justify-center pb-6 pt-5"
+                                    >
+                                        <svg
+                                                class="mb-4 h-8 w-8 text-gray-500 dark:text-gray-400"
+                                                aria-hidden="true"
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                fill="none"
+                                                viewBox="0 0 20 16"
+                                        >
+                                            <path
+                                                    stroke="currentColor"
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                    stroke-width="2"
+                                                    d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"
+                                            />
                                         </svg>
-                                        <p class="mb-2 text-sm text-gray-500 dark:text-gray-400">
-                                            <span class="font-semibold">Click to upload</span> or drag and drop
+                                        <p
+                                                class="mb-2 text-sm text-gray-500 dark:text-gray-400"
+                                        >
+                                            <span class="font-semibold">Click to upload</span>
+                                            or drag and drop
                                         </p>
-                                        <p class="text-xs text-gray-500 dark:text-gray-400">SVG, PNG, JPG or GIF (MAX. 800x400px)</p>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400">
+                                            SVG, PNG, JPG or GIF (MAX. 800x400px)
+                                        </p>
                                     </div>
-                                    <input id="mainImageFile" name="mainImageFile" onchange="previewImage(event, 'newImagePreview1', 'currentImage1')" type="file" class="hidden" />
+                                    <input
+                                            id="mainImageFile"
+                                            name="mainImageFile" onchange="previewImage(event, 'newImagePreview1', 'currentImage1')"
+                                            type="file"
+                                            class="hidden"
+                                    />
                                 </label>
                             </div>
                         </div>
                     </div>
                     <div class="flex flex-col gap-2">
                         <div class="flex justify-center">
-                            <img th:if="${blog.secondaryImage}" th:src="@{${blog.secondaryImage}}" id="currentImage2" alt="" class="h-24 w-32 rounded-md object-cover" />
+                            <img
+                                    th:if="${blog.secondaryImage}" th:src="@{${blog.secondaryImage}}" id="currentImage2"
+                                    alt=""
+                                    class="h-24 w-32 rounded-md object-cover"
+                            />
                         </div>
                         <div class="flex flex-col gap-2">
                             <div class="flex justify-center">
-                                <img id="newImagePreview2" src="#" alt="New Image Preview" class="hidden h-24 w-32 rounded-md object-cover" />
+                                <img
+                                        id="newImagePreview2"
+                                        src="#"
+                                        alt="New Image Preview"
+                                        class="hidden h-24 w-32 rounded-md object-cover"
+                                />
                             </div>
                             <div class="flex w-full items-center justify-center">
-                                <label for="secondaryImageFile" class="flex h-28 w-full cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 hover:bg-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:hover:border-gray-500 dark:hover:bg-gray-600 dark:hover:bg-gray-800">
-                                    <div class="flex flex-col items-center justify-center pb-6 pt-5">
-                                        <svg class="mb-4 h-8 w-8 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
-                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2" />
+                                <label
+                                        for="secondaryImageFile"
+                                        class="flex h-28 w-full cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 hover:bg-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:hover:border-gray-500 dark:hover:bg-gray-600 dark:hover:bg-gray-800"
+                                >
+                                    <div
+                                            class="flex flex-col items-center justify-center pb-6 pt-5"
+                                    >
+                                        <svg
+                                                class="mb-4 h-8 w-8 text-gray-500 dark:text-gray-400"
+                                                aria-hidden="true"
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                fill="none"
+                                                viewBox="0 0 20 16"
+                                        >
+                                            <path
+                                                    stroke="currentColor"
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                    stroke-width="2"
+                                                    d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"
+                                            />
                                         </svg>
-                                        <p class="mb-2 text-sm text-gray-500 dark:text-gray-400">
-                                            <span class="font-semibold">Click to upload</span> or drag and drop
+                                        <p
+                                                class="mb-2 text-sm text-gray-500 dark:text-gray-400"
+                                        >
+                                            <span class="font-semibold">Click to upload</span>
+                                            or drag and drop
                                         </p>
-                                        <p class="text-xs text-gray-500 dark:text-gray-400">SVG, PNG, JPG or GIF (MAX. 800x400px)</p>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400">
+                                            SVG, PNG, JPG or GIF (MAX. 800x400px)
+                                        </p>
                                     </div>
-                                    <input id="secondaryImageFile" name="secondaryImageFile" onchange="previewImage(event, 'newImagePreview2', 'currentImage2')" type="file" class="hidden" />
+                                    <input
+                                            id="secondaryImageFile"
+                                            name="secondaryImageFile" onchange="previewImage(event, 'newImagePreview2', 'currentImage2')"
+                                            type="file"
+                                            class="hidden"
+                                    />
                                 </label>
                             </div>
                         </div>
                     </div>
                     <div class="flex items-center justify-center">
-                        <button type="submit" class="h-14 w-40 rounded-full bg-[#FF5B26] px-6 py-2 text-lg font-bold text-white hover:opacity-90">Hoàn tất</button>
+                        <button
+                                type="submit"
+                                class="h-14 w-40 rounded-full bg-[#FF5B26] px-6 py-2 text-lg font-bold text-white hover:opacity-90"
+                        >
+                            Hoàn tất
+                        </button>
                     </div>
                 </div>
-            </div>
-            <div class="form-group">
-                <label for="postDate">Date:</label>
-                <input type="text" id="postDate" name="postDate" th:value="${blog.postDate}" class="form-control" readonly>
-            </div>
-            <div class="form-group">
-                <button type="submit" class="btn btn-primary">Save</button>
-            </div>
-            <div th:if="${errors}" class="alert alert-danger" role="alert">
-                <ul>
-                    <li th:each="error : ${errors}" th:text="${error}"></li>
-                </ul>
             </div>
         </form>
     </div>
 </section>
-<!-- Bootstrap JS and dependencies -->
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<!--<section layout:fragment="content">-->
+<!--    <div class="container">-->
+<!--        <h1>Edit Room</h1>-->
+<!--        <form th:action="@{'/blogs/saveEdit/' + ${blog.blogId}}" th:object="${blog}" method="post" class="needs-validation" enctype="multipart/form-data" novalidate>-->
+<!--            <div class="form-group">-->
+<!--                <label for="title">Room Number:</label>-->
+<!--                <input type="text" class="form-control" id="title" th:field="*{title}" required>-->
+<!--                <div class="invalid-feedback" th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></div>-->
+<!--            </div>-->
+
+<!--            <div class="form-group">-->
+<!--                <label for="content">Content:</label>-->
+<!--                <textarea class="form-control" id="content" th:field="*{content}" required></textarea>-->
+<!--                <div class="invalid-feedback" th:if="${#fields.hasErrors('content')}" th:errors="*{content}"></div>-->
+<!--            </div>-->
+<!--            <div class="mt-2">-->
+<!--                <h3 class="text-xl font-semibold">Select Images</h3>-->
+<!--                <div class="mt-2 grid grid-cols-3 gap-6">-->
+<!--                    <div class="flex flex-col gap-2">-->
+<!--                        <div class="flex justify-center">-->
+<!--                            <img th:if="${blog.mainImage}" th:src="@{${blog.mainImage}}" id="currentImage1" alt="" class="h-24 w-32 rounded-md object-cover" />-->
+<!--                        </div>-->
+<!--                        <div class="flex flex-col gap-2">-->
+<!--                            <div class="flex justify-center">-->
+<!--                                <img id="newImagePreview1" src="#" alt="New Image Preview" class="hidden h-24 w-32 rounded-md object-cover" />-->
+<!--                            </div>-->
+<!--                            <div class="flex w-full items-center justify-center">-->
+<!--                                <label for="mainImageFile" class="flex h-28 w-full cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 hover:bg-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:hover:border-gray-500 dark:hover:bg-gray-600 dark:hover:bg-gray-800">-->
+<!--                                    <div class="flex flex-col items-center justify-center pb-6 pt-5">-->
+<!--                                        <svg class="mb-4 h-8 w-8 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">-->
+<!--                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2" />-->
+<!--                                        </svg>-->
+<!--                                        <p class="mb-2 text-sm text-gray-500 dark:text-gray-400">-->
+<!--                                            <span class="font-semibold">Click to upload</span> or drag and drop-->
+<!--                                        </p>-->
+<!--                                        <p class="text-xs text-gray-500 dark:text-gray-400">SVG, PNG, JPG or GIF (MAX. 800x400px)</p>-->
+<!--                                    </div>-->
+<!--                                    <input id="mainImageFile" name="mainImageFile" onchange="previewImage(event, 'newImagePreview1', 'currentImage1')" type="file" class="hidden" />-->
+<!--                                </label>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                    <div class="flex flex-col gap-2">-->
+<!--                        <div class="flex justify-center">-->
+<!--                            <img th:if="${blog.secondaryImage}" th:src="@{${blog.secondaryImage}}" id="currentImage2" alt="" class="h-24 w-32 rounded-md object-cover" />-->
+<!--                        </div>-->
+<!--                        <div class="flex flex-col gap-2">-->
+<!--                            <div class="flex justify-center">-->
+<!--                                <img id="newImagePreview2" src="#" alt="New Image Preview" class="hidden h-24 w-32 rounded-md object-cover" />-->
+<!--                            </div>-->
+<!--                            <div class="flex w-full items-center justify-center">-->
+<!--                                <label for="secondaryImageFile" class="flex h-28 w-full cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 hover:bg-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:hover:border-gray-500 dark:hover:bg-gray-600 dark:hover:bg-gray-800">-->
+<!--                                    <div class="flex flex-col items-center justify-center pb-6 pt-5">-->
+<!--                                        <svg class="mb-4 h-8 w-8 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">-->
+<!--                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2" />-->
+<!--                                        </svg>-->
+<!--                                        <p class="mb-2 text-sm text-gray-500 dark:text-gray-400">-->
+<!--                                            <span class="font-semibold">Click to upload</span> or drag and drop-->
+<!--                                        </p>-->
+<!--                                        <p class="text-xs text-gray-500 dark:text-gray-400">SVG, PNG, JPG or GIF (MAX. 800x400px)</p>-->
+<!--                                    </div>-->
+<!--                                    <input id="secondaryImageFile" name="secondaryImageFile" onchange="previewImage(event, 'newImagePreview2', 'currentImage2')" type="file" class="hidden" />-->
+<!--                                </label>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                    <div class="flex items-center justify-center">-->
+<!--                        <button type="submit" class="h-14 w-40 rounded-full bg-[#FF5B26] px-6 py-2 text-lg font-bold text-white hover:opacity-90">Hoàn tất</button>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            <div class="form-group">-->
+<!--                <label for="postDate">Date:</label>-->
+<!--                <input type="text" id="postDate" name="postDate" th:value="${blog.postDate}" class="form-control" readonly>-->
+<!--            </div>-->
+<!--           -->
+<!--            <div th:if="${errors}" class="alert alert-danger" role="alert">-->
+<!--                <ul>-->
+<!--                    <li th:each="error : ${errors}" th:text="${error}"></li>-->
+<!--                </ul>-->
+<!--            </div>-->
+<!--        </form>-->
+<!--    </div>-->
+<!--</section>-->
+
+
 </body>
 </html>

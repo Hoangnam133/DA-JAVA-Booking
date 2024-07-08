@@ -246,11 +246,20 @@
                    </div>
                             </div>
                             <div th:if="${!booking.checkInStatus}">
+
                                 <div
                                         th:if="${!booking.cancelStatus}"
-                                        class="flex items-center gap-6"
+                                        class="flex items-center gap-2"
                                 >
-
+                                    <a    class="mr-4 block"
+                                          th:href="@{'/payments/bookingDetail/' + ${booking.bookingId}}"
+                                    >
+                                        <img
+                                                th:src="@{/static/hinhanh/pay-pal.png}"
+                                                class="w-18 h-6 object-cover"
+                                                alt=""
+                                        />
+                                    </a>
                                     <a
                                             th:href="@{'/bookings/cancelBooking/' + ${booking.bookingId}}"
                                             class="rounded-lg bg-red-500 px-[2.19rem] py-1 text-[1.125rem] font-semibold text-white"

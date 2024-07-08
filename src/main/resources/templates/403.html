@@ -9,13 +9,46 @@
 </head>
 <body class="font-sans">
 <main>
-    <section class="flex h-screen flex-col items-center justify-center">
-        <img src="/static/hinhanh/403.jpg" alt="" class="h-[36rem] w-[36rem] object-cover" />
-        <h2 class="mt-8 text-2xl font-bold">Forbidden</h2>
 
-
- 
-    </section>
+    <div class="px-72">
+        <section class="flex h-screen items-center justify-between">
+            <img src="/static/hinhanh/403.webp" alt="" class="h-[26rem] w-[30rem]" />
+            <div th:if="${errors}" class="mt-4 w-[30rem] text-center text-lg text-[#4E5358]" role="alert">
+                <ul>
+                    <li th:each="error : ${errors}" th:text="${error}"></li>
+                </ul>
+            </div>
+            <div class="flex flex-col items-center">
+                <p
+                        class="mt-4 w-[30rem] text-center text-5xl leading-[3.8rem] text-[#4E5358]"
+                >
+                    Xin lỗi chúng tôi không tìm thấy trang mà bạn cần!
+                </p>
+                <div class="mt-8 flex gap-4">
+                    <div class="flex flex-col items-center gap-1">
+                        <span class="text-gray-500">Trở về trang chủ</span>
+                        <span class="text-sm text-gray-500">DTN booking</span>
+                        <a
+                                href="/homeUser"
+                                class="mt-2 rounded-full bg-amber-500 px-4 py-2 text-lg text-white hover:opacity-90"
+                        >
+                            DTN BOOKING</a
+                        >
+                    </div>
+                    <div class="flex flex-col items-center gap-1">
+                        <span class="text-gray-500">Hỗ trợ</span>
+                        <span class="text-sm text-gray-500">Facebook</span>
+                        <a
+                                href="https://www.facebook.com/profile.php?id=100040910089273"
+                                class="mt-2 rounded-full bg-amber-500 px-4 py-2 text-lg text-white hover:opacity-90"
+                        >
+                            Liên hệ Facebook</a
+                        >
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
 </main>
 </body>
 </html>

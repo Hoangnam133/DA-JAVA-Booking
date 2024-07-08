@@ -2,6 +2,7 @@ package com.example.booking.controller;
 
 import com.example.booking.entity.Room;
 import com.example.booking.service.HandleImageService;
+import com.example.booking.service.HotelService;
 import com.example.booking.service.RoomService;
 import com.example.booking.service.RoomTypeService;
 import jakarta.validation.Valid;
@@ -25,12 +26,14 @@ import org.springframework.web.multipart.MultipartFile;
 public class RoomController {
     private final RoomService roomService;
     private final RoomTypeService roomTypeService;
+    private final HotelService hotelService;
     @Autowired
     private HandleImageService handleImageService;
     @Autowired
-    public RoomController(RoomService roomService, RoomTypeService roomTypeService) {
+    public RoomController(RoomService roomService, RoomTypeService roomTypeService,HotelService hotelService) {
         this.roomService = roomService;
         this.roomTypeService = roomTypeService;
+        this.hotelService = hotelService;
     }
     @GetMapping("/list")
     public String showRoomList(@RequestParam(defaultValue = "0") int page, Model model) {
@@ -93,7 +96,7 @@ public class RoomController {
                 String image2Path = handleImageService.saveImage(roomImage2File);
                 room.setRoomImage2(image2Path);
             }
-
+            room.setHotel(hotelService.getHotelById(1));
             roomService.createRoom(room);
             return "redirect:/rooms/list";
         } catch (IOException ex) {
@@ -155,7 +158,7 @@ public class RoomController {
             model.addAttribute("roomType", roomTypeService.getAll());
             return "Rooms/edit";
         }
-
+        room.setHotel(hotelService.getHotelById(1));
         roomService.updateRoom(room);
         return "redirect:/rooms/list";
     }
