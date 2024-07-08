@@ -25,6 +25,7 @@ public class Booking {
     private double totalPrice;
     private boolean paymentStatus;
     private boolean cancelStatus;
+    private LocalDate bookingTime;
     @Column(length = 255)
     @Size(min = 10 ,max = 255, message = "Cancellation reason from 10 to 255 characters")
     private String cancellationReason;

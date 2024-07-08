@@ -12,7 +12,7 @@ import java.util.List;
 @Repository
 public interface BookingRepository extends JpaRepository<Booking, Integer> {
 
-    List<Booking> findByUser_Id(Long userId);
+    List<Booking> findByUser_IdOrderByBookingTimeDesc(Long userId);
     List<Booking> findAllByCancelStatusIsFalseAndCheckInDateLessThanEqualAndCheckOutDateGreaterThanEqual(LocalDate checkInDate, LocalDate checkOutDate);
     Page<Booking> findAllByCheckInStatusTrueAndPaymentStatusFalseOrderByCheckInDateDesc(Pageable pageable);
     Page<Booking> findAllByCheckInStatusFalseAndCancelStatusFalseAndPaymentStatusFalseOrderByCheckInDateDesc(Pageable pageable);

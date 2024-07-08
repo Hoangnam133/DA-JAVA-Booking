@@ -61,7 +61,7 @@ public class BookingService {
         bookingRepository.save(existingBooking);
     }
     public List<Booking> ShowBookingListOfUser(Long userId){
-        List<Booking> bookings = bookingRepository.findByUser_Id(userId);
+        List<Booking> bookings = bookingRepository.findByUser_IdOrderByBookingTimeDesc(userId);
         if (bookings == null){
             throw new RuntimeException("No bookings found");
         }
