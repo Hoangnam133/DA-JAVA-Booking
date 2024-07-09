@@ -13,7 +13,16 @@
     <div
             class="mb-0 flex w-full min-w-0 flex-col break-words rounded-2xl border-0 border-solid border-transparent bg-white bg-clip-border shadow-xl"
     >
+        <div class=" m-4 flex gap-2 items-center">
+            <h6>Thêm tài khoản ở đây</h6>
+            <a th:href="@{/createEmployeeAccount}"  class="text-xs font-semibold leading-tight text-slate-400">
+                                    <span class="flex h-10 w-10 items-center justify-center rounded-md bg-amber-400">
+                                        <img src="/static/hinhanh/add.svg" alt="" class="h-4 w-4"/>
+                                    </span>
+            </a>
+        </div>
         <div >
+
             <div class="overflow-x-auto p-0">
                 <table
                         class="mb-0 w-full items-center border-gray-200 align-top text-slate-500"
@@ -91,12 +100,8 @@
                                         <img src="/static/hinhanh/eye.svg" alt="" class="h-4 w-4"/>
                                     </span>
                                 </a>
-                                <span>|</span>
-                                <a th:href="@{/createEmployeeAccount}"  class="text-xs font-semibold leading-tight text-slate-400">
-                                    <span class="flex h-10 w-10 items-center justify-center rounded-md bg-amber-400">
-                                        <img src="/static/hinhanh/add.svg" alt="" class="h-4 w-4"/>
-                                    </span>
-                                </a>
+
+
                             </div>
                         </td>
                     </tr>

@@ -66,19 +66,21 @@ public class  UserController {
             model.addAttribute("errors", errors);
             return "Users/register"; // Trả về lại view "register" nếu có lỗi
         }
+        if (userService.findByEmail(user.getEmail()).isPresent()) {
+            model.addAttribute("errors", "This email address is already in use");
+            return "Users/register";
+        }
+        if (userService.findByUsername(user.getUsername()).isPresent()) {
+            model.addAttribute("errors", "This username is already in use");
+            return "Users/register";
+        }
+        if (userService.findUserByPhone(user.getPhone()).isPresent()) {
+            model.addAttribute("errors", "This phone number is already in use");
+            return "Users/register";
+        }
         user.setAccountStatus(true);
 
-//        User existingUser = userService.findByUsername(user.getUsername())
-//                .orElseThrow(() -> new UsernameNotFoundException(user.getUsername()));
-//        try {
-//            if(existingUser.getEmail().equals(user.getEmail())
-//            || existingUser.getUsername().equals(user.getUsername())){
-//                throw new RuntimeException("Email of Username already exists ");
-//            }
-//        }catch (Exception e){
-//            model.addAttribute("errors", e.getMessage());
-//            return "Users/register";
-//        }
+
         userService.save(user); // Lưu người dùng vào cơ sở dữ liệu
         userService.setDefaultRole(user.getUsername()); // Gán vai trò mặc định cho người dùng
         return "redirect:/login"; // Chuyển hướng người dùng tới trang "login"
@@ -156,6 +158,18 @@ public class  UserController {
             model.addAttribute("errors", errors);
             return "Users/createEmployeeAccount";
         }
+        if (userService.findByEmail(employee.getEmail()).isPresent()){
+            model.addAttribute("errors", "This email address is already in use");
+            return "Users/createEmployeeAccount";
+        }
+        if (userService.findByUsername(employee.getUsername()).isPresent()) {
+            model.addAttribute("errors", "This username is already in use");
+            return "Users/createEmployeeAccount";
+        }
+        if (userService.findUserByPhone(employee.getPhone()).isPresent()) {
+            model.addAttribute("errors", "This phone number is already in use");
+            return "Users/createEmployeeAccount";
+        }
         userService.createEmployeeAccount(employee);
         return "redirect:/employeeAccount";
     }
@@ -201,9 +215,14 @@ public class  UserController {
 
     @PostMapping("/forgotPassword")
     public String processForgotPassword(@RequestParam String email, Model model) {
-        String response = userService.regeneratePasswordResetToken(email);
-        model.addAttribute("message", response);
-        return "Users/forgotPassword";
+        try {
+            String response = userService.regeneratePasswordResetToken(email);
+            model.addAttribute("message", response);
+            return "Users/forgotPassword";
+        }catch (Exception e) {
+            model.addAttribute("errors","email not found");
+            return "Users/forgotPassword";
+        }
     }
 
     @GetMapping("/reset-password")

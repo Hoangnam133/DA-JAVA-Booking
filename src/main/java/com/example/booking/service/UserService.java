@@ -42,6 +42,10 @@ public class UserService implements UserDetailsService {
         user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
         userRepository.save(user);
     }
+
+    public Optional<User> findUserByPhone(String phone) {
+        return userRepository.findByPhone(phone);
+    }
     // Gán vai trò mặc định cho người dùng dựa trên tên người dùng.
     public void setDefaultRole(String username) {
         userRepository.findByUsername(username).ifPresentOrElse(

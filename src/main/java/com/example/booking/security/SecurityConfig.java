@@ -15,6 +15,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 
 @Configuration // Đánh dấu lớp này là một lớp cấu hình cho Spring Context.
@@ -106,6 +107,9 @@ public class SecurityConfig {
                 ).
                 exceptionHandling(exceptionHandling -> exceptionHandling
                         .accessDeniedPage("/Error403") // Trang báo lỗi khi truy cập không được phép.
+                        .defaultAuthenticationEntryPointFor(
+                                (request, response, authException) -> response.sendRedirect("/error"),
+                                new AntPathRequestMatcher("/**"))
                 ).
                 sessionManagement(sessionManagement -> sessionManagement
                         .maximumSessions(1) // Giới hạn số phiên đăng nhập.
