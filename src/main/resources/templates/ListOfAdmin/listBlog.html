@@ -16,7 +16,15 @@
         <div
                 class="mb-4 flex items-center justify-between rounded-t-2xl bg-white p-6 pb-0 text-lg font-medium"
         >
-            <h6>Thông tin</h6>
+            <div class="flex gap-2 items-center">
+                <h6>Thêm Blog</h6>
+                <a th:href="@{/blogs/add}" class="text-xs font-semibold leading-tight text-slate-400">
+
+                                    <span class="flex h-10 w-10 items-center justify-center rounded-md bg-amber-400">
+                                        <img src="/static/hinhanh/add.svg" alt="" class="h-4 w-4"/>
+                                    </span>
+                </a>
+            </div>
 
         </div>
 

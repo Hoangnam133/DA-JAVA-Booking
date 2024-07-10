@@ -137,6 +137,9 @@ public class UserService implements UserDetailsService {
             userRepository.save(user);
         }
     }
+    public Optional<User> getAdminUser() {
+        return userRepository.findAdminUser();
+    }
     public int getTotalCountLogin(){
         return userRepository.findAll().stream().mapToInt(User::getCountLogin).sum();
     }
