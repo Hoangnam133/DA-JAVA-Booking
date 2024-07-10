@@ -1,6 +1,7 @@
 package com.example.booking.controller;
 
 import com.example.booking.entity.Blog;
+import com.example.booking.entity.User;
 import com.example.booking.service.BlogService;
 import com.example.booking.service.HandleImageService;
 import com.example.booking.service.UserService;
@@ -18,6 +19,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Controller
 @RequestMapping("/blogs")
@@ -95,6 +98,8 @@ public class BlogController {
             return "Reviews/add";
         }
         blog.setBlogStatus(false);
+        blog.setPostDate(LocalDate.now().toString());
+        blog.setUser(userService.getAdminUser().orElseThrow());
         blogService.createBlog(blog);
         return "redirect:/blogs/listBlogOfAdmin";
     }
@@ -148,6 +153,7 @@ public class BlogController {
                 blog.setSecondaryImage(currentBlog.getSecondaryImage());
             }
 
+            blog.setUser(userService.getAdminUser().orElseThrow());
             blogService.updateBlog(blog);
             return "redirect:/blogs/listBlogOfAdmin";
         } catch (IOException ex) {
